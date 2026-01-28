@@ -1,49 +1,304 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-Chương này có độ dài từ 9 đến 11 trang.
 
-Với phương pháp phân tích thiết kế hướng đối tượng, sinh viên sử dụng biểu đồ use case theo hướng dẫn của template này. Với các phương pháp khác, sinh viên trao đổi với giáo viên hướng dẫn để đổi tên và sắp xếp lại đề mục cho phù hợp. Ví dụ, thay vì sử dụng biểu đồ use case, sinh viên đi theo hướng tiếp cận Agile có thể dùng User Story.
+Sau khi xác định được bài toán và định hướng giải pháp trong Chương 1, chương này sẽ trình bày chi tiết quá trình khảo sát các hệ thống hiện có và phân tích yêu cầu cho hệ thống thương mại điện tử. Nội dung bao gồm khảo sát các nền tảng tương tự để rút ra bài học kinh nghiệm, xác định các tác nhân và yêu cầu chức năng thông qua biểu đồ use case, đặc tả chi tiết các chức năng quan trọng, và phân tích các yêu cầu phi chức năng cần đảm bảo.
 
-
-\textbf{Lưu ý}: Mỗi chương nên có thêm 1 đoạn mở đầu chương và kết thúc chương, mở đầu giới thiệu những nội dung sẽ trình bày trong chương, kết thúc tổng kết lại các nội dung đã trình bày
-
-\section{Khảo sát hiện trạng}
+\section{Khảo sát hiện trạng và các giải pháp hiện có}
 \label{section:2.1}
-Thông thường, khảo sát chi tiết về hiện trạng và yêu cầu của phần mềm sẽ được lấy từ ba nguồn chính, đó là (i) người dùng/khách hàng, (ii) các hệ thống đã có, (iii) và các ứng dụng tương tự.
-Sinh viên cần tiến hành phân tích, so sánh, đánh giá chi tiết ưu nhược điểm của các sản phẩm/nghiên cứu hiện có. Sinh viên có thể lập bảng so sánh nếu cần thiết. Kết hợp với khảo sát người dùng/khách hàng (nếu có), sinh viên nêu và mô tả sơ lược các tính năng phần mềm quan trọng cần phát triển.
 
-\section{Tổng quan chức năng}
+Để hiểu rõ thực trạng và xu hướng phát triển của thương mại điện tử, việc khảo sát các hệ thống hiện có là cần thiết. Phần này phân tích ba nền tảng thương mại điện tử phổ biến tại Việt Nam, từ đó rút ra những ưu điểm cần học hỏi và hạn chế cần khắc phục.
+
+Shopee là một trong những nền tảng thương mại điện tử hàng đầu tại Việt Nam với hơn 50 triệu người dùng. Về ưu điểm, Shopee có giao diện thân thiện với màu cam đặc trưng, dễ sử dụng cho cả người mới. Hệ thống tìm kiếm và lọc sản phẩm rất mạnh với nhiều tiêu chí như giá, đánh giá, vị trí, lượt bán. Chức năng Shopee Live và các chương trình khuyến mãi liên tục tạo trải nghiệm mua sắm hấp dẫn. Ứng dụng tích hợp ShopeePay cho phép thanh toán nhanh chóng và có nhiều ưu đãi hoàn tiền. Tuy nhiên, Shopee cũng có một số hạn chế. Giao diện đôi khi bị đánh giá là quá nhiều quảng cáo và thông báo khuyến mãi, gây rối mắt cho người dùng. Thời gian tải trang đôi khi chậm do quá nhiều hình ảnh và banner. Quy trình đánh giá sản phẩm còn phức tạp với nhiều bước xác thực.
+
+Lazada là nền tảng thuộc tập đoàn Alibaba, có thế mạnh về công nghệ và logistics. Về ưu điểm, Lazada có hệ thống phân loại sản phẩm khoa học với cấu trúc danh mục rõ ràng. Chương trình LazMall đảm bảo sản phẩm chính hãng, tạo niềm tin cho người mua. Dịch vụ giao hàng nhanh với mạng lưới kho hàng rộng khắp. Tích hợp nhiều phương thức thanh toán từ thẻ ngân hàng,ví điện tử đến trả góp. Về hạn chế, giao diện của Lazada được đánh giá là chưa thực sự tối ưu cho người dùng Việt Nam, thiên về phong cách quốc tế. Một số tính năng phức tạp gây khó khăn cho người dùng ít am hiểu công nghệ. Giá sản phẩm đôi khi cao hơn so với các nền tảng khác do chi phí vận hành.
+
+Tiki là nền tảng thương mại điện tử nội địa với định hướng phát triển hệ sinh thái. Về ưu điểm, Tiki có giao diện gọn gàng, tập trung vào trải nghiệm người dùng với màu xanh dương đặc trưng. Hệ thống đánh giá sản phẩm chi tiết và đáng tin cậy với cơ chế xác thực người mua. Dịch vụ TikiNOW giao hàng trong 2 giờ tại các thành phố lớn tạo lợi thế cạnh tranh. Chương trình Astra - siêu thị online tích hợp nhiều tiện ích. Về hạn chế, số lượng sản phẩm trên Tiki ít hơn so với Shopee và Lazada do chính sách kiểm duyệt chặt chẽ. Giá thành trung bình cao hơn do tập trung vào chất lượng. Chưa có nhiều chương trình khuyến mãi lớn như các đối thủ.
+
+Từ việc khảo sát ba nền tảng trên, có thể rút ra một số nhận xét quan trọng. Về mặt tích cực, các hệ thống đều chú trọng vào trải nghiệm người dùng với giao diện thân thiện và tính năng tìm kiếm mạnh mẽ. Việc tích hợp nhiều phương thức thanh toán là xu hướng chung để tăng tỷ lệ chuyển đổi. Hệ thống đánh giá và phản hồi đóng vai trò quan trọng trong việc xây dựng lòng tin. Về mặt hạn chế, nhiều nền tảng có xu hướng tập trung quá nhiều tính năng khiến giao diện phức tạp. Tốc độ tải trang chưa được tối ưu do quá nhiều nội dung đa phương tiện. Quy trình thanh toán vẫn còn nhiều bước xác thực gây phiền toái.
+
+Dựa trên phân tích trên, hệ thống cần phát triển sẽ học hỏi những ưu điểm như giao diện thân thiện, tính năng tìm kiếm mạnh, và đa dạng phương thức thanh toán. Đồng thời khắc phục các hạn chế bằng cách tối ưu tốc độ tải trang, đơn giản hóa quy trình thanh toán, và cân bằng giữa tính năng phong phú với sự đơn giản dễ sử dụng.
+
+\section{Phân tích yêu cầu hệ thống}
 \label{section:2.2}
-Phần \ref{section:2.2} này có nhiệm vụ tóm tắt các chức năng của phần mềm. Trong phần này, sinh viên lưu ý chỉ mô tả chức năng mức cao (tổng quan) mà không đặc tả chi tiết cho từng chức năng. Đặc tả chi tiết được trình bày trong phần \ref{section:2.3}.
 
-\subsection{Biểu đồ use case tổng quát}
+Sau khi khảo sát các hệ thống hiện có, phần này sẽ phân tích chi tiết yêu cầu của hệ thống thông qua việc xác định các tác nhân, yêu cầu chức năng và biểu đồ use case mô tả tương tác giữa người dùng và hệ thống.
+
+\subsection{Các tác nhân}
 \label{subsection:2.2.1}
-Sinh viên vẽ biểu đồ use case tổng quan và giải thích các tác nhân tham gia là gì, nêu vai trò của từng tác nhân, và mô tả ngắn gọn các use case chính.
 
-\subsection{Biểu đồ use case phân rã XYZ}
+Hệ thống có hai tác nhân chính với vai trò và quyền hạn khác nhau.
+
+Khách hàng là tác nhân chính sử dụng hệ thống để mua sắm. Vai trò của khách hàng bao gồm tìm kiếm và duyệt sản phẩm theo danh mục hoặc từ khóa, xem thông tin chi tiết sản phẩm bao gồm mô tả, hình ảnh, giá cả và đánh giá, quản lý giỏ hàng với các thao tác thêm, xóa, cập nhật số lượng sản phẩm, quản lý danh sách yêu thích để lưu các sản phẩm quan tâm, thực hiện đặt hàng và thanh toán thông qua cổng PayOS, theo dõi trạng thái đơn hàng từ khi đặt hàng đến khi giao hàng thành công, và quản lý thông tin cá nhân như địa chỉ, số điện thoại liên lạc.
+
+Quản trị viên là tác nhân có quyền quản lý toàn bộ hệ thống. Vai trò của quản trị viên bao gồm quản lý danh mục sản phẩm với các thao tác tạo mới, chỉnh sửa, xóa danh mục, quản lý sản phẩm bao gồm thêm sản phẩm mới với đầy đủ thông tin, chỉnh sửa thông tin sản phẩm hiện có, xóa sản phẩm không còn kinh doanh, và upload hình ảnh sản phẩm, quản lý sự kiện khuyến mãi để tạo các chương trình giảm giá theo thời gian, quản lý đơn hàng với khả năng xem danh sách tất cả đơn hàng, xem chi tiết từng đơn hàng, cập nhật trạng thái xử lý đơn hàng, và xem báo cáo thống kê về doanh thu, sản phẩm bán chạy, số lượng đơn hàng theo thời gian.
+
+\subsection{Yêu cầu chức năng}
 \label{subsection:2.2.2}
-Với mỗi use case mức cao trong biểu đồ use case tổng quan, sinh viên tạo một mục riêng như mục \ref{subsection:2.2.2} và tiến hành phân rã use case đó. Lưu ý tên use case cần phân rã trong biểu đồ use case tổng quan phải khớp với tên đề mục.
 
-Trong mỗi mục như vậy, sinh viên vẽ và giải thích ngắn gọn các use case phân rã.
+Các yêu cầu chức năng được nhóm thành các module nghiệp vụ rõ ràng.
 
-\subsection{Quy trình nghiệp vụ}
-\label{subsection:2.2.3}
-Nếu sản phẩm/hệ thống cần xây dựng có quy trình nghiệp vụ quan trọng/đáng chú ý, sinh viên cần mô tả và vẽ biểu đồ hoạt động minh họa quy trình nghiệp vụ đó. Sinh viên lưu ý đây không phải là luồng sự kiện của từng use case, mà là luồng hoạt động kết hợp nhiều use case để thực hiện một nghiệp vụ nào đó.
+Module Xác thực và Phân quyền đảm bảo an toàn cho hệ thống. Chức năng đăng ký cho phép người dùng tạo tài khoản mới bằng email và mật khẩu, với kiểm tra tính hợp lệ của thông tin đăng ký. Chức năng đăng nhập xác thực người dùng bằng email và mật khẩu, tạo JWT token để duy trì phiên làm việc. Hệ thống phân quyền dựa trên vai trò để giới hạn quyền truy cập vào các chức năng nhạy cảm.
 
-Ví dụ, một hệ thống quản lý thư viện có quy trình nghiệp vụ mượn trả với mô tả sơ bộ như sau: Sinh viên làm thẻ mượn, sau đó sinh viên đăng ký mượn sách, thủ thư cho mượn, và cuối cùng sinh viên trả lại sách cho thư viện. Một hệ thống có thể có một vài quy trình nghiệp vụ quan trọng như vậy.
-\section{Đặc tả chức năng}
+Module Quản lý Sản phẩm cung cấp đầy đủ chức năng liên quan đến sản phẩm. Chức năng hiển thị danh sách sản phẩm hỗ trợ phân trang, lọc theo danh mục và khoảng giá, sắp xếp theo nhiều tiêu chí như giá, tên, ngày tạo. Chức năng tìm kiếm cho phép tìm sản phẩm theo tên với gợi ý tự động. Chức năng xem chi tiết hiển thị đầy đủ thông tin sản phẩm bao gồm tên, mô tả, giá, hình ảnh, số lượng tồn kho và đánh giá. Với quản trị viên, hệ thống cung cấp chức năng thêm sản phẩm mới với form nhập đầy đủ thông tin, chỉnh sửa thông tin sản phẩm hiện có, xóa sản phẩm với xác nhận để tránh thao tác nhầm, và upload hình ảnh sản phẩm với xem trước.
+
+Module Giỏ hàng giúp người dùng quản lý sản phẩm trước khi mua. Chức năng thêm sản phẩm vào giỏ hàng cho phép chọn số lượng và kiểm tra tồn kho. Chức năng xem giỏ hàng hiển thị danh sách sản phẩm với hình ảnh, tên, giá, số lượng và tổng tiền. Chức năng cập nhật số lượng cho phép tăng giảm số lượng từng sản phẩm với kiểm tra tồn kho. Chức năng xóa sản phẩm cho phép xóa từng sản phẩm hoặc xóa toàn bộ giỏ hàng.
+
+Module Đặt hàng và Thanh toán xử lý quy trình mua hàng. Chức năng tạo đơn hàng thu thập thông tin giao hàng bao gồm địa chỉ, số điện thoại, ghi chú, tính toán tổng tiền và tạo bản ghi đơn hàng trong database. Chức năng thanh toán tích hợp PayOS để tạo link thanh toán, chuyển hướng người dùng đến trang thanh toán PayOS, nhận callback từ PayOS sau khi thanh toán, xác thực checksum để đảm bảo tính toàn vẹn, và cập nhật trạng thái đơn hàng dựa trên kết quả thanh toán. Chức năng theo dõi đơn hàng cho phép xem danh sách đơn hàng của khách hàng, xem chi tiết từng đơn hàng bao gồm sản phẩm, tổng tiền, trạng thái, và hiển thị lịch sử thay đổi trạng thái.
+
+Module Quản trị hệ thống cung cấp các công cụ cho quản trị viên. Dashboard hiển thị tổng quan số liệu quan trọng như tổng doanh thu, số đơn hàng theo trạng thái, sản phẩm bán chạy nhất, và biểu đồ doanh thu theo thời gian. Quản lý danh mục cho phép tạo danh mục mới, chỉnh sửa tên và mô tả danh mục, và xóa danh mục không còn sử dụng. Quản lý sự kiện cho phép tạo sự kiện khuyến mãi với thời gian bắt đầu và kết thúc, gắn sự kiện với sản phẩm, và quản lý hiển thị sự kiện trên trang chủ. Quản lý đơn hàng cho phép xem tất cả đơn hàng với filter theo trạng thái và ngày, cập nhật trạng thái đơn hàng từ đang xử lý, đã xác nhận, đang giao hàng đến hoàn thành.
+
+\section{Đặc tả Use Case}
 \label{section:2.3}
-Sinh viên lựa chọn từ 4 đến 7 use case quan trọng nhất của đồ án để đặc tả chi tiết. Mỗi đặc tả bao gồm ít nhất các thông tin sau: (i) Tên use case, (ii) Luồng sự kiện (chính và phát sinh), (iii) Tiền điều kiện, và (iv) Hậu điều kiện. Sinh viên chỉ vẽ bổ sung biểu đồ hoạt động khi đặc tả use case phức tạp.
-\subsection{Đặc tả use case A}
-\hfill
-\subsection{Đặc tả use case B}
-\hfill
+
+Phần này trình bày chi tiết đặc tả của các use case quan trọng nhất trong hệ thống. Mỗi use case được mô tả rõ ràng về mục đích, tác nhân tham gia, điều kiện tiên quyết, luồng sự kiện và kết quả mong đợi.
+
+\subsection{Đặc tả Use Case: Đăng nhập hệ thống}
+\label{subsection:2.3.1}
+
+\textbf{Tóm tắt:} Use case này mô tả quy trình đăng nhập của người dùng vào hệ thống để truy cập các chức năng yêu cầu xác thực.
+
+\textbf{Tác nhân:} Khách hàng, Quản trị viên.
+
+\textbf{Tiền điều kiện:} Người dùng đã có tài khoản trong hệ thống.
+
+\textbf{Luồng sự kiện chính:}
+\begin{enumerate}
+\item Người dùng truy cập trang đăng nhập.
+\item Hệ thống hiển thị form đăng nhập với các trường email và mật khẩu.
+\item Người dùng nhập email và mật khẩu vào form.
+\item Người dùng nhấn nút Đăng nhập.
+\item Hệ thống xác thực thông tin đăng nhập với database.
+\item Hệ thống tạo JWT token chứa thông tin người dùng và vai trò.
+\item Hệ thống lưu token vào cookie của trình duyệt.
+\item Hệ thống chuyển hướng người dùng về trang chủ hoặc trang trước đó.
+\item Use case kết thúc thành công.
+\end{enumerate}
+
+\textbf{Luồng sự kiện thay thế:}
+\begin{enumerate}
+\item[5a.] Email không tồn tại trong hệ thống:
+  \begin{enumerate}
+  \item[5a.1.] Hệ thống hiển thị thông báo lỗi "Email hoặc mật khẩu không chính xác".
+  \item[5a.2.] Quay lại bước 2.
+  \end{enumerate}
+\item[5b.] Mật khẩu không khớp:
+  \begin{enumerate}
+  \item[5b.1.] Hệ thống hiển thị thông báo lỗi "Email hoặc mật khẩu không chính xác".
+  \item[5b.2.] Quay lại bước 2.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Hậu điều kiện:} Người dùng đăng nhập thành công và có thể truy cập các chức năng yêu cầu xác thực.
+
+\subsection{Đặc tả Use Case: Tìm kiếm và lọc sản phẩm}
+\label{subsection:2.3.2}
+
+\textbf{Tóm tắt:} Use case này cho phép người dùng tìm kiếm sản phẩm theo từ khóa và lọc kết quả theo nhiều tiêu chí.
+
+\textbf{Tác nhân:} Khách hàng.
+
+\textbf{Tiền điều kiện:} Hệ thống có ít nhất một sản phẩm trong database.
+
+\textbf{Luồng sự kiện chính:}
+\begin{enumerate}
+\item Người dùng truy cập trang danh sách sản phẩm hoặc trang chủ.
+\item Hệ thống hiển thị ô tìm kiếm và các bộ lọc.
+\item Người dùng nhập từ khóa vào ô tìm kiếm.
+\item Hệ thống gửi request tìm kiếm đến server.
+\item Server tìm kiếm sản phẩm có tên chứa từ khóa trong database.
+\item Server trả về danh sách sản phẩm phù hợp.
+\item Hệ thống hiển thị kết quả tìm kiếm với phân trang.
+\item Người dùng áp dụng bộ lọc danh mục hoặc khoảng giá.
+\item Hệ thống cập nhật danh sách sản phẩm theo bộ lọc.
+\item Use case kết thúc thành công.
+\end{enumerate}
+
+\textbf{Luồng sự kiện thay thế:}
+\begin{enumerate}
+\item[6a.] Không tìm thấy sản phẩm nào:
+  \begin{enumerate}
+  \item[6a.1.] Hệ thống hiển thị thông báo "Không tìm thấy sản phẩm phù hợp".
+  \item[6a.2.] Quay lại bước 2.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Hậu điều kiện:} Danh sách sản phẩm phù hợp với tiêu chí tìm kiếm và lọc được hiển thị.
+
+\subsection{Đặc tả Use Case: Quản lý giỏ hàng}
+\label{subsection:2.3.3}
+
+\textbf{Tóm tắt:} Use case này mô tả quy trình người dùng thêm, xóa, cập nhật sản phẩm trong giỏ hàng.
+
+\textbf{Tác nhân:} Khách hàng.
+
+\textbf{Tiền điều kiện:} Người dùng đã đăng nhập vào hệ thống.
+
+\textbf{Luồng sự kiện chính:}
+\begin{enumerate}
+\item Người dùng xem chi tiết một sản phẩm.
+\item Hệ thống hiển thị thông tin sản phẩm và nút Thêm vào giỏ hàng.
+\item Người dùng chọn số lượng muốn mua.
+\item Người dùng nhấn nút Thêm vào giỏ hàng.
+\item Hệ thống kiểm tra số lượng tồn kho.
+\item Hệ thống thêm sản phẩm vào giỏ hàng trong state management.
+\item Hệ thống đồng bộ giỏ hàng lên server.
+\item Hệ thống hiển thị thông báo thành công.
+\item Người dùng truy cập trang giỏ hàng.
+\item Hệ thống hiển thị danh sách sản phẩm trong giỏ với tổng tiền.
+\item Use case kết thúc thành công.
+\end{enumerate}
+
+\textbf{Luồng sự kiện thay thế:}
+\begin{enumerate}
+\item[5a.] Số lượng mua lớn hơn tồn kho:
+  \begin{enumerate}
+  \item[5a.1.] Hệ thống hiển thị thông báo "Số lượng sản phẩm không đủ".
+  \item[5a.2.] Quay lại bước 3.
+  \end{enumerate}
+\item[7a.] Lỗi kết nối server:
+  \begin{enumerate}
+  \item[7a.1.] Hệ thống lưu giỏ hàng vào localStorage tạm thời.
+  \item[7a.2.] Hệ thống đồng bộ lại khi có kết nối.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Hậu điều kiện:} Sản phẩm được thêm vào giỏ hàng và hiển thị trong trang giỏ hàng.
+
+\subsection{Đặc tả Use Case: Thanh toán với PayOS}
+\label{subsection:2.3.4}
+
+\textbf{Tóm tắt:} Use case này mô tả quy trình thanh toán đơn hàng thông qua cổng thanh toán PayOS.
+
+\textbf{Tác nhân:} Khách hàng, PayOS System.
+
+\textbf{Tiền điều kiện:} Người dùng đã đăng nhập và có sản phẩm trong giỏ hàng.
+
+\textbf{Luồng sự kiện chính:}
+\begin{enumerate}
+\item Người dùng truy cập trang giỏ hàng và nhấn nút Thanh toán.
+\item Hệ thống chuyển hướng đến trang nhập thông tin giao hàng.
+\item Người dùng nhập địa chỉ giao hàng, số điện thoại và ghi chú.
+\item Người dùng xác nhận thông tin và nhấn nút Đặt hàng.
+\item Hệ thống tạo đơn hàng trong database với trạng thái Chờ thanh toán.
+\item Hệ thống gọi PayOS API để tạo link thanh toán với thông tin đơn hàng.
+\item PayOS trả về link thanh toán và mã giao dịch.
+\item Hệ thống chuyển hướng người dùng đến trang thanh toán PayOS.
+\item Người dùng chọn phương thức thanh toán và hoàn tất giao dịch trên PayOS.
+\item PayOS xác nhận thanh toán thành công và gửi webhook đến hệ thống.
+\item Hệ thống xác thực checksum của webhook.
+\item Hệ thống cập nhật trạng thái đơn hàng thành Đã thanh toán.
+\item Hệ thống gửi email xác nhận đơn hàng cho người dùng.
+\item PayOS chuyển hướng người dùng về trang kết quả thanh toán.
+\item Use case kết thúc thành công.
+\end{enumerate}
+
+\textbf{Luồng sự kiện thay thế:}
+\begin{enumerate}
+\item[6a.] PayOS API trả về lỗi:
+  \begin{enumerate}
+  \item[6a.1.] Hệ thống hiển thị thông báo lỗi kỹ thuật.
+  \item[6a.2.] Hệ thống hủy đơn hàng.
+  \item[6a.3.] Use case kết thúc thất bại.
+  \end{enumerate}
+\item[10a.] Người dùng hủy thanh toán trên PayOS:
+  \begin{enumerate}
+  \item[10a.1.] PayOS gửi webhook hủy giao dịch.
+  \item[10a.2.] Hệ thống cập nhật trạng thái đơn hàng thành Đã hủy.
+  \item[10a.3.] Use case kết thúc.
+  \end{enumerate}
+\item[11a.] Checksum không hợp lệ:
+  \begin{enumerate}
+  \item[11a.1.] Hệ thống từ chối webhook và ghi log cảnh báo.
+  \item[11a.2.] Trạng thái đơn hàng giữ nguyên Chờ thanh toán.
+  \item[11a.3.] Use case kết thúc thất bại.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Hậu điều kiện:} Đơn hàng được tạo và thanh toán thành công, trạng thái được cập nhật trong database.
+
+\subsection{Đặc tả Use Case: Quản lý sản phẩm (Admin)}
+\label{subsection:2.3.5}
+
+\textbf{Tóm tắt:} Use case này cho phép quản trị viên thêm, sửa, xóa sản phẩm trong hệ thống.
+
+\textbf{Tác nhân:} Quản trị viên.
+
+\textbf{Tiền điều kiện:} Quản trị viên đã đăng nhập với quyền admin.
+
+\textbf{Luồng sự kiện chính - Thêm sản phẩm mới:}
+\begin{enumerate}
+\item Quản trị viên truy cập trang quản lý sản phẩm.
+\item Hệ thống hiển thị danh sách sản phẩm và nút Thêm sản phẩm mới.
+\item Quản trị viên nhấn nút Thêm sản phẩm mới.
+\item Hệ thống hiển thị form nhập thông tin sản phẩm.
+\item Quản trị viên nhập tên, mô tả, giá, số lượng, danh mục.
+\item Quản trị viên upload hình ảnh sản phẩm.
+\item Hệ thống xử lý upload và lưu hình ảnh vào server.
+\item Quản trị viên nhấn nút Lưu.
+\item Hệ thống validate dữ liệu nhập vào.
+\item Hệ thống tạo bản ghi sản phẩm mới trong database.
+\item Hệ thống hiển thị thông báo thành công và cập nhật danh sách.
+\item Use case kết thúc thành công.
+\end{enumerate}
+
+\textbf{Luồng sự kiện thay thế:}
+\begin{enumerate}
+\item[9a.] Dữ liệu không hợp lệ (thiếu trường bắt buộc, giá âm):
+  \begin{enumerate}
+  \item[9a.1.] Hệ thống hiển thị thông báo lỗi chi tiết.
+  \item[9a.2.] Quay lại bước 5.
+  \end{enumerate}
+\item[7a.] Lỗi upload hình ảnh:
+  \begin{enumerate}
+  \item[7a.1.] Hệ thống hiển thị thông báo lỗi upload.
+  \item[7a.2.] Quay lại bước 6.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Hậu điều kiện:} Sản phẩm mới được thêm vào database và hiển thị trong danh sách.
+
+\subsection{Đặc tả Use Case: Xem thống kê Dashboard}
+\label{subsection:2.3.6}
+
+\textbf{Tóm tắt:} Use case này cho phép quản trị viên xem các số liệu thống kê về hoạt động kinh doanh.
+
+\textbf{Tác nhân:} Quản trị viên.
+
+\textbf{Tiền điều kiện:} Quản trị viên đã đăng nhập với quyền admin.
+
+\textbf{Luồng sự kiện chính:}
+\begin{enumerate}
+\item Quản trị viên truy cập trang Dashboard.
+\item Hệ thống gửi request lấy dữ liệu thống kê từ server.
+\item Server tính toán các số liệu: tổng doanh thu, số đơn hàng theo trạng thái.
+\item Server truy vấn sản phẩm bán chạy nhất.
+\item Server tính toán doanh thu theo ngày trong 7 ngày gần nhất.
+\item Server trả về dữ liệu thống kê dạng JSON.
+\item Hệ thống hiển thị các card tóm tắt với số liệu chi tiết.
+\item Hệ thống vẽ biểu đồ doanh thu theo thời gian.
+\item Hệ thống hiển thị bảng top sản phẩm bán chạy.
+\item Use case kết thúc thành công.
+\end{enumerate}
+
+\textbf{Hậu điều kiện:} Dashboard hiển thị đầy đủ số liệu thống kê cập nhật.
 
 \section{Yêu cầu phi chức năng}
 \label{section:2.4}
-Trong phần này, sinh viên đưa ra các yêu cầu khác nếu có, bao gồm các yêu cầu phi chức năng như hiệu năng, độ tin cậy, tính dễ dùng, tính dễ bảo trì, hoặc các yêu cầu về mặt kỹ thuật như về CSDL, công nghệ sử dụng, v.v.
 
+Ngoài các yêu cầu chức năng, hệ thống cần đáp ứng các yêu cầu phi chức năng quan trọng để đảm bảo chất lượng và trải nghiệm người dùng.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Về hiệu năng, hệ thống cần đảm bảo thời gian phản hồi nhanh. Thời gian tải trang không vượt quá 2 giây trong điều kiện mạng bình thường. API response time dưới 500ms cho các request đơn giản và dưới 1 giây cho các request phức tạp. Hệ thống cần có khả năng xử lý đồng thời ít nhất 100 người dùng mà không giảm hiệu năng đáng kể. Database query cần được tối ưu với việc sử dụng index phù hợp.
+
+Về bảo mật, hệ thống phải bảo vệ thông tin người dùng và giao dịch. Mật khẩu người dùng được mã hóa bằng bcrypt với số vòng hash tối thiểu là 10. Xác thực sử dụng JWT với thời gian hết hạn hợp lý, refresh token để duy trì phiên. HTTPS bắt buộc cho tất cả các request trong môi trường production. Input validation nghiêm ngặt để phòng chống SQL injection, XSS và các tấn công phổ biến. CORS được cấu hình chặt chẽ chỉ cho phép request từ domain được ủy quyền. Checksum validation cho webhook từ PayOS để đảm bảo tính toàn vẹn dữ liệu.
+
+Về khả năng sử dụng, giao diện người dùng cần thân thiện và trực quan. Thiết kế responsive hoạt động tốt trên desktop, tablet và mobile. Hệ thống cung cấp thông báo lỗi rõ ràng, dễ hiểu cho người dùng. Quy trình thanh toán được tối ưu với số bước tối thiểu. Loading indicator hiển thị khi có thao tác xử lý lâu.
+
+Về độ tin cậy, hệ thống cần hoạt động ổn định. Uptime tối thiểu 99 phần trăm trong môi trường production. Xử lý lỗi graceful, không để hệ thống crash hoàn toàn. Logging đầy đủ các lỗi và hoạt động quan trọng để hỗ trợ debug. Backup database định kỳ để phòng ngừa mất dữ liệu.
+
+Về khả năng bảo trì, code cần được tổ chức rõ ràng. Cấu trúc dự án tuân theo best practices của Next.js và Express. Code được chia thành các module nhỏ, tái sử dụng được. Comment đầy đủ cho các phần logic phức tạp. Sử dụng TypeScript để tăng tính type-safe. Tuân thủ coding convention thống nhất trong toàn bộ dự án.
+
+Về khả năng mở rộng, hệ thống được thiết kế để dễ dàng mở rộng. Kiến trúc module hóa cho phép thêm chức năng mới mà không ảnh hưởng code cũ. API được thiết kế theo RESTful chuẩn, dễ dàng mở rộng endpoint. Database schema linh hoạt với MongoDB, dễ thêm trường mới. Hệ thống có thể scale horizontal bằng cách tăng số instance server.
+
+Các yêu cầu phi chức năng này đảm bảo hệ thống không chỉ đáp ứng đúng chức năng mà còn có chất lượng cao, an toàn và sẵn sàng cho việc vận hành thực tế.
 
 \end{document}

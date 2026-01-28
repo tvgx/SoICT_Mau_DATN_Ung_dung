@@ -1,12 +1,94 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-\section{Kết luận}
-Sinh viên so sánh kết quả nghiên cứu hoặc sản phẩm của mình với các nghiên cứu hoặc sản phẩm tương tự.
 
-Sinh viên phân tích trong suốt quá trình thực hiện ĐATN, mình đã làm được gì, chưa làm được gì, các đóng góp nổi bật là gì, và tổng hợp những bài học kinh nghiệm rút ra nếu có.
+Chương cuối cùng này tổng kết toàn bộ quá trình nghiên cứu và triển khai hệ thống thương mại điện tử. Nội dung bao gồm kết luận về những gì đã đạt được, đánh giá kết quả so với mục tiêu ban đầu, và đề xuất các hướng phát triển tiếp theo cho hệ thống.
+
+\section{Kết luận}
+\label{section:6.1}
+
+Đề tài đã thành công xây dựng một hệ thống thương mại điện tử hoàn chỉnh, đáp ứng đầy đủ các yêu cầu đề ra từ ban đầu.
+
+Về bài toán đặt ra, như đã phân tích trong Chương 1, các nền tảng thương mại điện tử hiện tại vẫn còn nhiều hạn chế về trải nghiệm người dùng, quy trình thanh toán phức tạp, và thiếu công cụ quản lý tập trung. Từ những vấn đề này, đề tài hướng đến việc xây dựng một giải pháp cải tiến với giao diện thân thiện, thanh toán đơn giản thông qua PayOS, và dashboard quản lý mạnh mẽ cho admin.
+
+Về giải pháp đã xây dựng, hệ thống được thiết kế theo kiến trúc Client-Server với sự phân tách rõ ràng giữa frontend và backend. Phần backend sử dụng Node.js với Express framework, tổ chức theo mô hình MVC mở rộng với năm tầng: Routes, Controllers, Services, Models và Middlewares. MongoDB được chọn làm cơ sở dữ liệu với sáu collections chính là users, products, categories, orders, events và wishlist. Passport.js kết hợp JWT cung cấp authentication stateless và secure. PayOS được tích hợp làm cổng thanh toán với webhook mechanism để cập nhật trạng thái tự động.
+
+Phần frontend được xây dựng với Next.js phiên bản 16, tận dụng App Router và Server Components để tối ưu performance. Zustand quản lý state global với cart store, auth store và wishlist store, kết hợp persist middleware để lưu vào localStorage. TypeScript được sử dụng xuyên suốt để đảm bảo type safety. TailwindCSS và Radix UI cung cấp component library accessible và customizable.
+
+Về kết quả đạt được dựa trên code thực tế, hệ thống implement đầy đủ các chức năng core. Module authentication cho phép user đăng ký, đăng nhập với email và password được hash bằng bcrypt, JWT tokens được tạo và verify qua middleware. Module product management cung cấp CRUD operations cho admin, tìm kiếm full-text với MongoDB text index, lọc theo category và price range, pagination cho performance. Module shopping cart implement hybrid solution với optimistic updates trên client, sync với backend qua API, persist trong localStorage và MongoDB, và selection mechanism cho checkout. Module checkout và payment tích hợp PayOS với flow tạo payment link, redirect đến PayOS, xử lý webhook callback, verify checksum, và update order status. Module order management cho phép user xem order history và track status, admin xem tất cả orders với filters. Module dashboard hiển thị statistics như total revenue, order counts theo status, top selling products, và revenue chart.
+
+Về deployment, hệ thống đã được triển khai thành công trên cloud platforms. Database host trên MongoDB Atlas với M0 free tier. Backend deploy trên Render với auto deployment từ GitHub. Frontend deploy trên Vercel với CDN distribution. CI/CD được setup với GitHub Actions để automate testing và deployment. Environment variables được configure proper cho production security.
+
+Về testing và validation, unit tests cover các service functions quan trọng. Integration tests verify API endpoints hoạt động đúng. System tests validate end-to-end user flows từ registration đến checkout. Payment testing được thực hiện trong PayOS sandbox environment. Performance testing cho thấy API response times acceptable và database queries optimized với indexes.
+
+Về đánh giá so với mục tiêu, tất cả mục tiêu chức năng đã được hoàn thành. User có thể browse products, search, filter, add to cart, checkout và pay qua PayOS. Admin có thể quản lý products, categories, events, view orders và statistics. Các yêu cầu phi chức năng cũng được đảm bảo với performance acceptable, security với multiple layers, usability với responsive design, reliability với error handling, và maintainability với clear code structure.
+
+Tuy nhiên, hệ thống vẫn có một số hạn chế. Concurrent cart updates có thể gây race conditions. Webhook reliability phụ thuộc vào server uptime. Image optimization chưa được implement đầy đủ. Search chỉ support tiếng Việt có dấu. Test coverage có thể được improve thêm.
+
+Nhìn chung, đề tài đã thành công deliver một e-commerce platform functional và production-ready, demonstrate khả năng áp dụng kiến thức lý thuyết vào thực tiễn, và provide valuable learning experience về modern web development.
+
+\section{Khó khăn và bài học kinh nghiệm}
+\label{section:6.2}
+
+Trong quá trình thực hiện đề tài, nhiều khó khăn đã được gặp phải và khắc phục, mang lại những bài học quý báu.
+
+Về kỹ thuật, việc tích hợp PayOS ban đầu gặp khó khăn do documentation chưa đầy đủ cho một số edge cases. Việc debug webhook flow khó khăn vì cần test với actual payment transactions. Giải pháp là sử dụng PayOS sandbox environment và log comprehensively để track flow. Bài học là luôn có comprehensive logging và error tracking từ đầu project.
+
+State management với Zustand và localStorage sync gặp vấn đề với timing issues. Optimistic updates đôi khi không revert đúng khi API fails. Giải pháp là implement proper error boundaries và rollback mechanisms. Bài học là testing edge cases và error scenarios quan trọng không kém happy path.
+
+MongoDB schema design phải balance giữa normalization và denormalization. Ban đầu order chỉ store product IDs, nhưng khi product bị delete hoặc update price, order history không accurate. Giải pháp là denormalize product info vào order items. Bài học là trong e-commerce, historical data immutability quan trọng.
+
+TypeScript strict mode enforcement gặp nhiều type errors ban đầu. Việc define proper types cho API responses và Mongoose models tốn thời gian. Nhưng sau đó TypeScript catch nhiều bugs sớm và refactoring dễ hơn. Bài học là initial investment cho type safety pays off long-term.
+
+Về deployment, configuration environment variables cho nhiều platforms khác nhau phức tạp. CORS issues khi deploy production vì URL khác development. Giải pháp là có clear environment configuration và test thoroughly trước khi deploy. Bài học là infrastructure as code và environment parity giữa dev và prod quan trọng.
+
+Testing strategy ban đầu chưa rõ ràng. Viết tests sau khi code xong khó hơn TDD approach. Giải pháp là adopt test-driven development cho các modules mới. Bài học là testing nên được integrate vào development process từ đầu chứ không phải afterthought.
+
+Về quản lý dự án, scope creep là vấn đề khi liên tục muốn thêm features mới. Giải pháp là strict về MVP scope và track features cho future versions. Bài học là focus on core functionality trước khi polish.
+
+Git workflow ban đầu không consistent với commits lớn và messages unclear. Sau khi adopt conventional commits và feature branches, collaboration và review dễ hơn. Bài học là good version control practices essential cho code quality.
+
+Những khó khăn và bài học này không chỉ giúp hoàn thành tốt đề tài mà còn chuẩn bị skills và mindset cho công việc software development thực tế sau này.
 
 \section{Hướng phát triển}
-Trong phần này, sinh viên trình bày định hướng công việc trong tương lai để hoàn thiện sản phẩm hoặc nghiên cứu của mình.
+\label{section:6.3}
 
-Trước tiên, sinh viên trình bày các công việc cần thiết để hoàn thiện các chức năng/nhiệm vụ đã làm. Sau đó sinh viên phân tích các hướng đi mới cho phép cải thiện và nâng cấp các chức năng/nhiệm vụ đã làm.
+Hệ thống hiện tại có nhiều tiềm năng để phát triển và cải tiến thêm.
+
+Về mở rộng chức năng, product reviews và ratings hiện chưa có interface cho users submit. Hướng phát triển là implement review system với CRUD operations, rating aggregation, và review moderation cho admin. Product recommendations dựa trên purchase history hoặc collaborative filtering để tăng conversion rate. Wishlist hiện chỉ lưu products, có thể extend để share wishlist, notify khi price drop. Chat support real-time với WebSocket để customer có thể chat trực tiếp với support team hoặc chatbot.
+
+Về payment gateways, hiện chỉ support PayOS. Có thể tích hợp thêm VNPay, MoMo, ZaloPay để users có nhiều lựa chọn. COD cash on delivery cũng là payment method phổ biến tại Việt Nam cần được support. Installment payment cho high-value products để tăng accessibility.
+
+Về admin features, inventory management cần được enhance với low stock alerts, automatic reorder points, và inventory tracking across multiple warehouses. Sales analytics có thể expand với cohort analysis, customer lifetime value, và predictive analytics. Marketing tools như discount codes, flash sales với countdown timers, và email campaigns integration.
+
+Về mobile experience, responsive web hiện tại hoạt động trên mobile browser nhưng native mobile app với React Native hoặc Flutter sẽ provide better experience với push notifications, offline capabilities, và native UI. Progressive Web App features như service workers, offline caching, và add to home screen có thể improve mobile web experience.
+
+Về performance optimization, implement Redis caching cho frequently accessed data như product lists, category trees. Image optimization với automatic compression, format conversion sang WebP, và CDN integration. Database query optimization tiếp tục với query profiling và adding selective indexes. Frontend code splitting aggressive hơn và lazy loading cho non-critical components.
+
+Về security enhancements, implement two-factor authentication cho accounts với sensitive data. Rate limiting per user account không chỉ per IP để prevent abuse. CSRF protection với tokens cho state-changing operations. Content Security Policy headers stricter để prevent XSS. Regular security audits và dependency updates để patch vulnerabilities.
+
+Về infrastructure improvements, containerization với Docker để consistent environments across development và production. Kubernetes orchestration cho auto-scaling based on traffic. Monitoring và alerting với Prometheus và Grafana để track system health. Logging aggregation với ELK stack để centralize logs.
+
+Về internationalization, support multiple languages với i18n libraries. Multiple currencies với real-time exchange rates. Localization cho dates, numbers, và addresses theo regions.
+
+Về business features, multi-vendor marketplace cho phép sellers register và manage their own stores. Subscription model cho recurring products. Loyalty program với points accumulation và redemption. Affiliate marketing program để expand reach.
+
+Các hướng phát triển này nếu được implement sẽ transform hệ thống từ basic e-commerce platform thành comprehensive solution competitive với major platforms, serving larger user base và generating more business value.
+
+\section{Tổng kết}
+\label{section:6.4}
+
+Đề tài "Hệ thống Thương mại Điện tử Tích hợp Thanh toán PayOS" đã thành công hoàn thành việc phân tích, thiết kế và triển khai một nền tảng e-commerce modern và functional.
+
+Về mặt kỹ thuật, hệ thống demonstrate successful application của modern JavaScript full-stack development với Next.js, React, Express, MongoDB, và các công nghệ liên quan. Kiến trúc được thiết kế sound với clear separation of concerns, facilitating maintenance và future enhancements. Security được prioritize với multiple protection layers từ authentication đến data validation.
+
+Về mặt thực tiễn, hệ thống có thể deploy và operate trong production environment, serving real users và processing actual transactions. Deployment guide cung cấp roadmap cho businesses muốn adopt solution. Code quality và structure serve như reference implementation cho similar projects.
+
+Về mặt học tập, đề tài provide comprehensive learning experience covering full software development lifecycle từ requirements analysis, system design, implementation, testing, deployment, đến maintenance. Hands-on experience với industry-standard tools và practices prepare cho career trong software development.
+
+Những khó khăn encountered và overcome trong quá trình thực hiện không chỉ strengthen technical skills mà còn develop problem-solving mindset và resilience cần thiết cho software engineers.
+
+Các hướng phát triển đề xuất open up exciting possibilities để continue evolving system, incorporating new technologies và addressing emerging user needs.
+
+Kết luận, đề tài không chỉ achieve academic objectives của Project III mà còn deliver tangible value với working product có potential real-world applications, marking successful culmination của học tập và nghiên cứu trong lĩnh vực công nghệ thông tin.
+
 \end{document}

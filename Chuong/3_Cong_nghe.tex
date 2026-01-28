@@ -1,17 +1,165 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-Chương này có độ dài không quá 10 trang. Nếu cần trình bày dài hơn, sinh viên đưa vào phần phụ lục. Chú ý đây là kiến thức đã có sẵn; SV sau khi tìm hiểu được thì phân tích và tóm tắt lại. Sinh viên không trình bày dài dòng, chi tiết. 
+Sau khi hoàn thành phân tích yêu cầu trong Chương 2, chương này sẽ trình bày các công nghệ được lựa chọn để xây dựng hệ thống. Nội dung tập trung vào việc giới thiệu kiến trúc tổng thể, các công nghệ Backend và Frontend, cùng với cơ chế tích hợp thanh toán PayOS. Mỗi công nghệ sẽ được phân tích về vai trò, ưu điểm và lý do lựa chọn trong bối cảnh dự án.
 
-Với đồ án ứng dụng, sinh viên để tên chương là “Công nghệ sử dụng”. Trong chương này, sinh viên giới thiệu về các công nghệ, nền tảng sử dụng trong đồ án. Sinh viên cũng có thể trình bày thêm nền tảng lý thuyết nào đó nếu cần dùng tới.
+\section{Kiến trúc tổng thể hệ thống}
+\label{section:3.1}
 
-Với đồ án nghiên cứu, sinh viên đổi tên chương thành “Cơ sở lý thuyết”. Khi đó, nội dung cần trình bày bao gồm: Kiến thức nền tảng, cơ sở lý thuyết, các thuật toán, phương pháp nghiên cứu, v.v.
+Hệ thống được thiết kế theo kiến trúc Client-Server với sự phân tách rõ ràng giữa Frontend và Backend. Kiến trúc này mang lại nhiều lợi ích về tính module hóa, khả năng mở rộng và dễ dàng bảo trì.
 
-Với từng công nghệ/nền tảng/lý thuyết được trình bày, sinh viên phải phân tích rõ công nghệ/nền tảng/lý thuyết đó dùng để để giải quyết vấn đề/yêu cầu cụ thể nào ở Chương 2. Hơn nữa, với từng vấn đề/yêu cầu, sinh viên phải liệt kê danh sách các công nghệ/hướng tiếp cận tương tự có thể dùng làm lựa chọn thay thế, rồi giải thích rõ sự lựa chọn của mình.
+Về tổng quan kiến trúc, hệ thống bao gồm ba thành phần chính. Thành phần Client là ứng dụng web được xây dựng bằng Next.js, chạy trên trình duyệt của người dùng. Client chịu trách nhiệm hiển thị giao diện, xử lý tương tác người dùng và gọi API đến server. Thành phần Server là ứng dụng backend được xây dựng bằng Express.js, chạy trên Node.js runtime. Server xử lý logic nghiệp vụ, xác thực người dùng, và tương tác với database cùng các dịch vụ bên ngoài. Thành phần Database sử dụng MongoDB để lưu trữ dữ liệu của hệ thống bao gồm người dùng, sản phẩm, đơn hàng và các thông tin khác.
 
-Lưu ý: Nội dung ĐATN phải có tính chất liên kết, liền mạch, và nhất quán. Vì vậy, các công nghệ/thuật toán trình bày trong chương này phải khớp với nội dung giới thiệu của sinh viên ở phần trước đó. 
+Về luồng dữ liệu trong hệ thống, khi người dùng thao tác trên giao diện, client thu thập dữ liệu và tạo HTTP request gửi đến server thông qua các endpoint RESTful API. Request được gửi kèm JWT token trong header để xác thực người dùng. Server nhận request, thực hiện validate và xác thực quyền truy cập. Nếu hợp lệ, server xử lý logic nghiệp vụ, có thể bao gồm truy vấn database MongoDB, gọi API của dịch vụ bên ngoài như PayOS, hoặc xử lý dữ liệu phức tạp. Sau khi xử lý xong, server trả về response dưới dạng JSON chứa dữ liệu hoặc thông báo lỗi. Client nhận response và cập nhật giao diện người dùng tương ứng.
 
-Trong chương này, để tăng tính khoa học và độ tin cậy, sinh viên nên chỉ rõ nguồn kiến thức mình thu thập được ở tài liệu nào, đồng thời đưa tài liệu đó vào trong danh sách tài liệu tham khảo rồi tạo các tham chiếu chéo (xem hướng dẫn ở phụ lục A.7).
+Về tương tác với các hệ thống bên ngoài, hệ thống tích hợp với PayOS thông qua RESTful API để xử lý thanh toán. Khi người dùng thực hiện thanh toán, server tạo payment link từ PayOS API, chuyển hướng người dùng đến trang thanh toán. PayOS xử lý giao dịch và gửi webhook callback đến server để cập nhật trạng thái. Server xác thực checksum của webhook để đảm bảo tính toàn vẹn trước khi cập nhật database.
 
+Kiến trúc này mang lại nhiều ưu điểm. Thứ nhất là tách biệt concerns, Frontend tập trung vào UI/UX trong khi Backend xử lý business logic, giúp mỗi phần có thể phát triển độc lập. Thứ hai là khả năng scale dễ dàng, có thể tăng số lượng server instance khi traffic tăng mà không cần thay đổi client. Thứ ba là bảo mật tốt hơn, logic nghiệp vụ và database không expose ra client, giảm nguy cơ bị tấn công. Thứ tư là linh hoạt trong deployment, Frontend và Backend có thể deploy trên các nền tảng khác nhau, tối ưu cho từng loại workload.
+
+\section{Công nghệ Backend}
+\label{section:3.2}
+
+Phần Backend đóng vai trò quan trọng trong việc xử lý logic nghiệp vụ, quản lý dữ liệu và cung cấp API cho Frontend. Các công nghệ được lựa chọn cần đảm bảo hiệu năng cao, dễ phát triển và bảo trì.
+
+\subsection{Node.js và Express.js}
+\label{subsection:3.2.1}
+
+Node.js là JavaScript runtime được xây dựng trên V8 engine của Chrome, cho phép chạy JavaScript code trên server. Express.js là web framework phổ biến nhất cho Node.js, cung cấp các công cụ để xây dựng web application và API một cách nhanh chóng.
+
+Về đặc điểm của Node.js, runtime này sử dụng kiến trúc event-driven và non-blocking I/O, cho phép xử lý nhiều request đồng thời mà không cần tạo thread mới cho mỗi request. Điều này đặc biệt hiệu quả cho các ứng dụng có nhiều I/O operation như gọi database hay external API. Node.js sử dụng V8 engine được tối ưu cao, biên dịch JavaScript thành machine code để thực thi nhanh. NPM ecosystem cung cấp hàng triệu package giúp tăng tốc độ phát triển.
+
+Express.js được xây dựng như một minimal và flexible framework. Express cung cấp hệ thống routing mạnh mẽ để định nghĩa các endpoint API. Middleware architecture cho phép xử lý request qua nhiều layer như authentication, logging, error handling. Express hỗ trợ template engine và static file serving. Framework này có cộng đồng lớn với nhiều middleware và plugin có sẵn.
+
+Lý do lựa chọn Node.js và Express.js cho backend của dự án bao gồm nhiều yếu tố. Thứ nhất, JavaScript fullstack cho phép sử dụng cùng một ngôn ngữ cho cả Frontend và Backend, giúp dev có thể làm việc hiệu quả hơn và code có thể share giữa hai phần. Thứ hai, hiệu năng cao với non-blocking I/O phù hợp với ứng dụng thương mại điện tử có nhiều concurrent users. Thứ ba, Express.js đơn giản nhưng đủ mạnh để xây dựng RESTful API với cấu trúc rõ ràng. Thứ tư, NPM ecosystem cung cấp các package cần thiết như mongoose cho MongoDB, passport cho authentication, multer cho file upload. Thứ năm, dễ deploy trên các platform như Render, Heroku hay AWS.
+
+Trong dự án, Express.js được sử dụng để xây dựng RESTful API theo mô hình MVC. Routes định nghĩa các endpoint và HTTP methods. Controllers xử lý request và gọi services. Services chứa business logic và tương tác với database. Middleware được sử dụng cho authentication với Passport.js, validation với express-validator, error handling tập trung và logging với Morgan.
+
+\subsection{MongoDB và Mongoose}
+\label{subsection:3.2.2}
+
+MongoDB là document-oriented NoSQL database, lưu trữ dữ liệu dưới dạng JSON-like documents thay vì tables và rows như SQL database. Mongoose là Object Data Modeling library cho MongoDB và Node.js, cung cấp schema-based solution để model dữ liệu.
+
+Về đặc điểm của MongoDB, database này sử dụng mô hình document store với BSON format. Mỗi document có thể có structure khác nhau, không bắt buộc phải theo schema cứng nhắc. MongoDB hỗ trợ embedded documents và arrays, cho phép lưu trữ dữ liệu phức tạp trong một document. Query language mạnh mẽ hỗ trợ filter, sort, aggregate phức tạp. Indexing giúp tăng tốc độ query. Replication và sharding hỗ trợ high availability và horizontal scaling.
+
+Mongoose cung cấp nhiều tính năng hữu ích cho việc làm việc với MongoDB. Schema definition cho phép định nghĩa cấu trúc và type của data, đảm bảo data consistency. Validation tích hợp giúp kiểm tra dữ liệu trước khi lưu vào database. Middleware hooks cho phép thực thi logic trước và sau các operation như save, update, remove. Virtual properties và methods để thêm computed fields và business logic vào models. Query builder cung cấp API chainable để xây dựng query dễ đọc.
+
+Lý do lựa chọn MongoDB và Mongoose cho dự án có nhiều khía cạnh. Thứ nhất, schema flexibility phù hợp với dữ liệu thương mại điện tử, ví dụ sản phẩm có thể có các attributes khác nhau tùy category. Thứ hai, JSON-native storage hoạt động tốt với JavaScript stack, dữ liệu từ database có thể sử dụng trực tiếp mà không cần transform phức tạp. Thứ ba, embedded documents giúp giảm số lượng joins, ví dụ có thể embed thông tin cơ bản của product trong order thay vì chỉ lưu product ID. Thứ tư, scalability tốt với sharding khi data volume tăng lên. Thứ năm, Mongoose cung cấp type safety và validation, giảm lỗi runtime.
+
+Trong dự án, MongoDB được sử dụng để lưu trữ nhiều loại dữ liệu. Collection users chứa thông tin người dùng với các trường email, password hash, role, và thông tin cá nhân. Collection products lưu sản phẩm với name, description, price, images, category reference, stock quantity. Collection categories quản lý danh mục sản phẩm. Collection orders lưu đơn hàng với user reference, items array chứa product info và quantity, total amount, shipping info, payment status. Collection events lưu các sự kiện khuyến mãi. Mongoose schemas được định nghĩa rõ ràng với validation rules, tạo indexes cho các trường thường được query như email, product name.
+
+\subsection{Authentication và Authorization}
+\label{subsection:3.2.3}
+
+Xác thực và phân quyền là yếu tố quan trọng để bảo mật hệ thống. Dự án sử dụng kết hợp Passport.js, JWT và bcrypt để xây dựng hệ thống authentication an toàn.
+
+Passport.js là authentication middleware cho Node.js với hơn 500 strategies hỗ trợ các phương thức authentication khác nhau. Trong dự án, local strategy được sử dụng để xác thực bằng email và password. Passport cung cấp API đơn giản để serialize và deserialize user. Middleware passport.authenticate có thể được sử dụng trên routes cần bảo vệ.
+
+JSON Web Token là standard mở để truyền thông tin an toàn giữa các parties dưới dạng JSON object. JWT gồm ba phần: header chứa algorithm và type, payload chứa claims như user ID và role, signature để verify tính toàn vẹn. JWT là stateless, server không cần lưu session, phù hợp với kiến trúc scalable. Token có thời gian hết hạn configurable để cân bằng giữa security và user experience.
+
+Bcrypt là library để hash password một cách an toàn. Bcrypt sử dụng adaptive hash function, tự động generate salt và incorporate vào hash. Cost factor có thể adjust để tăng độ khó crack khi hardware mạnh hơn. Bcrypt chậm bằng design để phòng chống brute-force attacks.
+
+Luồng authentication trong hệ thống diễn ra như sau. Khi user đăng ký, client gửi email và password đến server. Server validate dữ liệu, hash password bằng bcrypt với cost factor 10. Server tạo user record trong database với password đã hash. Khi user đăng nhập, client gửi email và password. Server tìm user trong database theo email. Server compare password với hash trong database bằng bcrypt. Nếu match, server tạo JWT token chứa user ID và role với secret key. Server trả token về client, client lưu token vào cookie hoặc localStorage. Với mỗi request tiếp theo, client gửi token trong Authorization header. Server verify token bằng secret key. Nếu valid, server extract user info từ payload và xử lý request. Middleware kiểm tra role để authorize access vào các endpoint nhạy cảm.
+
+Cách tiếp cận này mang lại nhiều lợi ích về bảo mật. Password không bao giờ được lưu dạng plaintext. JWT stateless giúp scale server dễ dàng. Token có expiry giảm thiểu rủi ro khi bị leak. Role-based authorization cho phép phân quyền chi tiết.
+
+\section{Công nghệ Frontend}
+\label{section:3.3}
+
+Frontend là phần người dùng tương tác trực tiếp, cần đảm bảo giao diện đẹp, responsive và hiệu năng cao. Các công nghệ được chọn cần hỗ trợ development nhanh chóng đồng thời đảm bảo chất lượng code.
+
+\subsection{Next.js Framework}
+\label{subsection:3.3.1}
+
+Next.js là React framework cung cấp các tính năng production-ready như Server-Side Rendering, Static Site Generation, và API routes. Phiên bản 16.0 được sử dụng trong dự án mang lại nhiều cải tiến về performance và developer experience.
+
+Về các tính năng chính của Next.js, Server-Side Rendering cho phép render React components trên server và gửi HTML về client, cải thiện initial load time và SEO. Static Site Generation pre-render pages tại build time cho các trang không thay đổi thường xuyên. File-based routing tự động tạo routes dựa trên cấu trúc thư mục pages, giảm boilerplate code. Image Optimization tự động optimize images với lazy loading và modern formats. Code Splitting tự động chia code thành các chunks nhỏ, chỉ load code cần thiết cho mỗi route. API Routes cho phép tạo API endpoints ngay trong Next.js app, thuận tiện cho serverless deployment.
+
+Phiên bản 16.0 giới thiệu nhiều tính năng mới quan trọng. App Router mới với React Server Components cho phép fetch data trực tiếp trong component mà không cần client-side fetch. Streaming và Suspense tích hợp giúp hiển thị UI nhanh hơn với skeleton loading. Turbopack là bundler mới nhanh hơn Webpack đáng kể trong dev mode. Metadata API đơn giản hóa việc quản lý SEO tags.
+
+Lý do lựa chọn Next.js cho Frontend bao gồm nhiều yếu tố. Thứ nhất, SSR cải thiện SEO và initial load time, quan trọng cho trang thương mại điện tử cần được indexed tốt. Thứ hai, Developer Experience tốt với Fast Refresh, TypeScript support tích hợp, và comprehensive documentation. Thứ ba, Performance optimization tự động không cần config nhiều. Thứ tư, Production-ready với built-in optimization và best practices. Thứ năm, dễ deploy trên Vercel hoặc các platform khác với zero-config.
+
+Trong dự án, Next.js được sử dụng với App Router structure. Thư mục app chứa các routes với file conventions như page.tsx cho UI, layout.tsx cho shared layout, và loading.tsx cho loading states. Server Components được sử dụng cho các component không cần interactivity, fetch data trực tiếp. Client Components với "use client" directive cho các component cần useState, useEffect. API Routes không được sử dụng vì có dedicated backend, nhưng có thể dùng cho BFF pattern nếu cần.
+
+\subsection{React và TypeScript}
+\label{subsection:3.3.2}
+
+React là thư viện UI declarative cho phép xây dựng interactive user interfaces. Phiên bản 19.2 mang lại nhiều cải tiến về performance và developer experience. TypeScript được sử dụng để thêm type safety cho JavaScript code.
+
+React sử dụng component-based architecture, chia UI thành các components độc lập và reusable. Virtual DOM giúp update UI hiệu quả bằng cách chỉ re-render những phần thay đổi. Hooks như useState, useEffect cho phép sử dụng state và lifecycle trong functional components. Context API giúp share data giữa components mà không cần prop drilling.
+
+TypeScript là superset của JavaScript, thêm static typing. Type system giúp catch lỗi tại compile time thay vì runtime. Interface và Type aliases giúp define contracts rõ ràng. IDE support tốt hơn với autocomplete và refactoring. Code dễ maintain hơn khi project lớn lên.
+
+Trong dự án, React components được tổ chức theo atomic design. Atoms là các components nhỏ nhất như Button, Input. Molecules là tổ hợp atoms như SearchBar. Organisms là sections phức tạp như ProductCard, Header. Templates là page layouts. TypeScript được sử dụng cho tất cả components với props interfaces rõ ràng, giúp catch lỗi sớm và code dễ đọc hơn.
+
+\subsection{Styling và UI Components}
+\label{subsection:3.3.3}
+
+Để xây dựng giao diện đẹp và responsive, dự án sử dụng TailwindCSS cho styling và Radix UI cho accessible components.
+
+TailwindCSS là utility-first CSS framework cung cấp các class nhỏ để style elements. Thay vì viết CSS riêng, sử dụng các class như flex, text-center, bg-blue-500. Purge CSS tự động loại bỏ unused classes trong production, giúp bundle size nhỏ. Customization dễ dàng thông qua config file. Responsive design với breakpoint modifiers như md:, lg:.
+
+Phiên bản 4 của TailwindCSS mang lại nhiều cải tiến. CSS variables được sử dụng rộng rãi hơn. Performance tốt hơn với engine mới. Container queries hỗ trợ native.
+
+Radix UI là collection của unstyled, accessible UI components. Components như Dialog, Dropdown Menu, Select được build với accessibility best practices. WAI-ARIA compliant đảm bảo hoạt động tốt với screen readers. Unstyled cho phép customize hoàn toàn với TailwindCSS hoặc CSS khác. Composable APIs linh hoạt cho nhiều use cases.
+
+Trong dự án, TailwindCSS được config với custom colors, fonts phù hợp với brand. Components sử dụng Radix UI primitives làm base, style với Tailwind. Ví dụ Dialog component từ Radix được wrap và style thành Modal component có theme riêng. Button component được build với variants sử dụng class variance authority.
+
+\subsection{State Management với Zustand}
+\label{subsection:3.3.4}
+
+Zustand là state management library nhỏ gọn và đơn giản, được sử dụng thay vì Redux do API đơn giản hơn mà vẫn đủ mạnh.
+
+Zustand hoạt động dựa trên hooks, tạo store với create function. Store chứa state và actions để update state. Components subscribe store và re-render khi state thay đổi. Không cần Provider wrapper như Context API. Middleware hỗ trợ như persist để lưu state vào localStorage.
+
+So với Redux, Zustand có ưu điểm là boilerplate code ít hơn đáng kể. Không cần actions, reducers, action types riêng biệt. TypeScript support tốt với ít config. Bundle size nhỏ hơn nhiều. Performance tốt do fine-grained subscriptions.
+
+Trong dự án, Zustand được sử dụng cho các global states. Cart store quản lý items trong giỏ hàng với actions addItem, removeItem, updateQuantity, clearCart. State được persist vào localStorage để giữ giỏ hàng khi refresh. Auth store quản lý user info, isAuthenticated, token với actions login, logout. UI store quản lý các UI states như sidebar open/close, modal states. Product store cache danh sách sản phẩm để tránh fetch lại khi navigate.
+
+\section{Tích hợp thanh toán PayOS}
+\label{section:3.4}
+
+PayOS là cổng thanh toán được phát triển tại Việt Nam, cung cấp giải pháp thanh toán đơn giản và an toàn cho các doanh nghiệp. Việc tích hợp PayOS vào hệ thống cho phép người dùng thanh toán trực tuyến một cách thuận tiện.
+
+\subsection{Tổng quan về PayOS}
+\label{subsection:3.4.1}
+
+PayOS cung cấp API để tạo link thanh toán và xử lý callback. Hệ thống hỗ trợ nhiều phương thức thanh toán như QR code, thẻ ngân hàng, ví điện tử. Merchant chỉ cần đăng ký tài khoản PayOS để nhận Client ID, API Key và Checksum Key.
+
+Ưu điểm của PayOS bao gồm API đơn giản và documentation rõ ràng. SDK cho nhiều ngôn ngữ trong đó có Node.js. Hỗ trợ webhook để cập nhật trạng thái giao dịch tự động. Bảo mật với checksum mechanism. Phí giao dịch cạnh tranh. Dashboard để theo dõi giao dịch.
+
+Lý do chọn PayOS thay vì các cổng khác như VNPay hay MoMo là do API đơn giản hơn, phù hợp cho dự án học tập. Documentation và SDK chất lượng. Quy trình đăng ký nhanh chóng. Community support tốt tại Việt Nam.
+
+\subsection{Quy trình thanh toán}
+\label{subsection:3.4.2}
+
+Quy trình thanh toán với PayOS diễn ra qua nhiều bước. Người dùng hoàn tất giỏ hàng và nhấn thanh toán. Frontend gửi request tạo đơn hàng đến backend với thông tin sản phẩm và shipping. Backend tạo order record trong database với trạng thái Pending. Backend gọi PayOS API để tạo payment link với thông tin order ID, amount, description. PayOS trả về payment link và order code. Backend lưu order code vào order record. Backend trả payment link về frontend. Frontend redirect người dùng đến payment link. Người dùng chọn phương thức thanh toán trên PayOS và hoàn tất. PayOS gửi webhook đến backend endpoint với transaction info. Backend verify checksum của webhook để đảm bảo request từ PayOS. Backend extract transaction status từ webhook. Nếu success, backend update order status thành Paid. Nếu failed, backend update thành Failed. Backend gửi email notification cho user. PayOS redirect người dùng về success hoặc cancel page trên frontend.
+
+\subsection{Bảo mật trong tích hợp}
+\label{subsection:3.4.3}
+
+Bảo mật là vấn đề quan trọng khi xử lý thanh toán. PayOS sử dụng checksum mechanism để verify tính toàn vẹn của dữ liệu.
+
+Checksum được tính bằng cách concatenate các fields của payment data theo thứ tự cố định, hash string này với Checksum Key bằng SHA256. Khi nhận webhook, backend tính checksum từ data nhận được, so sánh với checksum được gửi kèm. Nếu match, data được xác nhận là từ PayOS chứ không phải attacker.
+
+Ngoài checksum, các biện pháp bảo mật khác bao gồm API Key được lưu trong environment variables, không commit vào git. HTTPS bắt buộc cho webhook endpoint. Validate tất cả fields từ webhook trước khi xử lý. Log tất cả transactions để audit. Idempotency check để tránh xử lý duplicate webhooks. Rate limiting trên webhook endpoint để phòng DDoS.
+
+Cách tiếp cận này đảm bảo hệ thống thanh toán an toàn và đáng tin cậy, bảo vệ cả merchant lẫn customers.
+
+\section{Các công nghệ bổ trợ}
+\label{section:3.5}
+
+Ngoài các công nghệ chính, dự án còn sử dụng nhiều công nghệ và thư viện bổ trợ để tăng chất lượng code và bảo mật.
+
+Về bảo mật, Helmet.js được sử dụng để set các HTTP headers an toàn như Content Security Policy, X-Frame-Options. CORS middleware được config để chỉ accept requests từ frontend domain. Express-validator và Joi validate input data để phòng injection attacks. Rate limiting với express-rate-limit phòng brute force và DDoS.
+
+Về logging và monitoring, Morgan log HTTP requests trong development. Winston có thể được thêm cho production logging với levels khác nhau. Error tracking với Sentry để monitor lỗi production.
+
+Về file upload, Multer middleware xử lý multipart form data để upload hình ảnh sản phẩm. Multer config với file size limit và allowed file types. Images được lưu vào thư mục public hoặc cloud storage như Cloudinary.
+
+Về testing, Jest framework cho unit testing. Supertest cho API integration testing. React Testing Library cho component testing.
+
+Về deployment, Docker containerization cho consistent environments. GitHub Actions cho CI/CD pipeline. Vercel cho frontend deployment. Render hoặc Railway cho backend deployment.
+
+Sự kết hợp của các công nghệ này tạo nên một tech stack hiện đại, mạnh mẽ và phù hợp cho việc xây dựng hệ thống thương mại điện tử production-ready.
 
 \end{document}

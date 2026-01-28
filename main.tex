@@ -215,6 +215,10 @@
     {}         % unnumbered format
     {\titlerule*[0.3pc]{.}\contentspage}         % filler-page-format, e.g dots
 
+% Set table of contents depth to show subsections
+\setcounter{tocdepth}{2}  % 0=chapter, 1=section, 2=subsection, 3=subsubsection
+\setcounter{secnumdepth}{3}  % Number sections up to subsubsection level
+
  % Tạo mục lục tự động
 \addtocontents{toc}{\protect\thispagestyle{empty}}
 \tableofcontents 
@@ -297,11 +301,11 @@
 \label{chapter:conclusion}
 \subfile{Chuong/6_Ket_luan}
 
-\newpage
-%\pagestyle{fancy} % Áp dụng header và footer
-\chapter*{MỘT SỐ LƯU Ý VỀ TÀI LIỆU THAM KHẢO} %Kết luận và hướng phát triển}
-\label{chapter:reference}
-\subfile{Chuong/7_Luu_y_tai_lieu_tham_khao}
+% \newpage
+% %\pagestyle{fancy} % Áp dụng header và footer
+% \chapter*{MỘT SỐ LƯU Ý VỀ TÀI LIỆU THAM KHẢO} %Kết luận và hướng phát triển}
+% \label{chapter:reference}
+% \subfile{Chuong/7_Luu_y_tai_lieu_tham_khao}
 
 
 % ===================================================
@@ -310,27 +314,28 @@
 \printbibliography
 \phantomsection\addcontentsline{toc}{chapter}{TÀI LIỆU THAM KHẢO}
 
-\appendixpage
-\appendices
-\addappheadtotoc
+% PHỤ LỤC - Commented out temporarily
+% \appendixpage
+% \appendices
+% \addappheadtotoc
 
 % \chapter*{PHỤ LỤC} %Kết luận và hướng phát triển}
 
 %\mainmatter
-\titleformat{\chapter}[hang]{\centering\bfseries}{ \thechapter.\ }{0pt}{}[]
-\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+% \titleformat{\chapter}[hang]{\centering\bfseries}{ \thechapter.\ }{0pt}{}[]
+% \titlespacing*{\chapter}{0pt}{-20pt}{20pt}
 
-\titlecontents{chapter}
-    [0.0cm]             % left margin
-    {\bfseries\vspace{0.3cm}}                  % above code
-    {{\bfseries{\scshape} \thecontentslabel.\ }} % numbered format
-    {}         % unnumbered format
-    {\titlerule*[0.3pc]{.}\contentspage}         % filler-page-format, e.g dots
-\chapter{HƯỚNG DẪN VIẾT ĐỒ ÁN TỐT NGHIỆP}
-\subfile{Chuong/Phu_luc_A}
+% \titlecontents{chapter}
+%     [0.0cm]             % left margin
+%     {\bfseries\vspace{0.3cm}}                  % above code
+%     {{\bfseries{\scshape} \thecontentslabel.\ }} % numbered format
+%     {}         % unnumbered format
+%     {\titlerule*[0.3pc]{.}\contentspage}         % filler-page-format, e.g dots
+% \chapter{HƯỚNG DẪN VIẾT ĐỒ ÁN TỐT NGHIỆP}
+% \subfile{Chuong/Phu_luc_A}
 
-\newpage
-\chapter{ĐẶC TẢ USE CASE}
-\subfile{Chuong/Phu_luc_B}
+% \newpage
+% \chapter{ĐẶC TẢ USE CASE}
+% \subfile{Chuong/Phu_luc_B}
 
 \end{document}
