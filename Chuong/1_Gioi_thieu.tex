@@ -1,70 +1,83 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-Trong bối cảnh công nghệ thông tin phát triển mạnh mẽ và Internet ngày càng phổ biến, thương mại điện tử đã trở thành một phần không thể thiếu trong đời sống kinh tế - xã hội. Việc mua sắm trực tuyến không chỉ mang lại sự tiện lợi cho người tiêu dùng mà còn tạo ra nhiều cơ hội kinh doanh mới cho các doanh nghiệp. Tuy nhiên, để xây dựng một hệ thống thương mại điện tử hoàn chỉnh và hiệu quả vẫn còn nhiều thách thức cần giải quyết.
+Trong bối cảnh phát triển phần mềm hiện đại, việc triển khai ứng dụng web một cách nhanh chóng, tin cậy và nhất quán là yếu tố then chốt quyết định thành công của dự án. Tuy nhiên, quy trình triển khai thủ công truyền thống vẫn còn nhiều hạn chế về thời gian, tỷ lệ lỗi và khả năng mở rộng. Continuous Integration và Continuous Deployment (CI/CD) đã trở thành giải pháp quan trọng giúp tự động hóa quy trình này, nâng cao chất lượng và tốc độ phát triển phần mềm.
 
 \section{Đặt vấn đề}
 \label{section:1.1}
 
-Thương mại điện tử tại Việt Nam đã có những bước phát triển vượt bậc trong những năm gần đây. Theo báo cáo của Bộ Công Thương, quy mô thị trường thương mại điện tử Việt Nam đạt hơn 20 tỷ USD, với tốc độ tăng trưởng trung bình 25\% mỗi năm. Xu hướng mua sắm trực tuyến ngày càng được người dùng ưa chuộng nhờ vào sự tiện lợi, đa dạng sản phẩm và khả năng so sánh giá cả dễ dàng.
+Trong quá trình phát triển ứng dụng web, việc triển khai từ môi trường phát triển lên môi trường production là một trong những giai đoạn quan trọng nhất. Tuy nhiên, quy trình triển khai thủ công truyền thống vẫn đang được sử dụng phổ biến và gặp phải nhiều vấn đề nghiêm trọng.
 
-Tuy nhiên, các nền tảng thương mại điện tử hiện tại vẫn còn tồn tại nhiều hạn chế. Về phía người dùng, quy trình mua hàng trên nhiều nền tảng còn phức tạp với nhiều bước thao tác không cần thiết, giao diện người dùng chưa thực sự trực quan và thân thiện. Đặc biệt, vấn đề thanh toán trực tuyến vẫn là một rào cản lớn khi nhiều cổng thanh toán yêu cầu quá nhiều bước xác thực hoặc không hỗ trợ đầy đủ các phương thức thanh toán phổ biến. Điều này dẫn đến tỷ lệ từ bỏ giỏ hàng cao, ảnh hưởng trực tiếp đến doanh thu của các doanh nghiệp.
+Về thời gian triển khai, quy trình thủ công thường mất từ 30 đến 45 phút cho mỗi lần deploy. Điều này bao gồm các bước: kéo code mới từ repository, cài đặt dependencies, build ứng dụng, cấu hình môi trường, khởi động lại server và kiểm tra hoạt động. Thời gian dài này không chỉ làm chậm quá trình phát triển mà còn hạn chế tần suất cập nhật, thường chỉ có thể deploy một lần mỗi tuần.
 
-Về phía quản trị viên, nhiều hệ thống thương mại điện tử hiện tại chưa cung cấp công cụ quản lý hiệu quả. Việc cập nhật sản phẩm, theo dõi đơn hàng, quản lý danh mục và phân tích dữ liệu kinh doanh còn thiếu tính tập trung và trực quan. Các báo cáo thống kê thường không được cập nhật theo thời gian thực, gây khó khăn trong việc ra quyết định kinh doanh kịp thời.
+Về tỷ lệ lỗi, triển khai thủ công dễ xảy ra sai sót do phụ thuộc vào con người. Các lỗi phổ biến bao gồm: quên cài đặt dependencies mới, cấu hình sai biến môi trường, deploy nhầm branch, hoặc bỏ qua bước migration database. Những lỗi này thường chỉ được phát hiện sau khi deploy lên production, gây gián đoạn dịch vụ và ảnh hưởng đến người dùng.
 
-Bên cạnh đó, vấn đề bảo mật và xác thực người dùng cũng là một thách thức quan trọng. Nhiều hệ thống vẫn sử dụng các phương pháp xác thực lỗi thời, dễ bị tấn công hoặc lộ lọt thông tin cá nhân của khách hàng. Điều này không chỉ gây thiệt hại cho người dùng mà còn làm giảm uy tín của doanh nghiệp.
+Về khả năng rollback, khi phát hiện lỗi sau deploy, việc quay lại phiên bản cũ bằng tay mất từ một đến hai giờ. Trong thời gian này, hệ thống có thể bị gián đoạn hoặc hoạt động không ổn định, gây thiệt hại cho doanh nghiệp.
 
-Từ những phân tích trên, việc xây dựng một hệ thống thương mại điện tử hiện đại, tích hợp đầy đủ các chức năng cần thiết, có giao diện thân thiện, quy trình thanh toán đơn giản và bảo mật cao là một nhu cầu cấp thiết. Hệ thống cần đảm bảo trải nghiệm người dùng mượt mà từ khâu tìm kiếm sản phẩm, quản lý giỏ hàng, cho đến thanh toán và theo dõi đơn hàng. Đồng thời, hệ thống cũng cần cung cấp công cụ quản trị mạnh mẽ để hỗ trợ vận hành kinh doanh hiệu quả.
+Về testing, do thời gian triển khai dài và phức tạp, nhiều developer có xu hướng bỏ qua các bước kiểm thử tự động để tiết kiệm thời gian. Điều này dẫn đến chất lượng code giảm và tăng nguy cơ lỗi trong production.
 
-\section{Mục tiêu và phạm vi đề tài}
+Về tính nhất quán, môi trường development, staging và production thường khác nhau về cấu hình, phiên bản dependencies, hoặc cách cài đặt. Sự khác biệt này gây ra tình trạng "works on my machine" - ứng dụng chạy tốt trên máy developer nhưng lỗi khi deploy lên server.
+
+Từ những vấn đề trên, nhu cầu tự động hóa quy trình CI/CD trở nên cấp thiết. Một hệ thống CI/CD hiệu quả cần đáp ứng các yêu cầu: giảm thời gian build và deploy xuống còn vài phút, tự động chạy tests để đảm bảo chất lượng code, giảm tỷ lệ lỗi triển khai thông qua quy trình chuẩn hóa, hỗ trợ rollback nhanh chóng khi có sự cố, và đảm bảo tính nhất quán giữa các môi trường thông qua containerization.
+
+\section{Mục tiêu đề tài}
 \label{section:1.2}
 
-Để giải quyết các vấn đề nêu trên, đề tài hướng đến việc xây dựng một hệ thống thương mại điện tử toàn diện với các mục tiêu cụ thể như sau.
+Để giải quyết các vấn đề về triển khai thủ công nêu trên, đề tài hướng đến việc xây dựng một hệ thống CI/CD hoàn chỉnh với các mục tiêu cụ thể, có thể đo lường và kiểm chứng.
 
-Mục tiêu tổng quát của hệ thống là tạo ra một nền tảng thương mại điện tử hoàn chỉnh, đáp ứng nhu cầu mua sắm trực tuyến của người dùng và cung cấp công cụ quản lý hiệu quả cho quản trị viên. Hệ thống cần đảm bảo tính dễ sử dụng, hiệu năng cao và bảo mật tốt.
+\subsection{Mục tiêu 1: Giảm thời gian build và deploy}
 
-Về mục tiêu cụ thể, đối với người dùng, hệ thống cần cung cấp đầy đủ các chức năng cơ bản của một nền tảng thương mại điện tử. Người dùng có thể dễ dàng đăng ký tài khoản, đăng nhập an toàn với cơ chế xác thực hiện đại. Chức năng tìm kiếm và lọc sản phẩm cần được thiết kế thông minh, cho phép người dùng nhanh chóng tìm thấy sản phẩm mong muốn thông qua nhiều tiêu chí khác nhau như danh mục, khoảng giá, đánh giá. Hệ thống giỏ hàng cần hỗ trợ đầy đủ các thao tác thêm, xóa, cập nhật số lượng sản phẩm một cách trực quan. Đặc biệt, quy trình thanh toán được thiết kế đơn giản với ít bước nhất có thể, tích hợp cổng thanh toán PayOS để đảm bảo giao dịch nhanh chóng và an toàn. Sau khi đặt hàng, người dùng cần có khả năng theo dõi trạng thái đơn hàng và xem lại lịch sử mua hàng một cách dễ dàng.
+Giảm thời gian triển khai từ 30-45 phút (quy trình thủ công) xuống còn dưới 5 phút (quy trình tự động), đạt mức cải thiện tối thiểu 83\%. Thời gian này được tính từ khi developer push code lên repository cho đến khi ứng dụng được deploy thành công lên môi trường production và vượt qua health check. Mục tiêu được đo lườngqua metrics: thời gian trung bình của CI/CD pipeline execution, lead time từ commit đến deployment, và deployment frequency tăng từ weekly lên minimum 2-3 lần mỗi ngày.
 
-Đối với quản trị viên, hệ thống cần cung cấp bảng điều khiển tập trung với đầy đủ các công cụ quản lý. Chức năng quản lý sản phẩm cho phép thêm mới, chỉnh sửa, xóa sản phẩm kèm theo hình ảnh và thông tin chi tiết. Quản lý danh mục sản phẩm và sự kiện khuyến mãi giúp tổ chức cửa hàng một cách khoa học và hiệu quả. Hệ thống cần cung cấp khả năng theo dõi và cập nhật trạng thái đơn hàng theo thời gian thực. Đặc biệt, bảng điều khiển cần hiển thị các số liệu thống kê quan trọng như doanh thu, số lượng đơn hàng, sản phẩm bán chạy dưới dạng trực quan, hỗ trợ việc ra quyết định kinh doanh.
+\subsection{Mục tiêu 2: Tự động hóa kiểm thử}
 
-Về phạm vi nghiên cứu, đề tài tập trung vào việc xây dựng hệ thống thương mại điện tử với kiến trúc Client-Server rõ ràng. Phần Frontend được phát triển bằng Next.js, tận dụng khả năng Server-Side Rendering để tối ưu hiệu năng và SEO. Giao diện được thiết kế responsive, đảm bảo hoạt động tốt trên nhiều thiết bị khác nhau. Phần Backend sử dụng Express.js để xây dựng RESTful API, xử lý logic nghiệp vụ và tương tác với cơ sở dữ liệu. Cơ sở dữ liệu MongoDB được lựa chọn nhờ tính linh hoạt của mô hình NoSQL, phù hợp với cấu trúc dữ liệu đa dạng của hệ thống thương mại điện tử. Hệ thống tích hợp PayOS làm cổng thanh toán chính, cung cấp trải nghiệm thanh toán an toàn và tiện lợi cho người dùng.
+Đạt được test coverage tối thiểu 80\% cho codebase, với tất cả tests được chạy tự động trong CI pipeline. Thời gian chạy toàn bộ test suite không vượt quá 3 phút để đảm bảo feedback nhanh chóng. Các loại tests bao gồm: unit tests cho business logic, integration tests cho API endpoints, và type checking với TypeScript. Mục tiêu được đo lường qua: code coverage percentage từ test reports, số lượng test cases passed/failed, và test execution time trong CI logs.
 
-Bên cạnh các chức năng chính, hệ thống còn chú trọng đến các yêu cầu phi chức năng. Về bảo mật, hệ thống áp dụng JSON Web Token cho xác thực, mã hóa mật khẩu người dùng bằng bcrypt, và sử dụng các biện pháp bảo vệ như Helmet.js và CORS. Về hiệu năng, hệ thống được tối ưu hóa để đảm bảo thời gian phản hồi nhanh và khả năng xử lý đồng thời nhiều người dùng. Về khả năng mở rộng, kiến trúc được thiết kế theo hướng module hóa, dễ dàng bổ sung tính năng mới trong tương lai.
+\subsection{Mục tiêu 3: Giảm tỷ lệ lỗi triển khai}
 
-Phạm vi không bao gồm trong đề tài là việc xây dựng ứng dụng di động native, tích hợp các phương thức thanh toán khác ngoài PayOS, và các chức năng nâng cao như hệ thống gợi ý sản phẩm dựa trên AI hay chat trực tuyến.
+Đạt tỷ lệ deployment thành công tối thiểu 95\%, nghĩa là trong 100 lần deploy chỉ có tối đa 5 lần thất bại do lỗi technical. Các deployment failures được xác định qua health check endpoint, application logs, và user-reported issues trong vòng 24 giờ sau deploy. Hệ thống cần hỗ trợ rollback nhanh chóng trong vòng 5 phút nếu phát hiện lỗi. Mục tiêu được đo lường qua: deployment success rate, mean time to recovery (MTTR), và số lượng rollbacks cần thiết.
 
-\section{Định hướng giải pháp}
+\subsection{Mục tiêu 4: Tối ưu hóa Docker image}
+
+Giảm kích thước Docker image tối thiểu 70\% thông qua multi-stage builds và các kỹ thuật optimization. Cụ thể, từ kích thước ban đầu khoảng 1.2GB (với full Node.js dependencies) xuống còn dưới 350MB (chỉ runtime dependencies). Điều này giúp giảm thời gian pull image từ registry, tiết kiệm băng thông và storage. Build time với layer caching phải dưới 5 phút. Mục tiêu được đo lường qua: final image size từ Docker registry, build duration từ CI logs, và layer cache hit rate.
+
+\subsection{Mục tiêu 5: Tăng deployment frequency}
+
+Tăng deployment frequency từ weekly (1 lần/tuần do overhead của manual process) lên minimum 2-3 lần mỗi ngày. Điều này cho phép faster iteration, quicker bug fixes, và shorter feedback cycles. Hệ thống cần support continuous deployment cho staging environment (mỗi khi merge vào develop branch) và controlled deployment cho production (mỗi khi merge vào main branch). Mục tiêu được đo lường qua: số lượng successful deployments per day/week, deployment frequency trend theo thời gian.
+
+\section{Phạm vi đề tài}
 \label{section:1.3}
 
-Để đạt được các mục tiêu đã đề ra, hệ thống được thiết kế theo kiến trúc Client-Server hiện đại, tận dụng các công nghệ web tiên tiến nhất hiện nay.
+Phạm vi nghiên cứu của đề tài tập trung vào việc xây dựng và triển khai hệ thống CI/CD cho một ứng dụng web thương mại điện tử sử dụng kiến trúc Client-Server.
 
-Về kiến trúc tổng thể, hệ thống áp dụng mô hình phân tách rõ ràng giữa Frontend và Backend, giao tiếp thông qua RESTful API. Kiến trúc này mang lại nhiều lợi ích như khả năng mở rộng linh hoạt, dễ dàng bảo trì và phát triển song song giữa hai phần. Frontend được phát triển như một Single Page Application với khả năng Server-Side Rendering, đảm bảo cả trải nghiệm người dùng lẫn hiệu quả SEO. Backend hoạt động như một API Server độc lập, xử lý logic nghiệp vụ và quản lý dữ liệu.
+\subsection{Trong phạm vi đề tài}
 
-Về công nghệ Frontend, Next.js được lựa chọn làm framework chủ đạo nhờ vào nhiều ưu điểm vượt trội. Framework này cung cấp khả năng Server-Side Rendering tự động, giúp trang web tải nhanh hơn và được công cụ tìm kiếm đánh giá cao hơn. Cơ chế định tuyến file-based đơn giản hóa việc tổ chức code. Khả năng tối ưu hóa tự động như code splitting và image optimization giúp cải thiện hiệu năng đáng kể. Việc sử dụng React 19.2 mới nhất giúp tận dụng các tính năng hiện đại như Server Components và Concurrent Rendering. Để quản lý trạng thái toàn cục, Zustand được sử dụng thay vì Redux nhờ API đơn giản và hiệu năng tốt hơn.
+Về CI/CD pipeline, đề tài triển khai đầy đủ workflow tự động với GitHub Actions làm nền tảng CI/CD chính. Pipeline bao gồm các giai đoạn: linting và type checking, unit testing và integration testing, Docker image build với multi-stage optimization, deployment tự động lên staging (develop branch) và production (main branch), health check sau deployment, và khả năng rollback.
 
-Về công nghệ Backend, Express.js được chọn làm framework chính để xây dựng API Server. Express.js là framework trưởng thành với cộng đồng lớn, cung cấp đầy đủ middleware cần thiết cho một ứng dụng web hiện đại. Kiến trúc không đồng bộ của Node.js đặc biệt phù hợp với ứng dụng có nhiều I/O operation như gọi database hay external API. Hệ thống được tổ chức theo mô hình MVC, phân tách rõ ràng giữa Routes, Controllers, Services và Models để dễ bảo trì và mở rộng.
+Về containerization, hệ thống sử dụng Docker để đảm bảo tính nhất quán giữa các môi trường. Dockerfile được thiết kế theo multi-stage pattern để tối ưu kích thước image. Base image sử dụng node:18-alpine để giảm footprint. Non-root user được cấu hình để tăng cường bảo mật.
 
-Về cơ sở dữ liệu, MongoDB được lựa chọn như một giải pháp NoSQL phù hợp với tính chất dữ liệu của hệ thống thương mại điện tử. Mô hình document-based của MongoDB cho phép lưu trữ dữ liệu có cấu trúc linh hoạt, đặc biệt phù hợp với sản phẩm có nhiều thuộc tính khác nhau. Mongoose được sử dụng làm ODM để định nghĩa schema và thao tác với database một cách type-safe. Khả năng scale horizontal của MongoDB đảm bảo hệ thống có thể mở rộng khi lượng dữ liệu tăng lên.
+Về deployment platforms, backend được deploy lên Render với auto-deployment và health check integration. Frontend được deploy lên Vercel với preview deployments cho pull requests và edge CDN distribution.
 
-Về tích hợp thanh toán, PayOS được chọn làm cổng thanh toán chính nhờ vào API đơn giản, hỗ trợ nhiều phương thức thanh toán phổ biến tại Việt Nam, và quy trình tích hợp rõ ràng. Hệ thống sử dụng PayOS Node.js SDK để tạo link thanh toán, xác thực giao dịch thông qua checksum, và nhận webhook callback để cập nhật trạng thái đơn hàng tự động.
+Về ứng dụng web, hệ thống bao gồm frontend với Next.js (App Router, Server-Side Rendering), backend với Express.js (RESTful API, MVC architecture), cơ sở dữ liệu MongoDB Atlas, và tích hợp PayOS cho thanh toán.
 
-Về bảo mật, hệ thống áp dụng nhiều lớp bảo vệ. JSON Web Token được sử dụng cho xác thực stateless, cho phép mở rộng hệ thống dễ dàng. Passport.js cung cấp các strategy xác thực linh hoạt. Mật khẩu người dùng được hash bằng bcrypt với salt tự động. Helmet.js được sử dụng để thiết lập các HTTP header an toàn. CORS được cấu hình chặt chẽ để chỉ cho phép request từ domain được ủy quyền.
+Về test environments, đề tài triển khai ba môi trường: development (local), staging (develop branch, sandbox services), và production (main branch, production services).
 
-Kết quả đạt được từ giải pháp này là một hệ thống thương mại điện tử hoàn chỉnh với giao diện hiện đại, trải nghiệm người dùng mượt mà, quy trình thanh toán đơn giản và an toàn, cùng với bảng quản trị mạnh mẽ. Đóng góp chính của đề tài là việc tích hợp thành công các công nghệ web hiện đại vào một hệ thống thương mại điện tử thực tế, có thể triển khai và vận hành ngay lập tức. Hệ thống không chỉ đáp ứng các yêu cầu chức năng cơ bản mà còn đảm bảo các yêu cầu phi chức năng về hiệu năng, bảo mật và khả năng mở rộng.
+\subsection{Ngoài phạm vi đề tài}
 
+Một số công nghệ và tính năng không nằm trong phạm vi nghiên cứu, bao gồm: Kubernetes orchestration cho container management (được đề cập như hướng phát triển), blue-green deployment strategy (hiện tại sử dụng rolling deployment), comprehensive monitoring tools như Prometheus/Grafana (chỉ có basic logging), infrastructure as code với Terraform/Ansible, ứng dụng mobile native (iOS/Android), và multiple cloud providers (chỉ tập trung Render và Vercel).
+
+\section{Cấu trúc báo cáo}
 \section{Cấu trúc báo cáo}
 \label{section:1.4}
 
-Phần còn lại của báo cáo được tổ chức thành năm chương tiếp theo, mỗi chương tập trung vào một khía cạnh cụ thể của đề tài.
+Phần còn lại của báo cáo được tổ chức thành năm chương tiếp theo, mỗi chương tập trung vào một khía cạnh cụ thể của đềài liên quan đến CI/CD và phát triển ứng dụng web.
 
-Chương 2 trình bày quá trình khảo sát và phân tích yêu cầu hệ thống. Chương này bắt đầu bằng việc khảo sát các hệ thống thương mại điện tử hiện có trên thị trường, phân tích ưu nhược điểm của từng nền tảng để rút ra bài học kinh nghiệm. Tiếp theo, chương sẽ trình bày chi tiết các yêu cầu chức năng của hệ thống thông qua biểu đồ use case và đặc tả chi tiết cho các ca sử dụng quan trọng. Cuối cùng, các yêu cầu phi chức năng về hiệu năng, bảo mật và khả năng mở rộng cũng được phân tích rõ ràng.
+Chương 2 trình bày quá trình khảo sát và phân tích yêu cầu. Chương này bắt đầu với hiện trạng triển khai thủ công, so sánh với quy trình CI/CD tự động qua bảng metrics cụ thể. Tiếp theo là phân tích các yêu cầu chức năng của hệ thống CI/CD như build, test, deploy tự động. Cuối cùng đề cập các yêu cầu phi chức năng về thời gian pipeline, success rate, và image size.
 
-Chương 3 giới thiệu về các công nghệ được sử dụng trong dự án. Chương này bắt đầu với việc trình bày kiến trúc tổng thể của hệ thống, làm rõ vai trò và sự tương tác giữa các thành phần. Tiếp theo, các công nghệ Backend như Express.js và MongoDB được giới thiệu kèm theo lý do lựa chọn và cách áp dụng vào dự án. Phần Frontend sẽ trình bày về Next.js, các thư viện UI và công cụ quản lý trạng thái. Cuối cùng, cơ chế tích hợp PayOS và các giải pháp bảo mật được phân tích chi tiết.
+Chương 3 giới thiệu các công nghệ và kiến trúc được áp dụng. Phần đầu trình bày kiến trúc CI/CD tổng thể với luồng từ code commit đến deployment. Tiếp theo giới thiệu các công nghệ chính như GitHub Actions, Docker, Render và Vercel, kèm theo lý do lựa chọn và trade-offs so với các giải pháp khác. Phần cuối mô tả ngắn gọn về kiến trúc ứng dụng Frontend và Backend.
 
-Chương 4 trình bày quá trình thiết kế, triển khai và đánh giá hệ thống. Phần thiết kế bao gồm thiết kế cơ sở dữ liệu với sơ đồ ER và cấu trúc collection, thiết kế API với các endpoint RESTful, và thiết kế giao diện người dùng. Phần triển khai mô tả cấu trúc thư mục dự án, các module chính và quy trình deployment lên môi trường production. Phần đánh giá trình bày kết quả testing từ unit test đến integration test và system test, cùng với các metrics về hiệu năng.
+Chương 4 trình bày triển khai và đánh giá hệ thống. Phần  triển khai mô tả chi tiết CI/CD pipeline implementation, Docker containerization, và deployment automation. Phần đánh giá là trọng tâm của chương, bao gồm bảng đánh giá kết quả so với mục tiêu đề ra, metrics cụ thể về deployment time, success rate, image size, và testing results.
 
-Chương 5 tập trung vào các giải pháp kỹ thuật nổi bật và đóng góp của đề tài. Chương này phân tích sâu về giải pháp tích hợp thanh toán PayOS với flow chi tiết và cơ chế xử lý lỗi. Các giải pháp tối ưu hiệu năng cho cả Frontend lẫn Backend được trình bày cụ thể. Giải pháp bảo mật được phân tích theo từng lớp bảo vệ. Cuối cùng, những đóng góp nổi bật của hệ thống so với các giải pháp hiện có được tổng kết.
-
-Chương 6 kết luận toàn bộ đề tài bằng cách tổng kết kết quả đạt được, những khó khăn và bài học kinh nghiệm trong quá trình thực hiện. Chương cũng đề xuất hướng phát triển tiếp theo cho hệ thống như tích hợp thêm các cổng thanh toán khác, phát triển ứng dụng mobile, xây dựng hệ thống gợi ý sản phẩm dựa trên AI, và mở rộng thành nền tảng đa nhà bán hàng.
+Chương 5 kết luận toàn bộ đề tài. Nội dung bao gồm tổng kết các đóng góp chính tập trung vào CI/CD (70\%) và application development (30\%). Phần hạn chế trình bày trung thực những gì chưa hoàn thiện như auto-rollback, monitoring tools, và test coverage. Bài học kinh nghiệm chia sẻ những khó khăn thực tế về pipeline optimization, Docker caching, và testing strategy. Cuối cùng là đề xuất hướng phát triển như Kubernetes, blue-green deployment, và comprehensive monitoring.
 
 \end{document}

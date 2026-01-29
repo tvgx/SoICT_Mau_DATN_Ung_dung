@@ -60,7 +60,7 @@ Nhóm Category API quản lý danh mục. GET /api/categories là public để l
 
 Nhóm Order API quản lý đơn hàng và giỏ hàng. GET /api/orders/cart yêu cầu authentication, tìm order với userId và status cart, populate product info, và trả về cart items. POST /api/orders/cart thêm sản phẩm vào giỏ nhận productId và quantity, tìm existing cart order, nếu chưa có thì tạo mới với status cart, nếu product đã có trong items thì tăng quantity, nếu chưa có thì push vào items array, và save order. DELETE /api/orders/cart/:productId xóa item khỏi giỏ. PUT /api/orders/cart/:productId cập nhật quantity. POST /api/orders/checkout chuyển cart thành pending order nhận shippingAddress, tìm cart order, validate items và stock, cập nhật status thành pending, và trả về order info. GET /api/orders lấy danh sách orders của user với filter theo status. GET /api/orders/:id lấy chi tiết order.
 
-Nhóm Payment API tích hợp PayOS. POST /api/payment/create-link nhận orderId, amount, description, returnUrl, cancelUrl, validate required fields, tạo paymentData object với orderCode numeric, amount numeric, description, returnUrl mặc định FRONTEND_URL/payment/success, và cancelUrl mặc định FRONTEND_URL/payment/failed, gọi payOS.createPaymentLink với paymentData, và trả về checkoutUrl và paymentLinkId. POST /api/payment/webhook nhận webhook từ PayOS, log webhook data, verify signature nếu cần, kiểm tra code 00 là success, tìm order theo orderCode, cập nhật paymentStatus và status, save order, và trả về success response. GET /api/payment/:paymentLinkId lấy thông tin payment từ PayOS.
+Nhóm Payment API tích hợp PayOS. POST /api/payment/create-link nhận orderId, amount, description, returnUrl, cancelUrl, validate required fields, tạo paymentData object với orderCode numeric, amount numeric, description, returnUrl mặc định FRONTEND\_URL/payment/success, và cancelUrl mặc định FRONTEND\_URL/payment/failed, gọi payOS.createPaymentLink với paymentData, và trả về checkoutUrl và paymentLinkId. POST /api/payment/webhook nhận webhook từ PayOS, log webhook data, verify signature nếu cần, kiểm tra code 00 là success, tìm order theo orderCode, cập nhật paymentStatus và status, save order, và trả về success response. GET /api/payment/:paymentLinkId lấy thông tin payment từ PayOS.
 
 Nhóm Dashboard API cho admin. GET /api/dashboard/stats yêu cầu admin role, tính tổng doanh thu từ orders paid, đếm số orders theo status, tìm top selling products, tính revenue theo ngày trong 7 ngày gần nhất, và trả về statistics object.
 
@@ -70,7 +70,7 @@ Nhóm Event API quản lý sự kiện khuyến mãi. GET /api/events lấy danh
 
 Nhóm Upload API xử lý upload hình ảnh. POST /api/upload sử dụng multer middleware, validate file type là image, lưu file vào thư mục public/uploads, và trả về file URL.
 
-Về authentication và authorization, hệ thống sử dụng JWT token trong Authorization header với format Bearer token. Middleware auth.middleware.js extract token từ header, verify token với JWT_SECRET, decode để lấy userId và role, tìm user trong database, attach user object vào req.user, và next nếu valid hoặc return 401 Unauthorized. Admin endpoints kiểm tra thêm req.user.role === admin.
+Về authentication và authorization, hệ thống sử dụng JWT token trong Authorization header với format Bearer token. Middleware auth.middleware.js extract token từ header, verify token với JWT\_SECRET, decode để lấy userId và role, tìm user trong database, attach user object vào req.user, và next nếu valid hoặc return 401 Unauthorized. Admin endpoints kiểm tra thêm req.user.role === admin.
 
 Về error handling, tất cả controllers wrap bằng catchAsync utility, errors được catch và forward đến error middleware, ApiError class chuẩn hóa error response với statusCode và message, và error middleware format response JSON với code, message, và stack trace trong development.
 
@@ -95,13 +95,13 @@ Deployment flow chi tiết như sau. Developer tạo feature branch từ develop
 \subsection{Docker containerization}
 \label{subsection:4.4.2}
 
-Backend được containerize với Docker để đảm bảo consistency across environments và dễ dàng deploy lên cloud platforms.
+Backend được containerize với Docker để đảm bảo tính nhất quán giữa các môi trường và dễ dàng deploy lên cloud platforms.
 
 Về multi-stage Dockerfile implementation, Stage 1 là builder stage với base image node:18-alpine được chọn vì lightweight chỉ 40MB so với node:18 standard 900MB. Working directory được set /app. Package files package.json và package-lock.json được copy trước để leverage Docker layer caching. Dependencies được install với npm ci --only=production để reproducible builds và loại bỏ devDependencies. Source code được copy sau để tránh rebuild dependencies khi code thay đổi.
 
-Stage 2 là production stage với base image node:18-alpine tương tự. NODE_ENV được set production để optimize runtime. Non-root user nodejs được tạo với addgroup và adduser để enhance security, tránh chạy application với root privileges. Chỉ production artifacts từ builder stage được copy với ownership nodejs:nodejs. User được switch sang nodejs trước khi start app. Port 8000 được expose cho application. Health check được define với interval 30 seconds, timeout 10 seconds, start period 40 seconds để container initialize, và retries 3 lần trước khi mark unhealthy. Health check command chạy node script call /api/health endpoint. CMD được set node server.js để start application.
+Stage 2 là production stage với base image node:18-alpine tương tự. NODE\_ENV được set production để optimize runtime. Non-root user nodejs được tạo với addgroup và adduser để enhance security, tránh chạy application với root privileges. Chỉ production artifacts từ builder stage được copy với ownership nodejs:nodejs. User được switch sang nodejs trước khi start app. Port 8000 được expose cho application. Health check được define với interval 30 seconds, timeout 10 seconds, start period 40 seconds để container initialize, và retries 3 lần trước khi mark unhealthy. Health check command chạy node script call /api/health endpoint. CMD được set node server.js để start application.
 
-Về optimization techniques applied, multi-stage build giảm final image size từ 1.2GB xuống 280MB, giảm 77 phần trăm. Docker ignore file loại bỏ node_modules, tests, documentation, và development files khỏi build context, giảm build time từ 45 seconds xuống 22 seconds. Layer ordering được optimize với frequently changing code ở cuối để maximize cache hits. npm ci được dùng thay vì npm install để faster và deterministic installs. Alpine Linux base image được chọn thay vì standard Debian base để minimal size.
+Về optimization techniques applied, multi-stage build giảm final image size từ 1.2GB xuống 280MB, giảm 77 phần trăm. Docker ignore file loại bỏ node\_modules, tests, documentation, và development files khỏi build context, giảm build time từ 45 seconds xuống 22 seconds. Layer ordering được optimize với frequently changing code ở cuối để maximize cache hits. npm ci được dùng thay vì npm install để faster và deterministic installs. Alpine Linux base image được chọn thay vì standard Debian base để minimal size.
 
 Security considerations bao gồm non-root user execution để prevent privilege escalation, minimal base image reducing attack surface, no secrets in image với environment variables injected at runtime, health check để automatic container restart nếu unhealthy, và read-only filesystem where possible.
 
@@ -112,7 +112,7 @@ Build performance metrics cho thấy initial build 45 seconds, với cache 22 se
 
 Automated CI/CD được implement với GitHub Actions workflows để orchestrate toàn bộ pipeline từ code commit đến deployment.
 
-Về backend workflow trong file .github/workflows/backend-deploy.yml, triggers được config on push to main or develop branches với paths filter backend/** để chỉ run khi backend code thay đổi, và on pull_request to main or develop để validate trước khi merge.
+Về backend workflow trong file .github/workflows/backend-deploy.yml, triggers được config on push to main or develop branches với paths filter backend/** để chỉ run khi backend code thay đổi, và on pull\_request to main or develop để validate trước khi merge.
 
 Job 1 là lint check chạy trên ubuntu-latest với steps checkout code, setup Node.js 18.x với npm cache enabled, install dependencies với npm ci, và run ESLint với npm run lint. Job này fail nếu có linting errors, ensuring code quality standards.
 
@@ -124,22 +124,22 @@ Job 4 là deploy to production chỉ run nếu ref is main branch và requires b
 
 Job 5 là deploy to staging cho develop branch với similar flow nhưng target staging environment.
 
-Về frontend workflow trong frontend-deploy.yml, triggers tương tự với paths filter frontend/**. Job 1 lint and type check với ESLint và TypeScript compiler tsc --noEmit để catch type errors trước build. Job 2 build Next.js application với npm run build, environment variable NEXT_PUBLIC_API_GATEWAY_URL được inject, và build artifacts uploaded for potential reuse. Job 3 run component tests với React Testing Library hoặc Jest. Job 4 deploy to Vercel production tự động cho main branch vì Vercel connected to repository. Job 5 deploy preview cho pull requests và develop branch, với preview URLs automatically commented on PRs.
+Về frontend workflow trong frontend-deploy.yml, triggers tương tự với paths filter frontend/**. Job 1 lint and type check với ESLint và TypeScript compiler tsc --noEmit để catch type errors trước build. Job 2 build Next.js application với npm run build, environment variable NEXT\_PUBLIC\_API\_GATEWAY\_URL được inject, và build artifacts uploaded for potential reuse. Job 3 run component tests với React Testing Library hoặc Jest. Job 4 deploy to Vercel production tự động cho main branch vì Vercel connected to repository. Job 5 deploy preview cho pull requests và develop branch, với preview URLs automatically commented on PRs.
 
 Về workflow optimizations, dependency caching với actions/setup-node cache npm giảm install time từ 60s xuống 10s. Matrix builds cho phép parallel testing across Node versions. Conditional job execution với if statements prevent unnecessary runs. Build artifact upload và reuse across jobs. GitHub Actions cache cho Docker layers và npm packages. Path filters ensure workflows chỉ run khi relevant files change.
 
-Về secrets management, GitHub Secrets store sensitive values như VERCEL_ORG_ID, VERCEL_PROJECT_ID, NEXT_PUBLIC_API_GATEWAY_URL. Secrets không appear trong logs hoặc artifacts. Principle of least privilege với separate secrets cho staging và production. Regular secret rotation quarterly. No hardcoded secrets trong workflow files.
+Về secrets management, GitHub Secrets store sensitive values như VERCEL\_ORG\_ID, VERCEL\_PROJECT\_ID, NEXT\_PUBLIC\_API\_GATEWAY\_URL. Secrets không appear trong logs hoặc artifacts. Principle of least privilege với separate secrets cho staging và production. Regular secret rotation quarterly. No hardcoded secrets trong workflow files.
 
 \subsection{Environment configuration}
 \label{subsection:4.4.4}
 
-Application deployment requires careful environment variable management across development, staging, và production environments.
+Application deployment yêu cầu quản lý environment variables cẩn thận giữa các môi trường development, staging và production.
 
 Về environment separation strategy, Development environment chạy locally với .env.development file, MongoDB local instance hoặc Atlas dev cluster, reduced logging, và debug mode enabled. Staging environment trên develop branch với Render staging service, MongoDB Atlas staging cluster, moderate logging, và similar to production config. Production environment trên main branch với Render production service, MongoDB Atlas production cluster với replication, comprehensive error logging, và optimized performance settings.
 
-Backend environment variables classification gồm core variables PORT default 8000, NODE_ENV development hoặc production, FRONTEND_URL for CORS configuration. Database MONGO_URI connection string to MongoDB Atlas. Authentication JWT_SECRET for signing tokens, JWT_EXPIRATION default 7 days. Payment integration PAYOS_CLIENT_ID, PAYOS_API_KEY, PAYOS_CHECKSUM_KEY from PayOS dashboard. Logging LOG_LEVEL info for production, debug for development.
+Backend environment variables classification gồm core variables PORT default 8000, NODE\_ENV development hoặc production, FRONTEND\_URL for CORS configuration. Database MONGO\_URI connection string to MongoDB Atlas. Authentication JWT\_SECRET for signing tokens, JWT\_EXPIRATION default 7 days. Payment integration PAYOS\_CLIENT\_ID, PAYOS\_API\_KEY, PAYOS\_CHECKSUM\_KEY from PayOS dashboard. Logging LOG\_LEVEL info for production, debug for development.
 
-Frontend environment variables include API configuration NEXT_PUBLIC_API_GATEWAY_URL pointing to backend API, prefixed NEXT_PUBLIC for client-side access. Build optimization NEXT_PUBLIC_ENV production hoặc staging. Analytics NEXT_PUBLIC_ANALYTICS_ID if using Google Analytics.
+Frontend environment variables include API configuration NEXT\_PUBLIC\_API\_GATEWAY\_URL pointing to backend API, prefixed NEXT\_PUBLIC for client-side access. Build optimization NEXT\_PUBLIC\_ENV production hoặc staging. Analytics NEXT\_PUBLIC\_ANALYTICS\_ID if using Google Analytics.
 
 Về configuration management best practices, .env.example file provides template với placeholder values. .env files are gitignored để prevent committing secrets. Platform-specific configuration on Render dashboard for backend và Vercel dashboard for frontend. Environment validation on application startup checking required variables exist, validating format and values, và fail fast if misconfigured. Type-safe env with TypeScript typed environment variables và compile-time checks.
 
@@ -148,7 +148,7 @@ Configuration loading sử dụng dotenv package load .env files, process.env ac
 \subsection{Deployment automation}
 \label{subsection:4.4.5}
 
-Automated deployment to cloud platforms giảm deployment time và eliminate human errors.
+Automated deployment lên các cloud platforms giảm thời gian deployment và loại bỏ human errors.
 
 Về Render deployment for backend, initial setup connect GitHub repository select backend folder, set build command docker build or npm install, set start command node server.js, configure environment variables, và enable auto-deploy on main branch. Auto-deploy mechanism monitors main branch for changes, triggers build on new commits, pulls latest code, runs build command hoặc builds Docker image, starts new instance, performs health checks at /api/health, switches traffic to new instance nếu healthy, và terminates old instance. Zero-downtime deployment achieved through rolling deployment strategy với new instance starts first, health check passes before traffic switch, gradual traffic migration, và old instance remains until new is verified.
 
@@ -205,7 +205,7 @@ Blue-green deployment alternative strategy maintain two identical environments b
 
 Quy trình development và deployment được tối ưu hóa để hỗ trợ team productivity và code quality.
 
-Về local development setup, Backend requires Node.js 18 or higher, MongoDB local hoặc Atlas, package.json dependencies installed, .env file configured từ .env.example template, và run npm run dev:backend để start với nodemon. Frontend requires Node.js 18 or higher, backend running và accessible, package.json dependencies installed, .env.local configured với NEXT_PUBLIC_API_GATEWAY_URL, và run npm run dev:frontend để start Next.js dev server với HMR.
+Về local development setup, Backend requires Node.js 18 or higher, MongoDB local hoặc Atlas, package.json dependencies installed, .env file configured từ .env.example template, và run npm run dev:backend để start với nodemon. Frontend requires Node.js 18 or higher, backend running và accessible, package.json dependencies installed, .env.local configured với NEXT\_PUBLIC\_API\_GATEWAY\_URL, và run npm run dev:frontend để start Next.js dev server với HMR.
 
 Git workflow best practices include branch naming feature/feature-name for new features, bugfix/issue-description for bug fixes, hotfix/critical-fix for production hotfixes. Commit messages follow conventional commits format feat: add new feature, fix: resolve bug, docs: update documentation, style: formatting changes, refactor: code restructuring, test: add tests, chore: maintenance tasks. Pull request process create PR from feature to develop, add description và context, request review from team, address review comments, merge after approval và passing checks.
 
