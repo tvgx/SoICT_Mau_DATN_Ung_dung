@@ -59,7 +59,7 @@
 \renewcommand\appendixtocname{PHỤ LỤC}
 
 
-\addbibresource{Danh_sach_tai_lieu_tham_khao.bib} % chèn file chứa danh mục tài liệu tham khảo vào 
+% \addbibresource{Danh_sach_tai_lieu_tham_khao.bib} % chèn file chứa danh mục tài liệu tham khảo vào 
 
 \include{lstlisting} % Phần này cho phép chèn code và formatting code như C, C++, Python
 
@@ -68,16 +68,22 @@
 % ===================================================
 
 
+% Cấu hình page style cho tất cả trang
 \fancypagestyle{plain}{%
 \fancyhf{} % clear all header and footer fields
-\fancyfoot[RO,RE]{\thepage} %RO=right odd, RE=right even
+\fancyfoot[R]{\thepage} % Page number ở góc dưới bên phải
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}}
 
+% Apply cho tất cả pages
+\pagestyle{plain}
+\fancyhf{}
+\fancyfoot[R]{\thepage}
+
 \setlength{\headheight}{10pt}
 
-\def \TITLE{ĐỒ ÁN TỐT NGHIỆP}
-\def \AUTHOR{NGUYỄN VĂN ABC}
+\def \TITLE{BÁO CÁO PROJECT}
+\def \AUTHOR{TRỊNH VI GIANG XUÂN}
 
 % ===================================================
 \titleformat{\chapter}[hang]{\centering\bfseries}{CHƯƠNG \thechapter.\ }{0pt}{}[]
@@ -176,23 +182,26 @@
 %\newpage
 %\subfile{chapters/0_1_subject.tex}
 
-\newpage
-\pagenumbering{gobble}
-\subfile{Chuong/0_2_Loi_cam_on.tex}
+% \newpage
+% \pagenumbering{gobble}
+% \subfile{Chuong/0_2_Loi_cam_on.tex}
 
-\newpage
-\pagenumbering{gobble}
-\subfile{Chuong/0_3_Tom_tat_noi_dung.tex}
+% \newpage
+% \pagenumbering{gobble}
+% \subfile{Chuong/0_3_Tom_tat_noi_dung.tex}
 
+% \newpage
+% \pagenumbering{gobble}
+% \subfile{Chuong/0_4_Tom_tat_noi_dung_English.tex}% ===================================================
+% Table of contents configuration
 \newpage
-\pagenumbering{gobble}
-\subfile{Chuong/0_4_Tom_tat_noi_dung_English.tex}
-
-% ===================================================
-% \pagestyle{empty} % Header và footer rỗng
-\newpage
-\pagenumbering{roman} % Xóa page numbering ở cuối trang
+\pagenumbering{roman}
 \renewcommand*\contentsname{MỤC LỤC}
+% ===================================================
+% % \pagestyle{empty} % Header và footer rỗng
+% \newpage
+% \pagenumbering{roman} % Xóa page numbering ở cuối trang
+% \renewcommand*\contentsname{MỤC LỤC}
 
 \titlecontents{chapter}
     [0.0cm]             % left margin
@@ -223,23 +232,22 @@
 \addtocontents{toc}{\protect\thispagestyle{empty}}
 \tableofcontents 
 \thispagestyle{empty}
-\cleardoublepage
 
 % \pagenumbering{roman}
 %Tạo danh mục hình vẽ.
-\renewcommand{\listfigurename}{DANH MỤC HÌNH VẼ}
-{\let\oldnumberline\numberline
-\renewcommand{\numberline}{Hình~\oldnumberline}
-\listoffigures} 
+% \renewcommand{\listfigurename}{DANH MỤC HÌNH VẼ}
+% {\let\oldnumberline\numberline
+% \renewcommand{\numberline}{Hình~\oldnumberline}
+% \listoffigures} 
 % \phantomsection\addcontentsline{toc}{section}{\numberline {} DANH MỤC HÌNH VẼ}
-\newpage
+
 
 
  %Tạo danh mục bảng biểu.
-\renewcommand{\listtablename}{DANH MỤC BẢNG BIỂU}
-{\let\oldnumberline\numberline
-\renewcommand{\numberline}{Bảng~\oldnumberline}
-\listoftables}
+% \renewcommand{\listtablename}{DANH MỤC BẢNG BIỂU}
+% {\let\oldnumberline\numberline
+% \renewcommand{\numberline}{Bảng~\oldnumberline}
+% \listoftables}
 % \phantomsection\addcontentsline{toc}{section}{\numberline {} DANH MỤC BẢNG BIỂU}
 
 \glsaddall 
