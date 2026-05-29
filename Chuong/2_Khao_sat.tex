@@ -1,49 +1,281 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
-Chương này có độ dài từ 9 đến 11 trang.
 
-Với phương pháp phân tích thiết kế hướng đối tượng, sinh viên sử dụng biểu đồ use case theo hướng dẫn của template này. Với các phương pháp khác, sinh viên trao đổi với giáo viên hướng dẫn để đổi tên và sắp xếp lại đề mục cho phù hợp. Ví dụ, thay vì sử dụng biểu đồ use case, sinh viên đi theo hướng tiếp cận Agile có thể dùng User Story.
-
-
-\textbf{Lưu ý}: Mỗi chương nên có thêm 1 đoạn mở đầu chương và kết thúc chương, mở đầu giới thiệu những nội dung sẽ trình bày trong chương, kết thúc tổng kết lại các nội dung đã trình bày
+Chương 1 đã xác định bài toán về rào cản chi phí và kỹ thuật mà các doanh nghiệp vừa và nhỏ gặp phải khi tiếp cận thương mại điện tử, đồng thời đề xuất giải pháp nền tảng ShopVolo v2. Chương 2 này sẽ đi sâu vào việc khảo sát và phân tích yêu cầu của hệ thống để làm cơ sở cho quá trình thiết kế. Cụ thể, phần \ref{section:2.1} trình bày kết quả khảo sát hiện trạng từ ba nguồn chính nhằm nhận diện rõ vấn đề. Tiếp đó, phần \ref{section:2.2} cung cấp cái nhìn tổng quan về các chức năng của hệ thống thông qua các biểu đồ phân rã. Phần \ref{section:2.3} đi vào đặc tả chi tiết luồng nghiệp vụ của các trường hợp sử dụng cốt lõi. Cuối cùng, phần \ref{section:2.4} đưa ra các yêu cầu phi chức năng cần đáp ứng để hệ thống vận hành trơn tru.
 
 \section{Khảo sát hiện trạng}
 \label{section:2.1}
-Thông thường, khảo sát chi tiết về hiện trạng và yêu cầu của phần mềm sẽ được lấy từ ba nguồn chính, đó là (i) người dùng/khách hàng, (ii) các hệ thống đã có, (iii) và các ứng dụng tương tự.
-Sinh viên cần tiến hành phân tích, so sánh, đánh giá chi tiết ưu nhược điểm của các sản phẩm/nghiên cứu hiện có. Sinh viên có thể lập bảng so sánh nếu cần thiết. Kết hợp với khảo sát người dùng/khách hàng (nếu có), sinh viên nêu và mô tả sơ lược các tính năng phần mềm quan trọng cần phát triển.
+
+Đối tượng người dùng của ShopVolo v2 là các doanh nghiệp vừa và nhỏ tại Việt Nam có nhu cầu mở rộng kênh bán hàng trực tuyến. Qua phân tích báo cáo về thương mại điện tử Việt Nam \cite{vecom2024}, hơn 60\% các đơn vị doanh nghiệp vừa và nhỏ phản ánh chi phí xây dựng website đang là rào cản lớn nhất của họ. Người dùng đang rất cần một nền tảng thương mại điện tử thực sự dễ dùng mà không yêu cầu kiến thức viết mã, có mức chi phí thấp để duy trì, nhưng vẫn cung cấp được một giao diện chuyên nghiệp. Dựa vào những nhu cầu cấp thiết đó, hệ thống phân tích và chỉ ra ba nhóm người dùng chính bao gồm: (i) Super Admin giữ vai trò quản trị toàn bộ hệ thống nền tảng, (ii) Tenant Owner là những người kinh doanh trực tiếp quản lý cửa hàng của mình, và (iii) End Customer đại diện cho lượng khách hàng cuối cùng sẽ truy cập vào nền tảng để mua sắm.
+
+Trước khi nền tảng ShopVolo v2 được định hình, các cửa hàng thường tự xây dựng trang web bằng các công cụ như WordPress kết hợp WooCommerce hoặc dựa hoàn toàn vào các trang mạng xã hội phổ biến như Facebook và Zalo. Tuy nhiên, các giải pháp này bộc lộ rất nhiều hạn chế cốt lõi như không có hệ thống quản lý đơn hàng tập trung, trải nghiệm giao diện không nhất quán trên các thiết bị, và gần như không thể mở rộng quy mô khi số lượng sản phẩm cũng như lượng truy cập tăng vọt.
+
+Khi xét đến các ứng dụng phần mềm dịch vụ chuyên biệt tương tự hiện nay, Shopify nổi bật với tư cách là một nền tảng thương mại điện tử khổng lồ cung cấp giao diện bắt mắt. Điểm yếu của nền tảng này là chi phí duy trì cố định hằng tháng khá cao và khả năng tùy biến sâu bị hạn chế \cite{shopify_docs}. Trong khi đó, WooCommerce lại cung cấp tính tự do tuyệt đối nhờ mã nguồn mở nhưng người sử dụng bị ép buộc phải tự cấu hình máy chủ, vá lỗi bảo mật liên tục, gây hao tổn nguồn lực kỹ thuật đáng kể \cite{woocommerce}.
+
+Tại thị trường trong nước, Haravan đã xây dựng được một hệ sinh thái hỗ trợ thanh toán nội địa vô cùng tiện lợi cho các nhà bán lẻ \cite{haravan_platform}. Tuy nhiên, công cụ thiết kế của họ vẫn còn cứng nhắc, và bản thân hệ thống chưa ứng dụng triệt để kiến trúc đa thuê bao nhằm tiết kiệm tài nguyên kết xuất giao diện. Ngoài ra, phân khúc doanh nghiệp quy mô cực lớn thường chọn giải pháp Adobe Commerce với sự mạnh mẽ tuyệt đối nhưng lại đòi hỏi nguồn kinh phí khổng lồ để bắt đầu và duy trì bảo trì hệ thống \cite{magento_docs}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+  \hline
+  \textbf{Tiêu chí so sánh} & \textbf{Shopify} & \textbf{WooCommerce} & \textbf{Haravan} & \textbf{ShopVolo v2 (đề xuất)} \\ \hline
+  Mô hình triển khai & SaaS & Self-hosted & SaaS & SaaS \\ \hline
+  Chi phí hàng tháng & \$29–\$299 & Miễn phí (hosting riêng) & 200k–3tr VND & Tối ưu (multi-tenant) \\ \hline
+  Tùy biến giao diện & Theme cố định & Cần dev WordPress & Hạn chế & Visual builder, Zero-file \\ \hline
+  Multi-tenancy thực sự & Có & Không & Không & Có (AsyncLocalStorage) \\ \hline
+  Hỗ trợ thanh toán VN & Hạn chế & Plugin & Có & Có (Stripe, COD, MoMo) \\ \hline
+  Vận hành 20k+ shop / RAM thấp & Không áp dụng & Không & Không áp dụng & Mục tiêu thiết kế \\ \hline
+\end{tabular}
+\caption{So sánh chi tiết các nền tảng thương mại điện tử}
+\label{table:so_sanh_chi_tiet}
+\end{table}
+
+Bảng \ref{table:so_sanh_chi_tiet} cho thấy rõ ràng một sự thiếu hụt nghiêm trọng trên thị trường. Các hệ thống hiện tại đều chưa thể giải quyết triệt để vấn đề cân bằng giữa chi phí, khả năng vận hành nhiều cửa hàng trên cấu hình máy chủ hạn hẹp và công cụ thiết kế giao diện linh hoạt. Từ những hạn chế tổng quát kể trên, nền tảng của đề tài phải tập trung xây dựng 10 tính năng cốt lõi: (i) khởi tạo cửa hàng, (ii) quản lý bộ khung nền tảng, (iii) tùy biến thương hiệu, (iv) quản lý sản phẩm, (v) thiết lập menu điều hướng, (vi) tạo trang nội dung động, (vii) duyệt sản phẩm động trên trang cửa hàng, (viii) quản lý giỏ hàng, (ix) thanh toán và xử lý đơn hàng, và cuối cùng là (x) ánh xạ tên miền tùy chỉnh.
 
 \section{Tổng quan chức năng}
 \label{section:2.2}
-Phần \ref{section:2.2} này có nhiệm vụ tóm tắt các chức năng của phần mềm. Trong phần này, sinh viên lưu ý chỉ mô tả chức năng mức cao (tổng quan) mà không đặc tả chi tiết cho từng chức năng. Đặc tả chi tiết được trình bày trong phần \ref{section:2.3}.
+
+Phần này có nhiệm vụ tóm tắt cấu trúc phân mảnh hệ thống thông qua các sơ đồ trường hợp sử dụng từ mức tổng thể đến mức chi tiết. Việc đặc tả chuyên sâu từng chức năng cốt lõi sẽ được tiến hành ở mục tiếp theo.
 
 \subsection{Biểu đồ use case tổng quát}
 \label{subsection:2.2.1}
-Sinh viên vẽ biểu đồ use case tổng quan và giải thích các tác nhân tham gia là gì, nêu vai trò của từng tác nhân, và mô tả ngắn gọn các use case chính.
 
-\subsection{Biểu đồ use case phân rã XYZ}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{Hinhve/usecase_tong_quat.png}
+    \caption{Biểu đồ use case tổng quát hệ thống ShopVolo v2}
+    \label{fig:usecase_tong_quat}
+\end{figure}
+% TODO: Vẽ biểu đồ UML use case tổng quát với 3 tác nhân (Super Admin, Tenant Owner, End Customer) và 10 use case chính, lưu vào Hinhve/usecase_tong_quat.png
+
+Hình \ref{fig:usecase_tong_quat} mô tả cái nhìn toàn cảnh về mọi hành vi tương tác trong hệ thống. Tác nhân Super Admin là người nắm giữ quyền hành lớn nhất, chịu trách nhiệm quản lý toàn bộ nền tảng và thiết kế các mẫu bộ khung nền tảng cho cửa hàng. Tác nhân Tenant Owner là những người kinh doanh tham gia trực tiếp vào việc đăng ký, thiết lập, cấu hình và quản lý mọi ngóc ngách thông tin trong cửa hàng của riêng họ. Cuối cùng, tác nhân End Customer là tập hợp lượng khách hàng đồ sộ liên tục truy cập vào hệ thống mặt tiền hiển thị nhằm tìm kiếm sản phẩm và thanh toán.
+
+\subsection{Biểu đồ use case phân rã — Quản lý Shop}
 \label{subsection:2.2.2}
-Với mỗi use case mức cao trong biểu đồ use case tổng quan, sinh viên tạo một mục riêng như mục \ref{subsection:2.2.2} và tiến hành phân rã use case đó. Lưu ý tên use case cần phân rã trong biểu đồ use case tổng quan phải khớp với tên đề mục.
 
-Trong mỗi mục như vậy, sinh viên vẽ và giải thích ngắn gọn các use case phân rã.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\linewidth]{Hinhve/usecase_quan_ly_shop.png}
+    \caption{Biểu đồ use case phân rã nhóm Quản lý Shop}
+    \label{fig:usecase_quan_ly_shop}
+\end{figure}
+% TODO: UC-01 (Onboarding), UC-02 (Master Template), UC-03 (Branding), UC-05 (Navigation), UC-10 (Domain Mapping)
 
-\subsection{Quy trình nghiệp vụ}
+Hình \ref{fig:usecase_quan_ly_shop} tập trung mô tả chi tiết các tác vụ liên quan đến việc thiết lập cửa hàng. Chức năng khởi tạo shop hỗ trợ đăng ký nhanh tài khoản và định danh cửa hàng. Quản lý nền tảng mẫu cung cấp luồng tùy chỉnh giao diện gốc. Chức năng tùy biến thương hiệu giúp đổi mới hình ảnh mà không cần biết viết mã, còn thiết lập điều hướng và ánh xạ tên miền bổ trợ tối đa cho việc định hình cấu trúc thông tin hoàn chỉnh.
+
+\subsection{Biểu đồ use case phân rã — Quản lý Sản phẩm \& Đơn hàng}
 \label{subsection:2.2.3}
-Nếu sản phẩm/hệ thống cần xây dựng có quy trình nghiệp vụ quan trọng/đáng chú ý, sinh viên cần mô tả và vẽ biểu đồ hoạt động minh họa quy trình nghiệp vụ đó. Sinh viên lưu ý đây không phải là luồng sự kiện của từng use case, mà là luồng hoạt động kết hợp nhiều use case để thực hiện một nghiệp vụ nào đó.
 
-Ví dụ, một hệ thống quản lý thư viện có quy trình nghiệp vụ mượn trả với mô tả sơ bộ như sau: Sinh viên làm thẻ mượn, sau đó sinh viên đăng ký mượn sách, thủ thư cho mượn, và cuối cùng sinh viên trả lại sách cho thư viện. Một hệ thống có thể có một vài quy trình nghiệp vụ quan trọng như vậy.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\linewidth]{Hinhve/usecase_san_pham_don_hang.png}
+    \caption{Biểu đồ use case phân rã nhóm Sản phẩm và Đơn hàng}
+    \label{fig:usecase_san_pham_don_hang}
+\end{figure}
+% TODO: UC-04 (Products), UC-08 (Cart), UC-09 (Checkout)
+
+Hình \ref{fig:usecase_san_pham_don_hang} mô tả trực tiếp các chức năng sinh lời cốt lõi của một hệ thống bán lẻ. Quản lý sản phẩm cho phép người bán cập nhật liên tục mọi thay đổi về kho hàng và hình ảnh. Quản lý giỏ hàng đóng vai trò điểm neo kết nối mong muốn mua sắm của khách, còn chức năng thanh toán trực tiếp giải quyết dòng tiền giao dịch để hoàn tất đơn hàng một cách nhanh chóng.
+
+\subsection{Biểu đồ use case phân rã — Trải nghiệm Khách hàng}
+\label{subsection:2.2.4}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\linewidth]{Hinhve/usecase_khach_hang.png}
+    \caption{Biểu đồ use case phân rã nhóm trải nghiệm Khách hàng}
+    \label{fig:usecase_khach_hang}
+\end{figure}
+% TODO: UC-06 (Custom Pages), UC-07 (Dynamic Browsing)
+
+Hình \ref{fig:usecase_khach_hang} mô tả trải nghiệm người tiêu dùng trên bề mặt hệ thống. Khách hàng dễ dàng theo dõi thông tin cửa hàng qua các trang nội dung động, đồng thời liên tục tương tác với mặt tiền của cửa hàng thông qua chức năng duyệt sản phẩm được kết xuất mạnh mẽ từ cấu hình hệ thống.
+
+\subsection{Quy trình nghiệp vụ — Onboarding và Dynamic Rendering}
+\label{subsection:2.2.5}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{Hinhve/activity_onboarding.png}
+    \caption{Biểu đồ hoạt động quy trình Onboarding và Rendering động}
+    \label{fig:activity_onboarding}
+\end{figure}
+% TODO: Vẽ luồng: Tenant đăng ký → Tạo account → Gán Master Template → Config branding → Publish layout → End Customer truy cập → Storefront fetch JSON → Deep Merge → Render UI
+
+Hình \ref{fig:activity_onboarding} mô tả quy trình nghiệp vụ quan trọng nhất, gắn kết vòng đời của cửa hàng từ khâu kiến tạo đến khâu hoạt động thực tế. Khi người dùng mới thực hiện đăng ký thông tin, hệ thống tự động sinh tài khoản, gán bộ khung giao diện tiêu chuẩn và cho phép cấu hình ngay lập tức. Cấu hình được xuất bản và mỗi khi có khách hàng tiến vào thông qua mạng lưới tên miền, máy chủ kết xuất lập tức kéo tệp dữ liệu về để tiến hành phép kết hợp đệ quy sâu. Toàn bộ các thông tin trộn lẫn này được hiển thị ngay lập tức lên màn hình một cách liền mạch nhất.
+
 \section{Đặc tả chức năng}
 \label{section:2.3}
-Sinh viên lựa chọn từ 4 đến 7 use case quan trọng nhất của đồ án để đặc tả chi tiết. Mỗi đặc tả bao gồm ít nhất các thông tin sau: (i) Tên use case, (ii) Luồng sự kiện (chính và phát sinh), (iii) Tiền điều kiện, và (iv) Hậu điều kiện. Sinh viên chỉ vẽ bổ sung biểu đồ hoạt động khi đặc tả use case phức tạp.
-\subsection{Đặc tả use case A}
-\hfill
-\subsection{Đặc tả use case B}
-\hfill
+
+Dựa trên mười tác vụ chính đã thống kê, phân hệ hệ thống này lựa chọn tiến hành đặc tả chuyên sâu năm quy trình vận hành trung tâm ảnh hưởng trực tiếp đến hiệu quả hoạt động tổng thể.
+
+\subsection{Đặc tả use case: Khởi tạo Shop (UC-01)}
+\label{subsection:2.3.1}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+  \hline
+  \textbf{Tên use case} & Khởi tạo Shop (Tenant Onboarding) \\ \hline
+  \textbf{Tác nhân} & Tenant Owner \\ \hline
+  \textbf{Mục đích} & Đăng ký tài khoản và tạo cửa hàng mới trên nền tảng \\ \hline
+  \textbf{Tiền điều kiện} & Tenant Owner chưa có tài khoản; email và domain chưa tồn tại trong hệ thống \\ \hline
+  \textbf{Hậu điều kiện} & Shop được tạo với trạng thái active; admin account được khởi tạo; Master Template mặc định được gán; email xác nhận được gửi \\ \hline
+  \textbf{Luồng chính} & 
+    1. Tenant Owner gửi POST /api/v1/tenants/register với: shopName, email, domain, ownerName \\
+    2. Hệ thống kiểm tra email và domain chưa trùng lặp \\
+    3. Hệ thống tạo bản ghi tenant trong PostgreSQL \\
+    4. Hệ thống tạo user với role=OWNER, liên kết với tenant \\
+    5. Hệ thống gán Master Template mặc định vào MongoDB (TenantLayout) \\
+    6. Hệ thống khởi tạo navigation menu mặc định \\
+    7. Hệ thống gửi email xác nhận \\
+    8. API trả về tenantId, domain, status=active \\ \hline
+  \textbf{Luồng phát sinh} & 
+    [2a] Domain đã tồn tại → HTTP 409, code 1013, message "Domain already exists" \\
+    [2b] Email đã đăng ký → HTTP 409, code 9996, message "Email already registered" \\
+    [2c] Dữ liệu không hợp lệ → HTTP 400, code 1002/1003/1004 \\ \hline
+\end{tabular}
+\caption{Đặc tả use case Khởi tạo Shop (UC-01)}
+\label{table:uc01}
+\end{table}
+Bảng \ref{table:uc01} mô tả luồng đăng ký ban đầu thông qua một cấu trúc hàm tự động giúp thiết lập cơ sở dữ liệu phân tán ngay tức thì cho một cửa hàng mới.
+
+\subsection{Đặc tả use case: Tùy biến giao diện (UC-03)}
+\label{subsection:2.3.2}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+  \hline
+  \textbf{Tên use case} & Tùy biến thương hiệu (Branding) \\ \hline
+  \textbf{Tác nhân} & Tenant Owner \\ \hline
+  \textbf{Mục đích} & Thay đổi logo, màu sắc chủ đạo, và font chữ của cửa hàng \\ \hline
+  \textbf{Tiền điều kiện} & Tenant Owner đã đăng nhập; shop đang ở trạng thái active \\ \hline
+  \textbf{Hậu điều kiện} & Cấu hình branding được lưu vào MongoDB (TenantLayout.overrides); Redis cache bị invalidate; giao diện storefront cập nhật trong vòng 1 giờ \\ \hline
+  \textbf{Luồng chính} & 
+    1. Tenant Owner chỉnh sửa logo/màu sắc/font trong Admin Dashboard \\
+    2. Dashboard gửi PATCH /api/v1/tenants/\{tenantId\}/config với branding JSON \\
+    3. API nhận override, thực hiện deep merge với Master Template \\
+    4. Lưu chỉ phần override (diff) vào MongoDB TenantLayout \\
+    5. Invalidate Redis cache key storefront:config:\{tenantId\} \\
+    6. Trả về config đã cập nhật và lastModified \\ \hline
+  \textbf{Luồng phát sinh} & 
+    [3a] URL logo không hợp lệ → HTTP 400, message "Invalid logo URL" \\
+    [3b] Màu sắc không đúng hex format → HTTP 400, message "Invalid color format" \\ \hline
+\end{tabular}
+\caption{Đặc tả use case Tùy biến thương hiệu (UC-03)}
+\label{table:uc03}
+\end{table}
+Bảng \ref{table:uc03} mô tả quy trình tùy biến giúp lưu trữ lại đúng phần nội dung khác biệt thay vì toàn bộ mã nguồn, tối ưu hóa hệ thống dữ liệu đồ sộ.
+
+\subsection{Đặc tả use case: Quản lý sản phẩm (UC-04)}
+\label{subsection:2.3.3}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+  \hline
+  \textbf{Tên use case} & Quản lý sản phẩm \\ \hline
+  \textbf{Tác nhân} & Tenant Owner \\ \hline
+  \textbf{Mục đích} & Cho phép người quản lý thêm mới, chỉnh sửa, xóa bỏ sản phẩm và cập nhật hình ảnh \\ \hline
+  \textbf{Tiền điều kiện} & Chủ cửa hàng đã đăng nhập thành công vào phiên quản trị \\ \hline
+  \textbf{Hậu điều kiện} & Thông tin sản phẩm cập nhật lên máy chủ trung tâm; quy trình trí tuệ nhân tạo xử lý hình nền hoàn tất và lưu trữ vào kho MinIO \\ \hline
+  \textbf{Luồng chính} & 
+    1. Tenant Owner điền tên, mã SKU, và dữ liệu cấu thành sản phẩm \\
+    2. Admin Dashboard gửi yêu cầu cập nhật API hệ thống lõi \\
+    3. Hình ảnh thô đẩy trực tiếp lên kho chứa đối tượng MinIO \\
+    4. Trí tuệ nhân tạo nhận diện và bóc tách phông nền chuẩn bị qua CronJob máy chủ ảnh \\
+    5. Hình ảnh sau bóc tách được thu nhỏ theo ba mức độ phân giải tiêu chuẩn \\
+    6. Toàn bộ định danh ảnh thu nhỏ lưu ngược vào bộ nhớ MongoDB \\
+    7. Thông báo hoàn tất khởi tạo sản phẩm về màn hình người dùng \\ \hline
+  \textbf{Luồng phát sinh} & 
+    [1a] Trường dữ liệu định danh mã bị rỗng → Cảnh báo nhập liệu bắt buộc \\
+    [4a] Lỗi kỹ thuật máy chủ ảnh ngắt quãng → Hệ thống lưu cấu hình ảnh mặc định và kích hoạt lại sau \\ \hline
+\end{tabular}
+\caption{Đặc tả use case Quản lý sản phẩm (UC-04)}
+\label{table:uc04}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\linewidth]{Hinhve/activity_upload_product.png}
+    \caption{Biểu đồ hoạt động luồng tải lên và xử lý ảnh sản phẩm}
+    \label{fig:activity_upload_product}
+\end{figure}
+% TODO: Luồng: Upload ảnh → MinIO lưu file gốc → Cron job tách nền AI → Tạo thumbnails 3 kích thước → Lưu URLs vào MongoDB ProductMedia
+
+Hình \ref{fig:activity_upload_product} là quy trình quản lý thông tin sản phẩm và phân luồng làm sạch phông nền ảnh thông minh giúp tăng độ sắc nét sản phẩm một cách chuyên nghiệp.
+
+\subsection{Đặc tả use case: Duyệt sản phẩm động (UC-07)}
+\label{subsection:2.3.4}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+  \hline
+  \textbf{Tên use case} & Duyệt sản phẩm động \\ \hline
+  \textbf{Tác nhân} & End Customer \\ \hline
+  \textbf{Mục đích} & Trình diễn giao diện nội dung sản phẩm mượt mà với khách mua hàng \\ \hline
+  \textbf{Tiền điều kiện} & Tên miền cửa hàng đang trỏ đúng địa chỉ máy chủ và cửa hàng vẫn kích hoạt \\ \hline
+  \textbf{Hậu điều kiện} & Toàn bộ nội dung thông tin được tải hoàn chỉnh và ghi nhận chỉ mục phục vụ truy xuất tức thời \\ \hline
+  \textbf{Luồng chính} & 
+    1. End Customer gõ tên miền truy cập vào ô tìm kiếm của trình duyệt mạng \\
+    2. Lớp phần mềm trung gian tự động bóc tách chuỗi để xác định mã cửa hàng \\
+    3. Động cơ mặt tiền kích hoạt hàm GET /api/v1/storefront/config?domain=xxx \\
+    4. Máy chủ ứng dụng lập tức lôi cấu hình đệ quy sâu từ kho lưu trữ nền \\
+    5. Bản ghi nội dung trộn lẫn được đẩy thẳng vào vùng nhớ tạm Redis với tuổi thọ giới hạn một giờ \\
+    6. Bộ phân giải thành phần cấu trúc JSON sang bộ giao diện lập trình bề mặt React \\
+    7. Nội dung phản hồi được truyền tới màn hình phía khách truy cập hoàn hảo nhất \\ \hline
+  \textbf{Luồng phát sinh} & 
+    [2a] Mã cửa hàng bị khóa do hết hạn thanh toán → Hệ thống điều hướng sang thông báo lỗi tạm dừng dịch vụ \\
+    [4a] Lỗi đường truyền tới MongoDB ngắt quãng → Hệ thống hiển thị cảnh báo bảo trì máy chủ tạm thời \\ \hline
+\end{tabular}
+\caption{Đặc tả use case Duyệt sản phẩm động (UC-07)}
+\label{table:uc07}
+\end{table}
+Bảng \ref{table:uc07} tập trung biểu diễn quy trình xử lý luồng sự kiện cốt lõi định hình kiến trúc Zero-file khi hệ thống phản ứng linh động thông qua các tập tin siêu văn bản JSON theo thời gian thực.
+
+\subsection{Đặc tả use case: Thanh toán và Đơn hàng (UC-09)}
+\label{subsection:2.3.5}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+  \hline
+  \textbf{Tên use case} & Thanh toán và đơn hàng \\ \hline
+  \textbf{Tác nhân} & End Customer \\ \hline
+  \textbf{Mục đích} & Hoàn thành tiến trình mua sắm và ghi nhận giao dịch dòng tiền vào hệ thống \\ \hline
+  \textbf{Tiền điều kiện} & End Customer đã lựa chọn tối thiểu một món đồ vào khoang chứa mua hàng \\ \hline
+  \textbf{Hậu điều kiện} & Đơn hàng được cập nhật trạng thái rõ ràng và lệnh thông báo qua email được vận hành \\ \hline
+  \textbf{Luồng chính} & 
+    1. Khách hàng bấm lệnh thanh toán, chốt thông tin địa chỉ giao hàng và phương thức giao dịch \\
+    2. Mặt tiền gọi hàm POST /api/v1/orders lên hệ thống trung tâm quản trị cơ sở dữ liệu \\
+    3. Hệ thống tạo nháp đơn hàng cùng mức thanh toán tạm thời chờ kết quả \\
+    4. Quá trình kết nối cổng thanh toán kích hoạt, mã giao dịch được lưu vết lại \\
+    5. Cổng Gateway gửi hàm callback webhook xác nhận tiền đã chảy vào tài khoản \\
+    6. Hệ thống lõi đối soát verify signature của webhook, xác thực an toàn tuyệt đối \\
+    7. Lệnh cập nhật trạng thái update order status được tiến hành, kéo theo gửi email xác nhận và bảng dashboard nháy tín hiệu đơn mới \\ \hline
+  \textbf{Luồng phát sinh} & 
+    [5a] Khách hủy thanh toán giữa chừng → Hủy lệnh nháp đơn hàng, giải phóng lượng kho dự phòng \\
+    [6a] Mã chứng thực chữ ký webhook không khớp chuẩn → Kích hoạt báo động xâm nhập và từ chối nâng trạng thái đơn \\ \hline
+\end{tabular}
+\caption{Đặc tả use case Thanh toán và Đơn hàng (UC-09)}
+\label{table:uc09}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\linewidth]{Hinhve/activity_checkout.png}
+    \caption{Biểu đồ hoạt động quy trình thanh toán và xác nhận đơn hàng}
+    \label{fig:activity_checkout}
+\end{figure}
+% TODO: Luồng: Checkout form → POST /api/v1/orders → Gọi Payment Gateway → Gateway callback webhook → Verify signature → Update order status → Gửi email confirmation → Update dashboard
+
+Hình \ref{fig:activity_checkout} xác nhận chặt chẽ cơ chế đóng kín dữ liệu thanh toán với bên thứ ba một cách an toàn.
 
 \section{Yêu cầu phi chức năng}
 \label{section:2.4}
-Trong phần này, sinh viên đưa ra các yêu cầu khác nếu có, bao gồm các yêu cầu phi chức năng như hiệu năng, độ tin cậy, tính dễ dùng, tính dễ bảo trì, hoặc các yêu cầu về mặt kỹ thuật như về CSDL, công nghệ sử dụng, v.v.
 
+Hệ thống cần đáp ứng thời gian phản hồi dưới 500ms cho cold cache và dưới 10ms cho warm cache của hệ thống Redis. Mục tiêu vận hành đồng thời 20.000 shop trên hạ tầng cấu hình khiêm tốn 16GB RAM đặt ra yêu cầu vô cùng nghiêm ngặt về tối ưu bộ nhớ. Cụ thể, NestJS phải bị giới hạn cờ cấu trúc cấp phát vùng nhớ tối đa 1024MB, cả hai cụm cơ sở dữ liệu PostgreSQL và MongoDB phân bổ mỗi thành phần tối đa 512MB RAM, còn đối với máy chủ truy xuất đệm Redis được thiết lập vòng lặp xử lý không vượt quá 256MB. Xét về độ tin cậy, hệ thống cam kết duy trì chuẩn hoạt động ở mức uptime đạt từ 99.5\% trở lên, đồng thời không cộng dồn thời gian đóng cổng để cấu hình bảo trì. Một cơ chế quy trình tự động được thiết kế nhằm sao lưu chạy mỗi ngày thông qua các tiến trình Kubernetes CronJob khép kín. Mọi lỗi bất ngờ phát sinh từ cơ sở dữ liệu đều được quản lý chặt chẽ qua cơ chế ném ngoại lệ InternalServerErrorException của NestJS, tuyệt đối không để lộ mã ngăn xếp truy vết ra thông báo trả về cho máy khách. Đi sâu hơn về khía cạnh tính dễ dùng, toàn bộ trung tâm điều khiển Admin Dashboard cần hỗ trợ tối ưu cho các người dùng cuối không có kiến thức kỹ thuật nâng cao. Giao diện thiết kế phải tuân thủ nghiêm chỉnh những quy định thiết kế tối giản, và mọi tính năng tác vụ trọng yếu như đăng hình ảnh gốc, thay màu nền thương hiệu phải dễ dàng vận hành với tổng thời gian thao tác tối đa không vượt qua thời lượng 3 phút. Phân tích đến yếu tố bảo mật, quá trình cấp quyền chứng thực xác thực thông qua cấu trúc JWT chuẩn mã hóa HS256. Mọi đường dẫn truy cập API đều yêu cầu khắt khe thông số xác minh Authorization header ngay ở những truy vấn đơn giản nhất. Đặc biệt, bản chất môi trường thiết lập đa khách thuê đặt nền móng chắc chắn đảm bảo cô lập dữ liệu tuyệt đối; chủ cửa hàng này sẽ hoàn toàn bị chặn đứng quyền truy xuất dữ liệu từ bất cứ cửa hàng nào khác trong cùng máy chủ. Secret mã hóa cực đoan được nạp qua cấu hình biến môi trường và không bao giờ xuất hiện lộ liễu trên các mã nguồn vật lý, đồng thời mã hóa TLS 1.3 bảo trợ toàn vẹn luồng dữ liệu liên thông. Đứng ở các góc độ yêu cầu kỹ thuật nền tảng, hệ thống cấu hình chạy tốt trên máy chủ có nhân lõi Node.js phiên bản 22 trở lên. Hệ thống phía máy khách hỗ trợ ổn định cho trình duyệt Chrome phiên bản 100, Firefox bản 100 hay Safari từ bản 15. Dữ liệu chạy dựa trên quy chuẩn cấu trúc PostgreSQL 16 tích hợp ORM Prisma và MongoDB 7 đi kèm Mongoose linh động. Hạ tầng triển khai kết dính toàn cục thông qua Docker Compose trong khi vận hành phát triển và nâng cấp thành hệ quản trị Kubernetes phân luồng tại máy chủ sản xuất, tất cả đồng loạt được thiết kế và quản trị theo cấu trúc tự động Turborepo nhằm gia tăng sức bật thời gian đóng gói biên dịch hệ thống.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Chương này đã làm rõ hiện trạng thị trường khi khảo sát ba nguồn phân tích cụ thể, từ đó hệ thống đã định hướng và chỉ điểm rõ 10 nhóm tính năng cốt lõi. Từ 10 chức năng quan trọng này, chương cũng đã đặc tả cẩn thận từng sự kiện diễn ra của 5 trường hợp sử dụng ưu tú nhất, bao gồm luôn những yêu cầu phi chức năng cần đáp ứng ở bước chạy đà thực tế. Chương tiếp theo trình bày các công nghệ được lựa chọn để hiện thực hóa các yêu cầu đã xác định.
 
 \end{document}
