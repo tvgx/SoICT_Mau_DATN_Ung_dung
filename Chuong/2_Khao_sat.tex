@@ -129,9 +129,9 @@ Dựa trên mười tác vụ chính đã thống kê, phân hệ hệ thống n
     7. Hệ thống gửi email xác nhận \\
     8. API trả về tenantId, domain, status=active \\ \hline
   \textbf{Luồng phát sinh} & 
-    [2a] Domain đã tồn tại → HTTP 409, code 1013, message "Domain already exists" \\
-    [2b] Email đã đăng ký → HTTP 409, code 9996, message "Email already registered" \\
-    [2c] Dữ liệu không hợp lệ → HTTP 400, code 1002/1003/1004 \\ \hline
+    {[2a]} Domain đã tồn tại $\rightarrow$ HTTP 409, code 1013, message "Domain already exists" \\
+    {[2b]} Email đã đăng ký $\rightarrow$ HTTP 409, code 9996, message "Email already registered" \\
+    {[2c]} Dữ liệu không hợp lệ $\rightarrow$ HTTP 400, code 1002/1003/1004 \\ \hline
 \end{tabular}
 \caption{Đặc tả use case Khởi tạo Shop (UC-01)}
 \label{table:uc01}
@@ -158,8 +158,8 @@ Bảng \ref{table:uc01} mô tả luồng đăng ký ban đầu thông qua một 
     5. Invalidate Redis cache key storefront:config:\{tenantId\} \\
     6. Trả về config đã cập nhật và lastModified \\ \hline
   \textbf{Luồng phát sinh} & 
-    [3a] URL logo không hợp lệ → HTTP 400, message "Invalid logo URL" \\
-    [3b] Màu sắc không đúng hex format → HTTP 400, message "Invalid color format" \\ \hline
+    {[3a]} URL logo không hợp lệ $\rightarrow$ HTTP 400, message "Invalid logo URL" \\
+    {[3b]} Màu sắc không đúng hex format $\rightarrow$ HTTP 400, message "Invalid color format" \\ \hline
 \end{tabular}
 \caption{Đặc tả use case Tùy biến thương hiệu (UC-03)}
 \label{table:uc03}
@@ -187,8 +187,8 @@ Bảng \ref{table:uc03} mô tả quy trình tùy biến giúp lưu trữ lại �
     6. Toàn bộ định danh ảnh thu nhỏ lưu ngược vào bộ nhớ MongoDB \\
     7. Thông báo hoàn tất khởi tạo sản phẩm về màn hình người dùng \\ \hline
   \textbf{Luồng phát sinh} & 
-    [1a] Trường dữ liệu định danh mã bị rỗng → Cảnh báo nhập liệu bắt buộc \\
-    [4a] Lỗi kỹ thuật máy chủ ảnh ngắt quãng → Hệ thống lưu cấu hình ảnh mặc định và kích hoạt lại sau \\ \hline
+    {[1a]} Trường dữ liệu định danh mã bị rỗng $\rightarrow$ Cảnh báo nhập liệu bắt buộc \\
+    {[4a]} Lỗi kỹ thuật máy chủ ảnh ngắt quãng $\rightarrow$ Hệ thống lưu cấu hình ảnh mặc định và kích hoạt lại sau \\ \hline
 \end{tabular}
 \caption{Đặc tả use case Quản lý sản phẩm (UC-04)}
 \label{table:uc04}
@@ -225,8 +225,8 @@ Hình \ref{fig:activity_upload_product} là quy trình quản lý thông tin s�
     6. Bộ phân giải thành phần cấu trúc JSON sang bộ giao diện lập trình bề mặt React \\
     7. Nội dung phản hồi được truyền tới màn hình phía khách truy cập hoàn hảo nhất \\ \hline
   \textbf{Luồng phát sinh} & 
-    [2a] Mã cửa hàng bị khóa do hết hạn thanh toán → Hệ thống điều hướng sang thông báo lỗi tạm dừng dịch vụ \\
-    [4a] Lỗi đường truyền tới MongoDB ngắt quãng → Hệ thống hiển thị cảnh báo bảo trì máy chủ tạm thời \\ \hline
+    {[2a]} Mã cửa hàng bị khóa do hết hạn thanh toán $\rightarrow$ Hệ thống điều hướng sang thông báo lỗi tạm dừng dịch vụ \\
+    {[4a]} Lỗi đường truyền tới MongoDB ngắt quãng $\rightarrow$ Hệ thống hiển thị cảnh báo bảo trì máy chủ tạm thời \\ \hline
 \end{tabular}
 \caption{Đặc tả use case Duyệt sản phẩm động (UC-07)}
 \label{table:uc07}
@@ -254,8 +254,8 @@ Bảng \ref{table:uc07} tập trung biểu diễn quy trình xử lý luồng s�
     6. Hệ thống lõi đối soát verify signature của webhook, xác thực an toàn tuyệt đối \\
     7. Lệnh cập nhật trạng thái update order status được tiến hành, kéo theo gửi email xác nhận và bảng dashboard nháy tín hiệu đơn mới \\ \hline
   \textbf{Luồng phát sinh} & 
-    [5a] Khách hủy thanh toán giữa chừng → Hủy lệnh nháp đơn hàng, giải phóng lượng kho dự phòng \\
-    [6a] Mã chứng thực chữ ký webhook không khớp chuẩn → Kích hoạt báo động xâm nhập và từ chối nâng trạng thái đơn \\ \hline
+    {[5a]} Khách hủy thanh toán giữa chừng $\rightarrow$ Hủy lệnh nháp đơn hàng, giải phóng lượng kho dự phòng \\
+    {[6a]} Mã chứng thực chữ ký webhook không khớp chuẩn $\rightarrow$ Kích hoạt báo động xâm nhập và từ chối nâng trạng thái đơn \\ \hline
 \end{tabular}
 \caption{Đặc tả use case Thanh toán và Đơn hàng (UC-09)}
 \label{table:uc09}

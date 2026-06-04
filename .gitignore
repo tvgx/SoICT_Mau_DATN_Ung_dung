@@ -1,0 +1,5 @@
+# LaTeX build output
+build/
+
+# Còn giữ lại PDF output ở gốc (được copy từ build/)
+!main.pdf
