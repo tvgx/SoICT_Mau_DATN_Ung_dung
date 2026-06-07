@@ -16,7 +16,7 @@ Tại thị trường trong nước, Haravan đã xây dựng được một h�
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|L|L|L|}
+\begin{tabularx}{\textwidth}{|Y|Y|Y|Y|Y|}
   \hline
   \textbf{Tiêu chí so sánh} & \textbf{Shopify} & \textbf{WooCommerce} & \textbf{Haravan} & \textbf{ShopVolo v2 (đề xuất)} \\ \hline
   Mô hình triển khai & SaaS & Self-hosted & SaaS & SaaS \\ \hline
@@ -25,7 +25,7 @@ Tại thị trường trong nước, Haravan đã xây dựng được một h�
   Multi-tenancy thực sự & Có & Không & Không & Có (AsyncLocalStorage) \\ \hline
   Hỗ trợ thanh toán VN & Hạn chế & Plugin & Có & Có (Stripe, COD, MoMo) \\ \hline
   Vận hành 20k+ shop / RAM thấp & Không áp dụng & Không & Không áp dụng & Mục tiêu thiết kế \\ \hline
-\end{tabulary}
+\end{tabularx}
 \caption{So sánh chi tiết các nền tảng thương mại điện tử}
 \label{table:so_sanh_chi_tiet}
 \end{table}
@@ -112,7 +112,7 @@ Dựa trên mười tác vụ chính đã thống kê, phân hệ hệ thống n
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabularx}{\textwidth}{|Y|Y|}
   \hline
   \textbf{Tên use case} & Khởi tạo Shop (Tenant Onboarding) \\ \hline
   \textbf{Tác nhân} & Tenant Owner \\ \hline
@@ -132,7 +132,7 @@ Dựa trên mười tác vụ chính đã thống kê, phân hệ hệ thống n
     {[2a]} Domain đã tồn tại $\rightarrow$ HTTP 409, code 1013, message "Domain already exists" \\
     {[2b]} Email đã đăng ký $\rightarrow$ HTTP 409, code 9996, message "Email already registered" \\
     {[2c]} Dữ liệu không hợp lệ $\rightarrow$ HTTP 400, code 1002/1003/1004 \\ \hline
-\end{tabulary}
+\end{tabularx}
 \caption{Đặc tả use case Khởi tạo Shop (UC-01)}
 \label{table:uc01}
 \end{table}
@@ -143,7 +143,7 @@ Bảng \ref{table:uc01} mô tả luồng đăng ký ban đầu thông qua một 
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabularx}{\textwidth}{|Y|Y|}
   \hline
   \textbf{Tên use case} & Tùy biến thương hiệu (Branding) \\ \hline
   \textbf{Tác nhân} & Tenant Owner \\ \hline
@@ -160,7 +160,7 @@ Bảng \ref{table:uc01} mô tả luồng đăng ký ban đầu thông qua một 
   \textbf{Luồng phát sinh} & 
     {[3a]} URL logo không hợp lệ $\rightarrow$ HTTP 400, message "Invalid logo URL" \\
     {[3b]} Màu sắc không đúng hex format $\rightarrow$ HTTP 400, message "Invalid color format" \\ \hline
-\end{tabulary}
+\end{tabularx}
 \caption{Đặc tả use case Tùy biến thương hiệu (UC-03)}
 \label{table:uc03}
 \end{table}
@@ -171,7 +171,7 @@ Bảng \ref{table:uc03} mô tả quy trình tùy biến giúp lưu trữ lại �
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabularx}{\textwidth}{|Y|Y|}
   \hline
   \textbf{Tên use case} & Quản lý sản phẩm \\ \hline
   \textbf{Tác nhân} & Tenant Owner \\ \hline
@@ -189,7 +189,7 @@ Bảng \ref{table:uc03} mô tả quy trình tùy biến giúp lưu trữ lại �
   \textbf{Luồng phát sinh} & 
     {[1a]} Trường dữ liệu định danh mã bị rỗng $\rightarrow$ Cảnh báo nhập liệu bắt buộc \\
     {[4a]} Lỗi kỹ thuật máy chủ ảnh ngắt quãng $\rightarrow$ Hệ thống lưu cấu hình ảnh mặc định và kích hoạt lại sau \\ \hline
-\end{tabulary}
+\end{tabularx}
 \caption{Đặc tả use case Quản lý sản phẩm (UC-04)}
 \label{table:uc04}
 \end{table}
@@ -209,7 +209,7 @@ Hình \ref{fig:activity_upload_product} là quy trình quản lý thông tin s�
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabularx}{\textwidth}{|Y|Y|}
   \hline
   \textbf{Tên use case} & Duyệt sản phẩm động \\ \hline
   \textbf{Tác nhân} & End Customer \\ \hline
@@ -227,7 +227,7 @@ Hình \ref{fig:activity_upload_product} là quy trình quản lý thông tin s�
   \textbf{Luồng phát sinh} & 
     {[2a]} Mã cửa hàng bị khóa do hết hạn thanh toán $\rightarrow$ Hệ thống điều hướng sang thông báo lỗi tạm dừng dịch vụ \\
     {[4a]} Lỗi đường truyền tới MongoDB ngắt quãng $\rightarrow$ Hệ thống hiển thị cảnh báo bảo trì máy chủ tạm thời \\ \hline
-\end{tabulary}
+\end{tabularx}
 \caption{Đặc tả use case Duyệt sản phẩm động (UC-07)}
 \label{table:uc07}
 \end{table}
@@ -238,7 +238,7 @@ Bảng \ref{table:uc07} tập trung biểu diễn quy trình xử lý luồng s�
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabularx}{\textwidth}{|Y|Y|}
   \hline
   \textbf{Tên use case} & Thanh toán và đơn hàng \\ \hline
   \textbf{Tác nhân} & End Customer \\ \hline
@@ -256,7 +256,7 @@ Bảng \ref{table:uc07} tập trung biểu diễn quy trình xử lý luồng s�
   \textbf{Luồng phát sinh} & 
     {[5a]} Khách hủy thanh toán giữa chừng $\rightarrow$ Hủy lệnh nháp đơn hàng, giải phóng lượng kho dự phòng \\
     {[6a]} Mã chứng thực chữ ký webhook không khớp chuẩn $\rightarrow$ Kích hoạt báo động xâm nhập và từ chối nâng trạng thái đơn \\ \hline
-\end{tabulary}
+\end{tabularx}
 \caption{Đặc tả use case Thanh toán và Đơn hàng (UC-09)}
 \label{table:uc09}
 \end{table}

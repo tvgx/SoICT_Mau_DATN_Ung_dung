@@ -28,6 +28,10 @@
 % \usepackage[ruled,vlined]{algorithm2e}  % Hỗ trợ viết các giải thuật
 \usepackage{capt-of} % Cho phép sử dụng caption lớn đối với landscape page
 \usepackage{multirow} % Merge cells
+\usepackage{tabularx} % Tạo bảng co giãn chiều rộng
+\usepackage{ragged2e} % Hỗ trợ canh lề và ngắt từ linh hoạt
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash\hspace{0pt}}X} % Cột Y cho tabularx tự ngắt dòng
+\usepackage{tabulary} % Hỗ trợ bảng co giãn thông minh theo nội dung
 \usepackage{fancyhdr} % Cho phép tùy biến header và footer
 % \usepackage[natbib,backend=biber,style=ieee]{biblatex} % Giúp chèn tài liệu tham khảo
 
@@ -35,6 +39,9 @@
 
 \usepackage{listings}
 \usepackage{float}
+\usepackage{tikz}
+\usepackage{pgf}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,shapes.multipart,fit,backgrounds,calc,decorations.markings}
 \usepackage{subcaption}
 
 \usepackage[nonumberlist, nopostdot, nogroupskip, acronym]{glossaries}
@@ -166,6 +173,9 @@
 
 % =========================== BODY ===============
 \begin{document}
+\sloppy
+\emergencystretch=3em
+\tolerance=9999
 % \newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
 \subfile{Bia} % Phần bìa
 % \restoregeometry

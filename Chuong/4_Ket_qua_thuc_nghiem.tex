@@ -1,71 +1,642 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
+% ===========================================================
+% Styles dùng chung cho TikZ trong chương này
+% ===========================================================
+\tikzset{
+  pkg/.style={
+    draw, rectangle, rounded corners=4pt, thick,
+    minimum width=2.2cm, minimum height=0.9cm,
+    text centered, font=\small\ttfamily
+  },
+  pkglabel/.style={font=\footnotesize\bfseries},
+  depArrow/.style={-{Stealth[length=7pt]}, dashed, thick},
+  solidArr/.style={-{Stealth[length=7pt]}, thick},
+  lifeline/.style={draw, very thin, dashed},
+  entity/.style={
+    draw, rectangle, thick, rounded corners=2pt,
+    minimum width=2.6cm, minimum height=0.75cm,
+    font=\small, text centered
+  },
+  entityAttr/.style={
+    draw, rectangle, thick,
+    minimum width=2.6cm, minimum height=0.6cm,
+    font=\scriptsize, text centered
+  },
+  relArrow/.style={-{Stealth[length=6pt]}, thick},
+  classBox/.style={
+    draw, rectangle split, rectangle split parts=3,
+    thick, rounded corners=2pt,
+    font=\small, text width=3.2cm
+  },
+  seqActor/.style={
+    draw, rectangle, thick, fill=gray!10,
+    minimum width=2.0cm, minimum height=0.65cm,
+    font=\small\bfseries, text centered
+  },
+  seqMsg/.style={-{Stealth[length=6pt]}, thick},
+  seqRet/.style={-{Stealth[length=6pt]}, dashed},
+}
+
+% ===========================================================
 \section{Thiết kế kiến trúc}
 \subsection{Lựa chọn kiến trúc phần mềm}
-Mục này có độ dài từ một đến ba trang. Sinh viên cần lựa chọn kiến trúc phần mềm cho ứng dụng của mình như: kiến trúc ba lớp MVC, MVP, SOA, Microservice, v.v. rồi giải thích sơ bộ về kiến trúc đó (không giải thích chi tiết/dài dòng).
-Sử dụng kiến trúc phần mềm đã chọn ở trên, sinh viên mô tả kiến trúc cụ thể cho ứng dụng của mình. Gợi ý: sinh viên áp dụng lý thuyết chung vào hệ thống/sản phẩm của mình như thế nào, có thay đổi, bổ sung hoặc cải tiến gì không. Ví dụ, thành phần M trong kiến trúc lý thuyết MVC sẽ là những thành phần cụ thể nào (ví dụ: là interface I + class C1 + class C2, v.v.) trong kiến trúc phần mềm của sinh viên.
 
+Hệ thống được thiết kế theo kiến trúc \textbf{Monorepo} (Turborepo) kết hợp với tư tưởng \textbf{Modular Monolith} cho tầng backend. Kiến trúc Monorepo cho phép quản lý tập trung toàn bộ mã nguồn frontend, backend và các gói dùng chung trong một kho lưu trữ duy nhất, tối ưu hóa việc chia sẻ kiểu dữ liệu (type-safety) và quy trình CI/CD.
+
+Hệ thống bao gồm ba thành phần chính:
+\begin{itemize}
+    \item \textbf{Frontend:} Hai ứng dụng Next.js độc lập -- \textit{storefront} (khách hàng mua sắm) và \textit{admin} (chủ cửa hàng quản lý).
+    \item \textbf{Backend (\texttt{api-core}):} NestJS được tổ chức theo các module nghiệp vụ (Auth, Shop, Order, Catalog, Layout, Inventory, Payment, Media, v.v.) với khả năng mở rộng thành microservices.
+    \item \textbf{Shared Packages:} Năm gói thư viện nội bộ: \texttt{database} (Prisma ORM), \texttt{schema} (Zod validation), \texttt{master-templates}, \texttt{ui-registry}, và \texttt{i18n}.
+\end{itemize}
+
+Đối với bài toán \textbf{Đa hệ thuê (Multi-tenancy)}, hệ thống áp dụng chiến lược \textit{Shared Database, Row-Level Isolation}: mọi thực thể nghiệp vụ đều mang khóa ngoại \texttt{shopId}; phân lập logic được thực thi qua \texttt{AsyncLocalStorage} ở tầng backend, đảm bảo mọi truy vấn tới database đều được tự động gắn đúng ngữ cảnh cửa hàng mà không cần truyền tham số qua từng lớp.
+
+% ===========================================================
 \subsection{Thiết kế tổng quan}
-Sinh viên vẽ biểu đồ gói UML (UML package diagram), nêu rõ sự phụ thuộc giữa các gói (package). SV cần vẽ các gói sao cho chúng được phân theo các tầng rõ ràng, không được sắp đặt package lộn xộn trong hình vẽ. Sinh viên chú ý các quy tắc thiết kế (Các gói không phụ thuộc lẫn nhau, gói tầng dưới không phụ thuộc gói tầng trên, không phụ thuộc bỏ qua tầng, v.v.) và cần giải thích sơ lược về mục đích/nhiệm vụ của từng package. SV tham khảo ví dụ minh họa trong Hình \ref{fig:Fig1}
+
+Biểu đồ gói dưới đây mô tả kiến trúc phân tầng của toàn bộ hệ thống. Tầng ứng dụng (Applications) phụ thuộc vào tầng gói dùng chung (Packages), và cả hai cùng phụ thuộc vào tầng hạ tầng (Infrastructure). Không có sự phụ thuộc ngược chiều (từ tầng dưới lên tầng trên) nhằm đảm bảo nguyên tắc thiết kế hướng phụ thuộc một chiều (Dependency Direction).
+
 \begin{figure}[H]
-    \centering
-    \includegraphics{Hinhve/Picture1.png}
-    \caption{Ví dụ biểu đồ phụ thuộc gói}
-    \label{fig:Fig1}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=0.5cm and 0.8cm]
+
+  % ---- LAYER 1: APPS ----
+  \node[pkg, fill=blue!12] (storefront) {storefront};
+  \node[pkg, fill=blue!12, right=0.9cm of storefront] (admin) {admin};
+  \node[pkg, fill=orange!15, right=0.9cm of admin] (apicore) {api-core};
+  \begin{scope}[on background layer]
+    \node[draw, dashed, rounded corners=6pt, inner sep=10pt,
+          fit=(storefront)(admin)(apicore), label={[pkglabel]above:{Applications}}] (appsLayer) {};
+  \end{scope}
+
+  % ---- LAYER 2: SHARED PACKAGES ----
+  \node[pkg, fill=green!15, below=1.5cm of storefront] (pkgui) {ui-registry};
+  \node[pkg, fill=green!15, below=1.5cm of admin] (pkgschema) {schema};
+  \node[pkg, fill=green!15, below=1.5cm of apicore] (pkgdb) {database};
+  \node[pkg, fill=green!15, right=0.5cm of pkgdb] (pkgtmpl) {master-templates};
+  \node[pkg, fill=green!15, left=0.5cm of pkgui] (pkgi18n) {i18n};
+  \begin{scope}[on background layer]
+    \node[draw, dashed, rounded corners=6pt, inner sep=10pt,
+          fit=(pkgdb)(pkgschema)(pkgtmpl)(pkgui)(pkgi18n),
+          label={[pkglabel]above:{Shared Packages}}] (pkgLayer) {};
+  \end{scope}
+
+  % ---- LAYER 3: INFRA ----
+  \node[pkg, fill=red!10, below=1.5cm of pkgdb] (postgres) {PostgreSQL};
+  \node[pkg, fill=red!10, right=0.4cm of postgres] (redis) {Redis};
+  \node[pkg, fill=red!10, right=0.4cm of redis] (mongo) {MongoDB};
+  \node[pkg, fill=red!10, right=0.4cm of mongo] (minio) {MinIO};
+  \begin{scope}[on background layer]
+    \node[draw, dashed, rounded corners=6pt, inner sep=10pt,
+          fit=(postgres)(redis)(mongo)(minio),
+          label={[pkglabel]above:{Infrastructure}}] (infraLayer) {};
+  \end{scope}
+
+  % ---- ARROWS: Apps -> Packages ----
+  \draw[depArrow, rounded corners] (storefront.south) -- ++(0,-0.3) -| (pkgui.north);
+  \draw[depArrow, rounded corners] (storefront.south) -- ++(0,-0.3) -| (pkgschema.north);
+  \draw[depArrow, rounded corners] (admin.south)      -- ++(0,-0.5) -| (pkgui.north);
+  \draw[depArrow, rounded corners] (admin.south)      -- ++(0,-0.5) -| (pkgschema.north);
+  \draw[depArrow, rounded corners] (apicore.south)    -- ++(0,-0.7) -| (pkgdb.north);
+  \draw[depArrow, rounded corners] (apicore.south)    -- ++(0,-0.7) -| (pkgschema.north);
+  \draw[depArrow, rounded corners] (apicore.south)    -- ++(0,-0.7) -| (pkgtmpl.north);
+
+  % ---- ARROWS: Packages -> Infra ----
+  \draw[depArrow] (pkgdb.south) -- (postgres.north);
+  \draw[depArrow, rounded corners] (apicore.east) -| ++(0.5,-3.5) |- (redis.east);
+  \draw[depArrow, rounded corners] (apicore.east) -| ++(0.7,-4.0) |- (mongo.east);
+  \draw[depArrow, rounded corners] (apicore.east) -| ++(0.9,-4.5) |- (minio.east);
+
+  % ---- REST API Arrow between frontend and backend ----
+  \draw[solidArr, color=blue!60, <->] (admin.east) -- node[above, font=\scriptsize]{REST API} (apicore.west);
+
+\end{tikzpicture}
+  % ---- REST API Arrow between frontend and backend ----
+  \draw[solidArr, color=blue!60, <->] (admin.east) -- node[above, font=\scriptsize]{REST API} (apicore.west);
+
+\end{tikzpicture}
+}%resizebox
+\caption{Biểu đồ gói thể hiện kiến trúc phân tầng và sự phụ thuộc trong hệ thống}
+\label{fig:PackageDiagram}
 \end{figure}
+
+Mô tả vai trò từng thành phần:
+\begin{itemize}
+    \item \textbf{storefront \& admin:} Hai ứng dụng Next.js 16 độc lập, sử dụng chung \texttt{ui-registry} (component library) và \texttt{i18n} (đa ngôn ngữ). Giao tiếp với \texttt{api-core} qua REST API.
+    \item \textbf{api-core:} Ứng dụng NestJS đóng vai trò backend duy nhất, phụ thuộc vào \texttt{database} (Prisma/PostgreSQL), \texttt{schema} (Zod DTO), và \texttt{master-templates}.
+    \item \textbf{database:} Gói bao gồm Prisma schema và PrismaService. Dữ liệu quan hệ lưu trên PostgreSQL.
+    \item \textbf{schema:} Gói định nghĩa kiểu dữ liệu dùng chung (Zod) giữa frontend và backend.
+\end{itemize}
+
+% ===========================================================
 \subsection{Thiết kế chi tiết gói}
-Sinh viên thiết kế và lần lượt vẽ biểu đồ thiết kế cho từng package, hoặc một nhóm các package liên quan để giải quyết một vấn đề gì đó. Khi vẽ thiết kế gói, sinh viên chỉ cần đưa tên lớp, không cần chỉ ra các thành viên phương thức và thuộc tính. SV tham khảo ví dụ minh họa trong Hình \ref{fig:Fig2}.
 
-Sinh viên cần vẽ rõ ràng quan hệ giữa các lớp trong biểu đồ. Các quan hệ bao gồm: phụ thuộc (dependency), kết hợp (association), kết tập (aggregation), hợp thành (composition), kế thừa (inheritance), và thực thi (implementation). Các quan hệ này đều đã được minh họa trong \ref{fig:Fig2}.
-
-Sau khi vẽ hình minh họa, sinh viên cần giải thích ngắn gọn về thiết kế của mình. 
+Bên trong \texttt{api-core}, kiến trúc được phân tầng theo mô hình \textit{Middleware $\to$ Guard $\to$ Controller $\to$ Service $\to$ Repository}. Cơ chế Multi-tenancy được hiện thực hóa theo luồng sau:
 
 \begin{figure}[H]
-    \centering
-    \includegraphics{Hinhve/Picture2.png}
-    \caption{Ví dụ thiết kế gói}
-    \label{fig:Fig2}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=0.8cm and 1.0cm,
+  svc/.style={draw, rectangle, rounded corners=3pt, thick, fill=orange!10,
+              minimum width=2.8cm, minimum height=0.75cm, font=\small, text centered},
+  mid/.style={draw, rectangle, rounded corners=3pt, thick, fill=blue!10,
+              minimum width=2.8cm, minimum height=0.75cm, font=\small, text centered},
+  guard/.style={draw, rectangle, rounded corners=3pt, thick, fill=green!10,
+              minimum width=2.8cm, minimum height=0.75cm, font=\small, text centered},
+  ctrl/.style={draw, rectangle, rounded corners=3pt, thick, fill=gray!10,
+              minimum width=2.8cm, minimum height=0.75cm, font=\small, text centered},
+  store/.style={draw, cylinder, shape border rotate=90, aspect=0.25, thick,
+              fill=yellow!15, minimum width=2.0cm, minimum height=0.7cm, font=\small, text centered},
+  darr/.style={-{Stealth[length=6pt]}, thick},
+]
+
+  % Column 1: Middleware & Guard
+  \node[mid]   (tmw)    {TenantMiddleware};
+  \node[guard, below=0.5cm of tmw] (guard) {BetterAuthGuard};
+  \begin{scope}[on background layer]
+    \node[draw=blue!40, dashed, rounded corners=5pt, inner sep=7pt,
+          fit=(tmw)(guard), label={[font=\scriptsize\bfseries, color=blue!70]above:Tầng Middleware / Guard}] {};
+  \end{scope}
+
+  % Column 2: Controller
+  \node[ctrl, right=1.5cm of tmw] (ctrl) {OrderController};
+  \node[ctrl, below=0.5cm of ctrl] (ctrl2) {CatalogController};
+  \begin{scope}[on background layer]
+    \node[draw=gray!40, dashed, rounded corners=5pt, inner sep=7pt,
+          fit=(ctrl)(ctrl2), label={[font=\scriptsize\bfseries]above:Controller}] {};
+  \end{scope}
+
+  % Column 3: Service
+  \node[svc, right=1.5cm of ctrl] (svc1)  {OrderService};
+  \node[svc, below=0.5cm of svc1] (svc2)  {CatalogService};
+  \node[svc, below=0.5cm of svc2] (tsvc)  {TenantService};
+  \begin{scope}[on background layer]
+    \node[draw=orange!40, dashed, rounded corners=5pt, inner sep=7pt,
+          fit=(svc1)(svc2)(tsvc), label={[font=\scriptsize\bfseries]above:Service}] {};
+  \end{scope}
+
+  % Column 4: DB / Cache
+  \node[store, right=1.5cm of svc1] (redis) {Redis};
+  \node[store, below=0.8cm of redis] (pg) {PostgreSQL};
+  \begin{scope}[on background layer]
+    \node[draw=yellow!60, dashed, rounded corners=5pt, inner sep=7pt,
+          fit=(redis)(pg), label={[font=\scriptsize\bfseries]above:Hạ tầng}] {};
+  \end{scope}
+
+  % Arrows - routed to avoid overlap!
+  \draw[darr, rounded corners] (tmw.north) |- ([yshift=0.7cm]ctrl.north) -| node[pos=0.25,above,font=\scriptsize]{lookup} (redis.north);
+  \draw[darr, rounded corners] (tmw.south) |- ([yshift=-0.7cm]ctrl2.south) -| node[pos=0.25,below,font=\scriptsize]{fallback} (pg.south);
+  \draw[darr, rounded corners] (tmw.south) -- ++(0,-0.3) -| node[pos=0.75, right, font=\scriptsize]{run(ctx)} (tsvc.west);
+  
+  \draw[darr] (guard.east) -- (ctrl2.west|-guard);
+  \draw[darr] (tmw.east|-ctrl) -- (ctrl.west);
+  \draw[darr] (ctrl.east)  -- (svc1.west);
+  \draw[darr] (ctrl2.east) -- (svc2.west);
+  
+  \draw[darr, rounded corners] (svc1.east) -- ++(0.3,0) |- node[pos=0.75, right, font=\scriptsize]{getTenantId()} (tsvc.east);
+  \draw[darr] (svc2.south) -- (tsvc.north);
+  
+  \draw[darr] (svc1.east) -- (redis.west|-svc1);
+  \draw[darr] (svc2.east) -- (pg.west|-svc2);
+
+\end{tikzpicture}
+}%resizebox
+\caption{Thiết kế chi tiết gói trong \texttt{api-core}: Luồng xử lý đa hệ thuê}
+\label{fig:PackageDetail}
 \end{figure}
 
+\texttt{TenantMiddleware} được đăng ký toàn cục trong \texttt{AppModule} và áp dụng cho tất cả các route. Nó trích xuất subdomain/header \texttt{x-tenant-id}, kiểm tra Redis (TTL 300s), nếu cache miss thì truy vấn PostgreSQL, sau đó gọi \texttt{TenantService.run(ctx, next)} để lưu ngữ cảnh vào \texttt{AsyncLocalStorage}. Mọi service nghiệp vụ (OrderService, CatalogService, v.v.) gọi \texttt{TenantService.getTenantId()} để lấy \texttt{shopId} tự động mà không cần truyền tham số.
+
+% ===========================================================
 \section{Thiết kế chi tiết}
 \subsection{Thiết kế giao diện}
-Phần này có độ dài từ hai đến ba trang. Sinh viên đặc tả thông tin về màn hình mà ứng dụng của mình hướng tới, bao gồm độ phân giải màn hình, kích thước màn hình, số lượng màu sắc hỗ trợ, v.v. Tiếp đến, sinh viên đưa ra các thống nhất/chuẩn hóa của mình khi thiết kế giao diện như thiết kế nút, điều khiển, vị trí hiển thị thông điệp phản hồi, phối màu, v.v. Sau cùng sinh viên đưa ra một số hình ảnh minh họa thiết kế giao diện cho các chức năng quan trọng nhất. Lưu ý, sinh viên không nhầm lẫn giao diện thiết kế với giao diện của sản phẩm sau cùng.
+Giao diện hệ thống được thiết kế theo chuẩn Component-based, sử dụng \textbf{TailwindCSS v4} và gói \texttt{ui-registry} tập trung tất cả các component tái sử dụng. Các quy chuẩn thiết kế giao diện:
+\begin{itemize}
+    \item \textbf{Tính đáp ứng (Responsive):} Hỗ trợ 3 breakpoint: Mobile ($<768$px), Tablet ($768$--$1024$px), Desktop ($>1024$px).
+    \item \textbf{Giao diện động (Dynamic Layout):} Storefront không có giao diện cố định mà render động từ JSON Schema trả về bởi \texttt{LayoutService}, cho phép chủ cửa hàng tùy biến trang web qua kéo thả.
+    \item \textbf{Phản hồi người dùng:} Mọi hành động đều có trạng thái loading, thông báo thành công/lỗi rõ ràng.
+\end{itemize}
+
+(Hình ảnh giao diện thực tế của dự án sẽ được chèn vào đây sau khi hoàn thiện UI)
+
+% ===========================================================
 \subsection{Thiết kế lớp}
-Phần này có độ dài từ ba đến bốn trang. Sinh viên trình bày thiết kế chi tiết các thuộc tính và phương thức cho một số lớp chủ đạo/quan trọng nhất của ứng dụng (từ 2-4 lớp). Thiết kế chi tiết cho các lớp khác, nếu muốn trình bày, sinh viên đưa vào phần phụ lục.
 
-Để minh họa thiết kế lớp, sinh viên thiết kế luồng truyền thông điệp giữa các đối tượng tham gia cho 2 đến 3 use case quan trọng nào đó bằng biểu đồ trình tự (hoặc biểu đồ giao tiếp).
+Phần này trình bày thiết kế chi tiết các thuộc tính và phương thức cho các lớp dịch vụ (Service) cốt lõi của hệ thống, cùng với luồng tương tác giữa chúng qua biểu đồ trình tự cho các use case quan trọng.
+
+\subsubsection{Thiết kế chi tiết lớp (Class Diagram)}
+Dưới đây là biểu đồ thiết kế lớp cho 4 dịch vụ chủ đạo nhất trong \texttt{api-core}: \texttt{OrderService}, \texttt{TenantService}, \texttt{AuthService} và \texttt{PrismaService}.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  classBox/.style={draw, rectangle split, rectangle split parts=3, thick, rounded corners=2pt, font=\scriptsize, text width=5cm, fill=white},
+  >=Stealth
+]
+
+% OrderService
+\node[classBox] (orderSvc) at (0,0) {
+  \textbf{OrderService}
+  \nodepart{two}
+  - prisma: PrismaService\\
+  - tenantSvc: TenantService\\
+  - inventorySvc: InventoryService
+  \nodepart{three}
+  + createOrder(dto: CheckoutDto): Order\\
+  + updateState(id: string, state: string): Order\\
+  + calculateTotal(items: LineItem[]): number
+};
+
+% TenantService
+\node[classBox] (tenantSvc) at (6.5,0) {
+  \textbf{TenantService}
+  \nodepart{two}
+  - als: AsyncLocalStorage$<$any$>$
+  \nodepart{three}
+  + run(context: any, next: Function): void\\
+  + getTenantId(): string\\
+  + getContext(): TenantContext
+};
+
+% AuthService
+\node[classBox] (authSvc) at (0,-4.5) {
+  \textbf{AuthService}
+  \nodepart{two}
+  - prisma: PrismaService\\
+  - betterAuth: typeof auth
+  \nodepart{three}
+  + getOwnerSession(req: Request): Session\\
+  + getCustomerSession(req: Request): Session\\
+  + validateToken(token: string): boolean
+};
+
+% PrismaService
+\node[classBox] (prisma) at (6.5,-4.5) {
+  \textbf{PrismaService}
+  \nodepart{two}
+  - \$client: PrismaClient
+  \nodepart{three}
+  + onModuleInit(): void\\
+  + onModuleDestroy(): void\\
+  + \$transaction(queries: any[]): Promise$<$any$>$
+};
+
+\draw[dashed, ->, thick] (orderSvc.east) -- node[above, font=\scriptsize] {uses} (tenantSvc.west);
+\draw[dashed, ->, thick] (orderSvc.south) -- node[left, font=\scriptsize] {uses} (authSvc.north);
+\draw[dashed, ->, thick] (authSvc.east) -- node[above, font=\scriptsize] {uses} (prisma.west);
+\draw[dashed, ->, thick] (tenantSvc.south) -- node[right, font=\scriptsize] {uses} (prisma.north);
+
+\end{tikzpicture}
+}%resizebox
+\caption{Biểu đồ thiết kế chi tiết các lớp cốt lõi}
+\label{fig:ClassDiagram}
+\end{figure}
+
+\subsubsection{Luồng 1: Khách hàng đặt hàng (Checkout)}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  stickman/.style={
+    font=\scriptsize, align=center,
+    append after command={
+      \pgfextra{
+        \draw[thick] (\tikzlastnode.north) ++(0,0.5) circle (0.15cm) coordinate (head);
+        \draw[thick] (head) ++(0,-0.15) -- ++(0,-0.4) coordinate (body);
+        \draw[thick] (head) ++(0,-0.2) -- ++(-0.25,-0.2);
+        \draw[thick] (head) ++(0,-0.2) -- ++(0.25,-0.2);
+        \draw[thick] (body) -- ++(-0.25,-0.3);
+        \draw[thick] (body) -- ++(0.25,-0.3);
+      }
+    }
+  },
+  obj/.style={draw, rectangle, thick, fill=white, minimum width=2.4cm, minimum height=0.6cm, font=\scriptsize, text centered},
+  >=Stealth,
+  every node/.style={font=\scriptsize},
+]
+  % Actors (top)
+  \node[stickman] (customer) at (0,0)       {\underline{NVA: Customer}};
+  \node[obj] (octrl)    at (3.5,0)     {\underline{:OrderController}};
+  \node[obj] (osvc)     at (7.0,0)     {\underline{:OrderService}};
+  \node[obj] (invsvc)   at (10.5,0)    {\underline{:InventoryService}};
+  \node[obj] (prisma)   at (14.0,0)    {\underline{:PrismaService}};
+
+  % Lifelines
+  \foreach \x in {0,3.5,7.0,10.5,14.0}{
+    \draw[dashed, thin] (\x,-0.35) -- (\x,-9.6);
+  }
+
+  % Activation Boxes
+  \draw[fill=white, thin] (3.35, -0.9) rectangle (3.65, -8.6);
+  \draw[fill=white, thin] (6.85, -2.4) rectangle (7.15, -8.2);
+  \draw[fill=white, thin] (10.35, -4.0) rectangle (10.65, -4.5);
+  \draw[fill=white, thin] (13.85, -5.2) rectangle (14.15, -7.8);
+
+  % -- Messages --
+  % 1: POST /orders/checkout
+  \draw[->, thick] (0,-0.9) -- (3.35,-0.9) node[midway,above]{1: POST /checkout (dto)};
+
+  % 2: StorefrontAuthGuard check
+  \draw[->, thick] (3.35,-1.5) -- (0,-1.5) node[midway,above]{2: [Guard] Xác thực session};
+  \draw[dashed,->, thin] (0,-1.8) -- (3.35,-1.8) node[midway,above]{3: OK (customerId)};
+
+  % 4: createOrder()
+  \draw[->, thick] (3.65,-2.4) -- (6.85,-2.4) node[midway,above]{4: createOrder(id, dto)};
+
+  % 5: getTenantId()
+  \draw[->, thick] (7.15,-3.0) -- (8.0,-3.0) -- (8.0,-3.3) -- (7.15,-3.3);
+  \node[right] at (8.0,-3.15) {5: getTenantId()};
+
+  % ALT FRAME: Stock check
+  \draw[thin] (1.0, -3.7) rectangle (15.5, -9.2);
+  \node[draw, thin, fill=white, anchor=north west] at (1.0, -3.7) {\textbf{alt}};
+  \node[anchor=north west] at (1.6, -3.7) {[Đủ tồn kho]};
+
+  % 6: lockStock()
+  \draw[->, thick] (7.15,-4.0) -- (10.35,-4.0) node[midway,above]{6: lockStock(variantId, qty)};
+  \draw[dashed,->, thin]  (10.35,-4.4) -- (7.15,-4.4) node[midway,above]{7: Trả về OK};
+
+  % 8: $transaction
+  \draw[->, thick] (7.15,-5.2) -- (13.85,-5.2) node[midway,above]{8: \$transaction\{...\}};
+
+  % 9: create Order record
+  \draw[->, thick] (14.15,-5.8) -- (15.0,-5.8) -- (15.0,-6.1) -- (14.15,-6.1);
+  \node[right] at (15.0,-5.95) {9: order.create()};
+
+  % 10: create LineItems
+  \draw[->, thick] (14.15,-6.5) -- (15.0,-6.5) -- (15.0,-6.8) -- (14.15,-6.8);
+  \node[right] at (15.0,-6.65) {10: lineItem.createMany()};
+
+  % 11: create Payment
+  \draw[->, thick] (14.15,-7.2) -- (15.0,-7.2) -- (15.0,-7.5) -- (14.15,-7.5);
+  \node[right] at (15.0,-7.35) {11: payment.create()};
+
+  % 12: return
+  \draw[dashed,->, thin] (13.85,-8.0) -- (7.15,-8.0) node[midway,above]{12: Order \{id, state\}};
+  \draw[dashed,->, thin] (6.85,-8.4)  -- (3.65,-8.4) node[midway,above]{13: Trả về Success()};
+
+  % Else branch
+  \draw[dashed, thin] (1.0, -8.7) -- (15.5, -8.7);
+  \node[anchor=north west] at (1.0, -8.7) {[Ngược lại]};
+  \draw[dashed,->, thin] (6.85,-9.0)  -- (3.65,-9.0) node[midway,above]{13b: Lỗi StockException};
+
+  % 14: HTTP Created / Error
+  \draw[dashed,->, thin] (3.35,-9.4)  -- (0,-9.4)   node[midway,above]{14: HTTP 201/400};
+
+\end{tikzpicture}
+}%resizebox
+\caption{Biểu đồ trình tự: Luồng Checkout (Đặt hàng)}
+\label{fig:SeqCheckout}
+\end{figure}
+
+\subsubsection{Luồng 2: Xác thực và phân quyền (BetterAuthGuard)}
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+  stickman/.style={
+    font=\scriptsize, align=center,
+    append after command={
+      \pgfextra{
+        \draw[thick] (\tikzlastnode.north) ++(0,0.5) circle (0.15cm) coordinate (head);
+        \draw[thick] (head) ++(0,-0.15) -- ++(0,-0.4) coordinate (body);
+        \draw[thick] (head) ++(0,-0.2) -- ++(-0.25,-0.2);
+        \draw[thick] (head) ++(0,-0.2) -- ++(0.25,-0.2);
+        \draw[thick] (body) -- ++(-0.25,-0.3);
+        \draw[thick] (body) -- ++(0.25,-0.3);
+      }
+    }
+  },
+  obj/.style={draw, rectangle, thick, fill=white, minimum width=2.2cm, minimum height=0.6cm, font=\scriptsize, text centered},
+  >=Stealth,
+  every node/.style={font=\scriptsize},
+]
+  % Actors
+  \node[stickman] (client)  at (0,0)     {\underline{NVA: Client}};
+  \node[obj] (guard)   at (3.5,0)   {\underline{:BetterAuthGuard}};
+  \node[obj] (authsvc) at (7.0,0)   {\underline{:AuthService}};
+  \node[obj] (bauth)   at (10.5,0)  {\underline{:better-auth}};
+
+  % Lifelines
+  \foreach \x in {0,3.5,7.0,10.5}{
+    \draw[dashed, thin] (\x,-0.35) -- (\x,-7.5);
+  }
+
+  % Activation boxes
+  \draw[fill=white, thin] (3.35, -0.9) rectangle (3.65, -6.5);
+  \draw[fill=white, thin] (6.85, -2.0) rectangle (7.15, -4.8);
+  \draw[fill=white, thin] (10.35, -3.0) rectangle (10.65, -4.2);
+
+  % 1: Request
+  \draw[->, thick] (0,-0.9) -- (3.35,-0.9) node[midway,above]{1: HTTP Request};
+
+  % 2: auth check
+  \draw[->, thick] (3.65,-2.0) -- (6.85,-2.0) node[midway,above]{2: getSession(req)};
+  \draw[->, thick] (7.15,-3.0) -- (10.35,-3.0) node[midway,above]{3: api.getSession()};
+  \draw[dashed,->, thin] (10.35,-4.0) -- (7.15,-4.0) node[midway,above]{4: Trả về User Session};
+  \draw[dashed,->, thin] (6.85,-4.5) -- (3.65,-4.5) node[midway,above]{5: Trả về Session};
+
+  % 3: auth result
+  \draw[dashed,->, thick] (3.35,-6.0) -- (0,-6.0) node[midway,above]{6: Trả về canActivate: true};
+
+\end{tikzpicture}
+}%resizebox
+\caption{Biểu đồ trình tự: Luồng xác thực BetterAuthGuard}
+\label{fig:SeqAuth}
+\end{figure}
+
+% ===========================================================
 \subsection{Thiết kế cơ sở dữ liệu}
-Phần này có độ dài từ hai đến bốn trang. Sinh viên thiết kế, vẽ và giải thích biểu đồ thực thể liên kết (E-R diagram). Từ đó, sinh viên thiết kế cơ sở dữ liệu tùy theo hệ quản trị cơ sở dữ liệu mà mình sử dụng (SQL, NoSQL, Firebase, v.v.)
 
+Hệ thống sử dụng \textbf{PostgreSQL} làm CSDL quan hệ chính, quản lý qua \textbf{Prisma ORM v5.22.0}. Sơ đồ thực thể liên kết (E-R Diagram) cho các thực thể cốt lõi được thể hiện bên dưới.
+
+\begin{figure}[H]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=1.5cm and 2.5cm,
+  ent/.style={draw, rectangle, thick, fill=blue!10, minimum width=2.6cm, minimum height=0.6cm, font=\small\bfseries, text centered},
+  attr/.style={draw, rectangle, thin, fill=white, minimum width=2.6cm, minimum height=0.55cm, font=\scriptsize, text centered},
+  rel/.style={draw, diamond, thick, fill=yellow!20, minimum width=1.4cm, minimum height=0.6cm, font=\scriptsize, text centered, aspect=2},
+  line/.style={thick},
+  >=Stealth,
+]
+
+  % -- User (Owner) --
+  \node[ent] (user) at (0,0) {User};
+  \node[attr, below=0pt of user] (u1) {id (PK)};
+
+  % -- Shop --
+  \node[ent, right=3.5cm of user] (shop) {Shop};
+  \node[attr, below=0pt of shop] (sh1) {id (PK)};
+  \node[attr, below=0pt of sh1]  (sh2) {ownerId (FK)};
+  \node[attr, below=0pt of sh2]  (sh3) {name, domain};
+  \node[attr, below=0pt of sh3]  (sh4) {status};
+
+  % -- Customer --
+  \node[ent, right=3.5cm of shop] (cust) {Customer};
+  \node[attr, below=0pt of cust] (c1) {id (PK)};
+  \node[attr, below=0pt of c1]   (c2) {shopId (FK)};
+  \node[attr, below=0pt of c2]   (c3) {email};
+
+  % -- Product --
+  \node[ent, below=3.2cm of shop] (prod) {Product};
+  \node[attr, below=0pt of prod] (p1) {id (PK)};
+  \node[attr, below=0pt of p1]   (p2) {shopId (FK)};
+
+  % -- Variant --
+  \node[ent, left=2.5cm of prod] (vari) {Variant};
+  \node[attr, below=0pt of vari] (v1) {id (PK)};
+  \node[attr, below=0pt of v1]   (v2) {productId (FK)};
+  \node[attr, below=0pt of v2]   (v3) {price, sku};
+
+  % -- Order --
+  \node[ent, right=2.5cm of prod] (order) {Order};
+  \node[attr, below=0pt of order] (o1) {id (PK)};
+  \node[attr, below=0pt of o1]    (o2) {shopId, customerId};
+  \node[attr, below=0pt of o2]    (o3) {state, totalAmount};
+
+  % -- LineItem --
+  \node[ent, below=3.0cm of prod] (li) {LineItem};
+  \node[attr, below=0pt of li] (l1) {id (PK)};
+  \node[attr, below=0pt of l1] (l2) {orderId (FK)};
+  \node[attr, below=0pt of l2] (l3) {variantId, qty};
+
+  % -- Payment --
+  \node[ent, right=2.5cm of li] (pay) {Payment};
+  \node[attr, below=0pt of pay] (pa1) {id (PK)};
+  \node[attr, below=0pt of pa1] (pa2) {orderId (FK)};
+  \node[attr, below=0pt of pa2] (pa3) {amount, state};
+
+  % -- Relations --
+  \draw[line, ->] (shop.south) -- node[right,font=\scriptsize]{has 0..*} (prod.north);
+  % Product has Variant
+  \draw[line, ->] (prod.west) -- node[above,font=\scriptsize]{has 1..*} (vari.east);
+  % Customer places Order
+  \draw[line, ->] (cust.south) to[bend right=15] node[right,font=\scriptsize]{places 0..*} (order.north);
+  % Order contains LineItem
+  \draw[line, ->] (order.south) -- node[right,font=\scriptsize]{contains 1..*} (li.north);
+  % LineItem refs Variant
+  \draw[line, ->] (li.west) -- node[above,font=\scriptsize]{refs} (vari.south|-li);
+  % Order has Payment
+  \draw[line, ->] (order.south east) to[bend left=10] node[right,font=\scriptsize]{has 0..*} (pay.north);
+
+\end{tikzpicture}
+}%resizebox
+\caption{Sơ đồ E-R các thực thể cốt lõi của hệ thống (PostgreSQL/Prisma)}
+\label{fig:ERDiagram}
+\end{figure}
+
+Ngoài PostgreSQL, hệ thống sử dụng thêm:
+\begin{itemize}
+    \item \textbf{MongoDB (Mongoose):} Lưu trữ schema bố cục giao diện (\texttt{GlobalLayout}, \texttt{PageLayout}) dưới dạng JSON linh hoạt, phù hợp với tính động của Layout Engine.
+    \item \textbf{Redis:} Lưu cache kết quả định danh tenant (TTL: 300 giây), giảm tải truy vấn PostgreSQL trong các request có tần suất cao.
+    \item \textbf{MinIO:} Object Storage tương thích S3 để lưu trữ file media (ảnh sản phẩm). Tích hợp qua AWS SDK v3 với \texttt{forcePathStyle: true}.
+\end{itemize}
+
+% ===========================================================
 \section{Xây dựng ứng dụng}
 \subsection{Thư viện và công cụ sử dụng}
-Sinh viên liệt kê các công cụ, ngôn ngữ lập trình, API, thư viện, IDE, công cụ kiểm thử, v.v. mà mình sử dụng để phát triển ứng dụng. Mỗi công cụ phải được chỉ rõ phiên bản sử dụng. SV nên kẻ bảng mô tả tương tự như Bảng \ref{table:my_label}. Nếu có nhiều nội dung trình bày, sinh viên cần xoay ngang bảng.
 
 \begin{table}[H]
 \centering{}
-    \begin{tabular}{lll}
+    \begin{tabulary}{\textwidth}{LLL}
         \hline
-        \textbf{Mục đích} & \textbf{Công cụ}       & \textbf{Địa chỉ URL}    \\ \hline
-        IDE lập trình     & Eclipse Oxygen a64 bit & http://www.eclipse.org/ \\ \hline
-        v.v.              & v.v.                   & v.v.                    \\ \hline
-        \end{tabular}
-    \caption{Danh sách thư viện và công cụ sử dụng}
-    \label{fig:my_label}
+        \textbf{Mục đích} & \textbf{Công cụ / Thư viện} & \textbf{Phiên bản} \\ \hline
+        Ngôn ngữ lập trình & TypeScript & v5.7.3 \\ \hline
+        Frontend Framework & Next.js (App Router) & v16.2.6 \\ \hline
+        UI Library & React & v19.2.3 \\ \hline
+        CSS Framework & TailwindCSS & v4 \\ \hline
+        Backend Framework & NestJS & v11.0.1 \\ \hline
+        Database ORM & Prisma ORM & v5.22.0 \\ \hline
+        Xác thực & Better Auth & v1.6.2 \\ \hline
+        Cache & Redis (ioredis) & v5.11.0 \\ \hline
+        Message Queue & Bull (BullMQ) & v11.0.4 \\ \hline
+        Object Storage & MinIO / AWS SDK v3 & v3.1057.0 \\ \hline
+        Schema Validation & Zod & v3.24.3 \\ \hline
+        NoSQL ODM & Mongoose & v8.2.0 \\ \hline
+        Build Tool & Turborepo & monorepo \\ \hline
+        IDE & VS Code & --- \\ \hline
+    \end{tabulary}
+    \caption{Danh sách thư viện và công cụ sử dụng trong dự án}
+    \label{table:tools}
 \end{table}
 
+% ===========================================================
 \subsection{Kết quả đạt được}
-Sinh viên trước tiên mô tả kết quả đạt được của mình là gì, ví dụ như các sản phẩm được đóng gói là gì, bao gồm những thành phần nào, ý nghĩa, vai trò?
 
-Sinh viên cần thống kê các thông tin về ứng dụng của mình như: số dòng code, số lớp, số gói, dung lượng toàn bộ mã nguồn, dung lượng của từng sản phẩm đóng gói, v.v. Tương tự như phần liệt kê về công cụ sử dụng, sinh viên cũng nên dùng bảng để mô tả phần thông tin thống kê này.
+Hệ thống hoàn thành việc xây dựng kiến trúc nền tảng SaaS thương mại điện tử Đa hệ thuê với đầy đủ các module cốt lõi.
 
+\begin{table}[H]
+\centering{}
+    \begin{tabulary}{\textwidth}{LL}
+        \hline
+        \textbf{Thông số} & \textbf{Giá trị} \\ \hline
+        Tổng số tệp mã nguồn (TS/TSX) & 263 tệp \\ \hline
+        Tổng số dòng mã nghiệp vụ & 20,316 dòng \\ \hline
+        Số module Service trong api-core & 21 service \\ \hline
+        Số Controller API trong api-core & 16 controller \\ \hline
+        Shared Packages nội bộ & 5 gói \\ \hline
+        Số bảng CSDL (PostgreSQL) & 30 model \\ \hline
+    \end{tabulary}
+    \caption{Thống kê thông số kỹ thuật dự án}
+    \label{table:codestats}
+\end{table}
+
+% ===========================================================
 \subsection{Minh họa các chức năng chính}
-Sinh viên lựa chọn và đưa ra màn hình cho các chức năng chính, quan trọng, và thú vị nhất. Mỗi giao diện cần phải có lời giải thích ngắn gọn. Khi giải thích, sinh viên có thể kết hợp với các chú thích ở trong hình ảnh giao diện.
 
+(Ảnh chụp màn hình thực tế của các chức năng sau đây sẽ được bổ sung:)
+\begin{enumerate}
+    \item Luồng đăng ký và khởi tạo cửa hàng mới (Onboarding)
+    \item Quản lý sản phẩm và tồn kho trên Admin Dashboard
+    \item Kéo thả tùy biến bố cục trang Storefront (Layout Builder)
+    \item Luồng mua hàng và thanh toán của khách hàng
+    \item Theo dõi và cập nhật trạng thái đơn hàng
+\end{enumerate}
+
+% ===========================================================
 \section{Kiểm thử}
-Phần này có độ dài từ hai đến ba trang. Sinh viên thiết kế các trường hợp kiểm thử cho hai đến ba chức năng quan trọng nhất. Sinh viên cần chỉ rõ các kỹ thuật kiểm thử đã sử dụng. Chi tiết các trường hợp kiểm thử khác, nếu muốn trình bày, sinh viên đưa vào phần phụ lục.
-Sinh viên sau cùng tổng kết về số lượng các trường hợp kiểm thử và kết quả kiểm thử. Sinh viên cần phân tích lý do nếu kết quả kiểm thử không đạt.
+
+Hệ thống sử dụng \textbf{Jest} kết hợp \texttt{@nestjs/testing} để thực hiện Unit Test và Integration Test cho tầng backend. Kỹ thuật được áp dụng:
+\begin{itemize}
+    \item \textbf{Dependency Injection Mocking:} Toàn bộ \texttt{PrismaService}, \texttt{TenantService} và Redis Cache được mock thay thế bằng đối tượng giả nhằm đảm bảo test chạy độc lập với hạ tầng.
+    \item \textbf{Unit Test:} Tập trung vào logic nghiệp vụ phức tạp: \texttt{AuthService.getOwnerSession()}, xác minh điều kiện giỏ hàng trong \texttt{OrderService.createOrder()}.
+\end{itemize}
+
+Các trường hợp kiểm thử cho chức năng \textbf{Xác thực (Auth)}: 
+
+\begin{table}[H]
+\centering{}
+    \begin{tabulary}{\textwidth}{LLLL}
+        \hline
+        \textbf{TC} & \textbf{Mô tả} & \textbf{Đầu vào} & \textbf{Kết quả mong đợi} \\ \hline
+        1 & Lấy session với cookie hợp lệ & Cookie hợp lệ & 200 OK + user object \\ \hline
+        2 & Lấy session với cookie hết hạn & Cookie expired & null → 401 Unauthorized \\ \hline
+        3 & Đổi tên hợp lệ & newName khác tên cũ & 200 OK + updated:true \\ \hline
+        4 & Đổi tên trùng tên cũ & newName = tên cũ & 400 Bad Request \\ \hline
+        5 & Truy cập endpoint không có Guard & Request & 200 OK (Public) \\ \hline
+    \end{tabulary}
+    \caption{Các trường hợp kiểm thử chức năng Xác thực}
+    \label{table:testcases}
+\end{table}
+
+% ===========================================================
 \section{Triển khai}
-Sinh viên trình bày mô hình và/hoặc cách thức triển khai thử nghiệm/thực tế. Ứng dụng của sinh viên được triển khai trên server/thiết bị gì, cấu hình như thế nào. Kết quả triển khai thử nghiệm nếu có (số lượng người dùng, số lượng truy cập, thời gian phản hồi, phản hồi người dùng, khả năng chịu tải, các thống kê, v.v.)
+
+Hệ thống được thiết kế hướng Cloud-Native với khả năng đóng gói và triển khai qua Docker. Mỗi ứng dụng trong Monorepo (\texttt{storefront}, \texttt{admin}, \texttt{api-core}) được đóng gói thành Docker image riêng biệt và điều phối qua \textbf{Docker Compose} hoặc \textbf{Kubernetes} tuỳ môi trường.
+
+Mô hình triển khai:
+\begin{itemize}
+    \item \textbf{API Gateway / Reverse Proxy:} NGINX đảm nhận việc điều phối traffic, ánh xạ wildcard domain \texttt{*.tenant.com} tới ứng dụng Storefront đúng.
+    \item \textbf{Xử lý đa hệ thuê tại tầng Next.js:} \texttt{Next.js Middleware} (\texttt{proxy.ts}) thực hiện URL Rewrite, chuyển tiếp \texttt{x-tenant-id} header tới \texttt{api-core}.
+    \item \textbf{Stateful Services:} PostgreSQL và Redis triển khai độc lập với persistent volume. MinIO hoạt động như Object Storage nội bộ.
+\end{itemize}
 
 \end{document}

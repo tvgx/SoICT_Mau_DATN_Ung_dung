@@ -253,3 +253,26 @@ Bảng \ref{table:nhan} trình bày...  % BẮT BUỘC
 - Kết quả đạt được / Demo đã có chưa
 - Tài liệu tham khảo chính (nếu có sẵn)
 ```
+
+---
+
+## IT3120 SYSTEM ANALYSIS & DESIGN RULES (BẮT BUỘC)
+
+**LUẬT QUAN TRỌNG:** Luôn đọc tài liệu trong `workspaces/it3120` trước khi vẽ hoặc thiết kế bất cứ thứ gì. Yêu cầu hình vẽ của báo cáo phải ĐÚNG THEO FORMAT sơ đồ trong IT3120 và ĐÚNG THEO nội dung được đưa trong text mô tả trước đó.
+
+### Tóm tắt nội dung các chương IT3120:
+1. **Chương 1 (Tổng quan):** Vòng đời phát triển hệ thống (SDLC), mô hình Agile, Unified Process.
+2. **Chương 2 (Mô hình hóa chức năng):** Use Case Diagram, Activity Diagram, đặc tả ca sử dụng. Sơ đồ ca sử dụng vẽ actor bằng người que (stickman), mũi tên include/extend nét đứt.
+3. **Chương 3 (Mô hình hóa cấu trúc):** Lớp lĩnh vực, Class Diagram, thẻ CRC. 
+4. **Chương 4 (Mô hình hóa hành vi):** Sơ đồ tuần tự (Sequence Diagram), sơ đồ giao tiếp, sơ đồ máy trạng thái, ma trận CRUD(E). 
+   - *Format sơ đồ tuần tự IT3120:* Actor phải là người que (stickman). Các đối tượng/lớp là hình chữ nhật. Tên phải được gạch chân (VD: `\underline{:Hệ thống}`). Trục thời gian là nét đứt. BẮT BUỘC vẽ hộp kích hoạt (Activation Box) trên trục thời gian. Thông điệp gọi là nét liền, thông điệp trả về là nét đứt. Có đánh số thứ tự thông điệp (VD: `1: m1()`, `2: m2()`). Khung tương tác (alt, loop, opt) vẽ hộp bao quanh và ghi nhãn ở góc trên bên trái.
+5. **Chương 5 (Thiết kế lớp):** Chuyển từ phân tích sang thiết kế. Thiết kế phương thức, thuộc tính, hợp đồng.
+6. **Chương 6 (Mẫu thiết kế):** Áp dụng GoF (Singleton, Observer, MVC...).
+7. **Cơ bản thiết kế cấu trúc & Chuyển sang thiết kế:** Logical sang Physical.
+8. **Thiết kế kiến trúc hệ thống:** Client-Server, phân tầng.
+9. **Thiết kế giao diện:** UI/UX, storyboard, luồng hội thoại.
+10. **Thiết kế lưu trữ cố định:** Chuyển đổi sang ERD, chuẩn hóa.
+
+Tài liệu tham khảo tham chiếu:
+- Sách giáo trình *System Analysis and Design in a Changing World* (John Satzinger, Robert Jackson, Stephen Burd).
+- Bộ slide bài giảng *Phân tích và Thiết kế Hệ thống (IT3120)*, Trường CNTT&TT, ĐHBKHN.
