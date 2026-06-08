@@ -228,7 +228,8 @@ Bảng \ref{table:nhan} trình bày...  % BẮT BUỘC
 ## QUY TRÌNH LÀM VIỆC CHO AGENT
 
 ```
-1. Nhận thông tin đề tài từ người dùng (tên đề tài, SV, GVHD, công nghệ, tính năng...)
+1. BẮT BUỘC: Luôn đọc codebase của `multi-ecommerce` và `it3120` trước khi áp dụng tư duy sâu (deep thinking) và thực hiện task.
+2. Nhận thông tin đề tài từ người dùng (tên đề tài, SV, GVHD, công nghệ, tính năng...)
 2. Điền thông tin cá nhân → main.tex (L79-80) + Bia.tex
 3. Hỏi người dùng nếu thiếu thông tin cụ thể (không tự bịa)
 4. Viết từng file theo thứ tự: 0_2 → 0_3 → 1 → 2 → 3 → 4 → 5 → 6
@@ -258,7 +259,7 @@ Bảng \ref{table:nhan} trình bày...  % BẮT BUỘC
 
 ## IT3120 SYSTEM ANALYSIS & DESIGN RULES (BẮT BUỘC)
 
-**LUẬT QUAN TRỌNG:** Luôn đọc tài liệu trong `workspaces/it3120` trước khi vẽ hoặc thiết kế bất cứ thứ gì. Yêu cầu hình vẽ của báo cáo phải ĐÚNG THEO FORMAT sơ đồ trong IT3120 và ĐÚNG THEO nội dung được đưa trong text mô tả trước đó.
+**LUẬT QUAN TRỌNG:** Luôn đọc codebase của `multi-ecommerce` và tài liệu trong `workspaces/it3120` trước khi áp dụng tư duy sâu rồi làm task. Khi vẽ hoặc thiết kế bất cứ thứ gì, yêu cầu hình vẽ của báo cáo phải ĐÚNG THEO FORMAT sơ đồ trong IT3120 và ĐÚNG THEO nội dung được đưa trong text mô tả trước đó.
 
 ### Tóm tắt nội dung các chương IT3120:
 1. **Chương 1 (Tổng quan):** Vòng đời phát triển hệ thống (SDLC), mô hình Agile, Unified Process.

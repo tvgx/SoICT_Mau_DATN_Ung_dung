@@ -6,7 +6,7 @@ Chương 1 đã xác định bài toán về rào cản chi phí và kỹ thuậ
 \section{Khảo sát hiện trạng}
 \label{section:2.1}
 
-Đối tượng người dùng của ShopVolo v2 là các doanh nghiệp vừa và nhỏ tại Việt Nam có nhu cầu mở rộng kênh bán hàng trực tuyến. Qua phân tích báo cáo về thương mại điện tử Việt Nam \cite{vecom2024}, hơn 60\% các đơn vị doanh nghiệp vừa và nhỏ phản ánh chi phí xây dựng website đang là rào cản lớn nhất của họ. Người dùng đang rất cần một nền tảng thương mại điện tử thực sự dễ dùng mà không yêu cầu kiến thức viết mã, có mức chi phí thấp để duy trì, nhưng vẫn cung cấp được một giao diện chuyên nghiệp. Dựa vào những nhu cầu cấp thiết đó, hệ thống phân tích và chỉ ra ba nhóm người dùng chính bao gồm: (i) Super Admin giữ vai trò quản trị toàn bộ hệ thống nền tảng, (ii) Tenant Owner là những người kinh doanh trực tiếp quản lý cửa hàng của mình, và (iii) End Customer đại diện cho lượng khách hàng cuối cùng sẽ truy cập vào nền tảng để mua sắm.
+Đối tượng người dùng của ShopVolo v2 là các doanh nghiệp vừa và nhỏ tại Việt Nam có nhu cầu mở rộng kênh bán hàng trực tuyến. Qua phân tích báo cáo về thương mại điện tử Việt Nam \cite{vecom2024}, hơn 60\% các đơn vị doanh nghiệp vừa và nhỏ phản ánh chi phí xây dựng website đang là rào cản lớn nhất của họ. Người dùng đang rất cần một nền tảng thương mại điện tử thực sự dễ dùng mà không yêu cầu kiến thức viết mã, có mức chi phí thấp để duy trì, nhưng vẫn cung cấp được một giao diện chuyên nghiệp. Dựa vào những nhu cầu cấp thiết đó, hệ thống phân tích và chỉ ra hai nhóm người dùng chính bao gồm: (i) Tenant Owner là những người kinh doanh trực tiếp quản lý cửa hàng của mình, và (ii) End Customer đại diện cho lượng khách hàng cuối cùng sẽ truy cập vào nền tảng để mua sắm.
 
 Trước khi nền tảng ShopVolo v2 được định hình, các cửa hàng thường tự xây dựng trang web bằng các công cụ như WordPress kết hợp WooCommerce hoặc dựa hoàn toàn vào các trang mạng xã hội phổ biến như Facebook và Zalo. Tuy nhiên, các giải pháp này bộc lộ rất nhiều hạn chế cốt lõi như không có hệ thống quản lý đơn hàng tập trung, trải nghiệm giao diện không nhất quán trên các thiết bị, và gần như không thể mở rộng quy mô khi số lượng sản phẩm cũng như lượng truy cập tăng vọt.
 
@@ -30,7 +30,7 @@ Tại thị trường trong nước, Haravan đã xây dựng được một h�
 \label{table:so_sanh_chi_tiet}
 \end{table}
 
-Bảng \ref{table:so_sanh_chi_tiet} cho thấy rõ ràng một sự thiếu hụt nghiêm trọng trên thị trường. Các hệ thống hiện tại đều chưa thể giải quyết triệt để vấn đề cân bằng giữa chi phí, khả năng vận hành nhiều cửa hàng trên cấu hình máy chủ hạn hẹp và công cụ thiết kế giao diện linh hoạt. Từ những hạn chế tổng quát kể trên, nền tảng của đề tài phải tập trung xây dựng 10 tính năng cốt lõi: (i) khởi tạo cửa hàng, (ii) quản lý bộ khung nền tảng, (iii) tùy biến thương hiệu, (iv) quản lý sản phẩm, (v) thiết lập menu điều hướng, (vi) tạo trang nội dung động, (vii) duyệt sản phẩm động trên trang cửa hàng, (viii) quản lý giỏ hàng, (ix) thanh toán và xử lý đơn hàng, và cuối cùng là (x) ánh xạ tên miền tùy chỉnh.
+Bảng \ref{table:so_sanh_chi_tiet} cho thấy rõ ràng một sự thiếu hụt nghiêm trọng trên thị trường. Các hệ thống hiện tại đều chưa thể giải quyết triệt để vấn đề cân bằng giữa chi phí, khả năng vận hành nhiều cửa hàng trên cấu hình máy chủ hạn hẹp và công cụ thiết kế giao diện linh hoạt. Từ những hạn chế tổng quát kể trên, nền tảng của đề tài phải tập trung xây dựng 10 tính năng cốt lõi: (i) khởi tạo cửa hàng, (ii) quản lý chương trình khuyến mãi, (iii) tùy biến thương hiệu, (iv) quản lý sản phẩm, (v) thiết lập menu điều hướng, (vi) tạo trang nội dung động, (vii) duyệt sản phẩm động trên trang cửa hàng, (viii) quản lý giỏ hàng, (ix) thanh toán và xử lý đơn hàng, và cuối cùng là (x) ánh xạ tên miền tùy chỉnh.
 
 \section{Tổng quan chức năng}
 \label{section:2.2}
@@ -42,33 +42,33 @@ Phần này có nhiệm vụ tóm tắt cấu trúc phân mảnh hệ thống th
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{Hinhve/usecase_tong_quat.png}
+    \includegraphics[width=0.85\linewidth]{Hinhve/Chuong2/usecase_tong_quat.png}
     \caption{Biểu đồ use case tổng quát hệ thống ShopVolo v2}
     \label{fig:usecase_tong_quat}
 \end{figure}
-% TODO: Vẽ biểu đồ UML use case tổng quát với 3 tác nhân (Super Admin, Tenant Owner, End Customer) và 10 use case chính, lưu vào Hinhve/usecase_tong_quat.png
+% TODO: Vẽ biểu đồ UML use case tổng quát với 2 tác nhân (Tenant Owner, End Customer) và 10 use case chính, lưu vào Hinhve/Chuong2/usecase_tong_quat.png
 
-Hình \ref{fig:usecase_tong_quat} mô tả cái nhìn toàn cảnh về mọi hành vi tương tác trong hệ thống. Tác nhân Super Admin là người nắm giữ quyền hành lớn nhất, chịu trách nhiệm quản lý toàn bộ nền tảng và thiết kế các mẫu bộ khung nền tảng cho cửa hàng. Tác nhân Tenant Owner là những người kinh doanh tham gia trực tiếp vào việc đăng ký, thiết lập, cấu hình và quản lý mọi ngóc ngách thông tin trong cửa hàng của riêng họ. Cuối cùng, tác nhân End Customer là tập hợp lượng khách hàng đồ sộ liên tục truy cập vào hệ thống mặt tiền hiển thị nhằm tìm kiếm sản phẩm và thanh toán.
+Hình \ref{fig:usecase_tong_quat} mô tả cái nhìn toàn cảnh về mọi hành vi tương tác trong hệ thống. Tác nhân Tenant Owner là những người kinh doanh tham gia trực tiếp vào việc đăng ký, thiết lập, cấu hình và quản lý mọi ngóc ngách thông tin trong cửa hàng của riêng họ. Tác nhân End Customer là tập hợp lượng khách hàng đồ sộ liên tục truy cập vào hệ thống mặt tiền hiển thị nhằm tìm kiếm sản phẩm và thanh toán.
 
 \subsection{Biểu đồ use case phân rã — Quản lý Shop}
 \label{subsection:2.2.2}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.80\linewidth]{Hinhve/usecase_quan_ly_shop.png}
+    \includegraphics[width=0.80\linewidth]{Hinhve/Chuong2/usecase_quan_ly_shop.png}
     \caption{Biểu đồ use case phân rã nhóm Quản lý Shop}
     \label{fig:usecase_quan_ly_shop}
 \end{figure}
-% TODO: UC-01 (Onboarding), UC-02 (Master Template), UC-03 (Branding), UC-05 (Navigation), UC-10 (Domain Mapping)
+% TODO: UC-01 (Onboarding), UC-02 (Promotions), UC-03 (Branding), UC-05 (Navigation), UC-10 (Domain Mapping)
 
-Hình \ref{fig:usecase_quan_ly_shop} tập trung mô tả chi tiết các tác vụ liên quan đến việc thiết lập cửa hàng. Chức năng khởi tạo shop hỗ trợ đăng ký nhanh tài khoản và định danh cửa hàng. Quản lý nền tảng mẫu cung cấp luồng tùy chỉnh giao diện gốc. Chức năng tùy biến thương hiệu giúp đổi mới hình ảnh mà không cần biết viết mã, còn thiết lập điều hướng và ánh xạ tên miền bổ trợ tối đa cho việc định hình cấu trúc thông tin hoàn chỉnh.
+Hình \ref{fig:usecase_quan_ly_shop} tập trung mô tả chi tiết các tác vụ liên quan đến việc thiết lập cửa hàng. Chức năng khởi tạo shop hỗ trợ đăng ký nhanh tài khoản và định danh cửa hàng. Quản lý các chương trình khuyến mãi (Promotions) giúp tạo ra các chiến dịch thu hút người mua. Chức năng tùy biến thương hiệu giúp đổi mới hình ảnh mà không cần biết viết mã, còn thiết lập điều hướng và ánh xạ tên miền bổ trợ tối đa cho việc định hình cấu trúc thông tin hoàn chỉnh.
 
 \subsection{Biểu đồ use case phân rã — Quản lý Sản phẩm \& Đơn hàng}
 \label{subsection:2.2.3}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.80\linewidth]{Hinhve/usecase_san_pham_don_hang.png}
+    \includegraphics[width=0.80\linewidth]{Hinhve/Chuong2/usecase_san_pham_don_hang.png}
     \caption{Biểu đồ use case phân rã nhóm Sản phẩm và Đơn hàng}
     \label{fig:usecase_san_pham_don_hang}
 \end{figure}
@@ -81,7 +81,7 @@ Hình \ref{fig:usecase_san_pham_don_hang} mô tả trực tiếp các chức nă
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.80\linewidth]{Hinhve/usecase_khach_hang.png}
+    \includegraphics[width=0.80\linewidth]{Hinhve/Chuong2/usecase_khach_hang.png}
     \caption{Biểu đồ use case phân rã nhóm trải nghiệm Khách hàng}
     \label{fig:usecase_khach_hang}
 \end{figure}
@@ -94,7 +94,7 @@ Hình \ref{fig:usecase_khach_hang} mô tả trải nghiệm người tiêu dùng
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{Hinhve/activity_onboarding.png}
+    \includegraphics[width=0.85\linewidth]{Hinhve/Chuong2/activity_onboarding.png}
     \caption{Biểu đồ hoạt động quy trình Onboarding và Rendering động}
     \label{fig:activity_onboarding}
 \end{figure}
@@ -196,7 +196,7 @@ Bảng \ref{table:uc03} mô tả quy trình tùy biến giúp lưu trữ lại �
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.80\linewidth]{Hinhve/activity_upload_product.png}
+    \includegraphics[width=0.80\linewidth]{Hinhve/Chuong2/activity_upload_product.png}
     \caption{Biểu đồ hoạt động luồng tải lên và xử lý ảnh sản phẩm}
     \label{fig:activity_upload_product}
 \end{figure}
@@ -263,7 +263,7 @@ Bảng \ref{table:uc07} tập trung biểu diễn quy trình xử lý luồng s�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.80\linewidth]{Hinhve/activity_checkout.png}
+    \includegraphics[width=0.80\linewidth]{Hinhve/Chuong2/activity_checkout.png}
     \caption{Biểu đồ hoạt động quy trình thanh toán và xác nhận đơn hàng}
     \label{fig:activity_checkout}
 \end{figure}

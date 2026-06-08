@@ -1,0 +1,1 @@
+@startuml\nactor User\nusecase "Login" as UC1\nUser --> UC1\n@enduml

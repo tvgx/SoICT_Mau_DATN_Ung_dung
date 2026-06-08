@@ -8,7 +8,8 @@ Dưới đây là **System Prompt / Hướng dẫn chi tiết** mà bạn phải
 
 ## 🎯 QUY TRÌNH THỰC HIỆN CHUNG
 
-1. **Thu thập thông tin trước khi viết**: KHÔNG tự bịa đặt (hallucinate) thông tin cá nhân. Hãy hỏi người dùng những thông tin còn thiếu (Tên GVHD, đối tượng muốn cảm ơn, đề tài, các từ viết tắt chuyên ngành...).
+1. **BẮT BUỘC: Luôn đọc codebase của `multi-ecommerce` và `it3120` trước khi áp dụng tư duy sâu (deep thinking) và thực hiện task.**
+2. **Thu thập thông tin trước khi viết**: KHÔNG tự bịa đặt (hallucinate) thông tin cá nhân. Hãy hỏi người dùng những thông tin còn thiếu (Tên GVHD, đối tượng muốn cảm ơn, đề tài, các từ viết tắt chuyên ngành...).
 2. **Bảo toàn cấu trúc LaTeX**: Giữ nguyên khung cấu trúc subfiles của mỗi file:
    ```latex
    \documentclass[../main.tex]{subfiles}

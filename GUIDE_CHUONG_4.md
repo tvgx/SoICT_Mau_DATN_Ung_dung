@@ -6,7 +6,8 @@
 
 ## 0. NGUYÊN TẮC BẮT BUỘC
 
-1. **Bám sát template gốc** — Giữ nguyên đúng 5 `\section` và tên các `\subsection` trong `4_Ket_qua_thuc_nghiem.tex`. Không đổi tên, không bỏ section, không thêm section mới.
+1. **BẮT BUỘC: Luôn đọc codebase của `multi-ecommerce` và `it3120` trước khi áp dụng tư duy sâu (deep thinking) và thực hiện task.**
+2. **Bám sát template gốc** — Giữ nguyên đúng 5 `\section` và tên các `\subsection` trong `4_Ket_qua_thuc_nghiem.tex`. Không đổi tên, không bỏ section, không thêm section mới.
 2. **Xóa văn bản hướng dẫn gốc** — Khi viết từng subsection, xóa toàn bộ các đoạn hướng dẫn của giảng viên (bắt đầu bằng "Mục này có độ dài...", "Sinh viên cần...", "SV tham khảo..."). Thay bằng nội dung thực.
 3. **Xóa hình ví dụ của giảng viên** — Xóa cả hai hình `Picture1.png` / `fig:Fig1` và `Picture2.png` / `fig:Fig2` cùng đoạn mô tả "Ví dụ biểu đồ..." ra khỏi file cuối.
 4. **Không bullet trong văn bản LaTeX** — Viết thành đoạn văn hoàn chỉnh, đủ chủ-vị. Khi liệt kê dùng `(i), (ii), (iii)` trong câu văn.
