@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/lordfeeder/workspaces/**)",
+      "Read(//home/lordfeeder/workspaces/it3120/**)",
+      "Bash(java -version)",
+      "Bash(python3 -c ' *)",
+      "Bash(grep -n 'async \\\\|$transaction\\\\|lockStock\\\\|reserve' apps/api-core/src/modules/order/order.service.ts)",
+      "Bash(sed -n '1,90p' apps/api-core/src/modules/payment/payment.service.ts)",
+      "Bash(sed -n '1,60p' apps/api-core/src/modules/media/media.service.ts)",
+      "Bash(python3 generate_diagrams.py)",
+      "Bash(latexmk -pdf -interaction=nonstopmode -outdir=build main.tex)",
+      "Bash(awk '/^!/{c=8} c&&c--' build/main.log)",
+      "Bash(awk '/^!/{c=6} c&&c--' build/main.log)",
+      "Bash(pdftotext -layout main.pdf /tmp/main.txt)",
+      "Bash(pdfinfo main.pdf)"
+    ]
+  }
+}

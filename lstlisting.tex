@@ -1,0 +1,49 @@
+% ===================================================
+% Cấu hình môi trường lstlisting để chèn mã nguồn
+% ===================================================
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.5,0.25}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0.13,0.29,0.53}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.97}
+
+% Định nghĩa ngôn ngữ TypeScript cho gói listings
+\lstdefinelanguage{TypeScript}{
+  keywords={class, interface, export, import, from, return, new, const, let,
+            var, function, async, await, if, else, switch, case, default,
+            for, of, in, this, private, public, readonly, static, implements,
+            extends, type, enum, true, false, null, undefined, try, catch, throw},
+  keywordstyle=\color{codeblue}\bfseries,
+  ndkeywords={string, number, boolean, any, void, Promise, Record},
+  ndkeywordstyle=\color{codegreen}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{codegray}\itshape,
+  stringstyle=\color{codegreen},
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`
+}
+
+\lstset{
+  language=TypeScript,
+  backgroundcolor=\color{backcolour},
+  basicstyle=\ttfamily\footnotesize,
+  numberstyle=\tiny\color{codegray},
+  numbers=left,
+  numbersep=8pt,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  tabsize=2,
+  frame=single,
+  framerule=0.3pt,
+  captionpos=b,
+  aboveskip=10pt,
+  belowskip=6pt
+}
+\renewcommand{\lstlistingname}{Mã nguồn}

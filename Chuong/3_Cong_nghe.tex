@@ -6,7 +6,7 @@ Chương 2 đã xác định các yêu cầu chức năng và phi chức năng c
 \section{Turborepo — Quản lý Monorepo}
 \label{section:3.1}
 
-Để đáp ứng yêu cầu phi chức năng tại \ref{section:2.4} về tính bảo trì và quy trình xây dựng tự động hóa, hệ thống yêu cầu quản lý 4 ứng dụng (admin, api-core, storefront, cli-tool) và 5 gói phần mềm dùng chung (ui-library, schema, database, i18n, master-templates) một cách nhất quán trong cùng một kho lưu trữ tập trung.
+Để đáp ứng yêu cầu phi chức năng tại mục \ref{section:2.4} về tính bảo trì và quy trình xây dựng tự động hóa, hệ thống yêu cầu quản lý 4 ứng dụng (admin, api-core, storefront, cli-tool) và 5 gói phần mềm dùng chung (ui-registry, schema, database, i18n, master-templates) một cách nhất quán trong cùng một kho lưu trữ tập trung.
 
 Các công cụ quản lý kho chứa mã nguồn tập trung phổ biến hiện nay bao gồm (i) Nx, (ii) Lerna, và (iii) trình quản lý không gian làm việc pnpm thuần túy.
 
@@ -30,7 +30,7 @@ Cụ thể, tầng trung gian tự động giải mã thông tin định danh kh
 
 Các nền tảng xây dựng giao diện nổi bật thay thế bao gồm (i) bộ đôi React và Vite, (ii) Remix, và (iii) hệ thống Nuxt.js dựa trên Vue.
 
-Next.js phiên bản 15 được chọn vì (i) bộ định tuyến ứng dụng hỗ trợ tính năng kết xuất các phần tử phía máy chủ giúp giảm thiểu dung lượng mã tải về cho khách truy cập, (ii) các hàm trung gian hoạt động ở biên cho phép nhận diện tên miền khách thuê và định tuyến từ rất sớm, và (iii) cơ chế tái tạo tĩnh tăng dần cung cấp khả năng tự động thiết lập thời gian sống cho bộ nhớ đệm của các trang mô tả sản phẩm một cách cực kỳ linh hoạt \cite{nextjs_docs}.
+Next.js phiên bản 16 được chọn vì (i) bộ định tuyến App Router với React Server Components cho phép kết xuất giao diện hoàn toàn phía máy chủ, giảm đáng kể dung lượng mã tải về cho khách truy cập, (ii) tầng middleware cho phép nhận diện tên miền của từng cửa hàng và viết lại đường dẫn từ rất sớm trong vòng đời request, và (iii) cơ chế Data Cache cho phép đặt chu kỳ làm mới và nhãn vô hiệu hóa cho từng nguồn dữ liệu (bố cục, sản phẩm, thông tin cửa hàng) một cách độc lập \cite{nextjs_docs}.
 
 \section{PostgreSQL và Prisma ORM — Cơ sở dữ liệu quan hệ}
 \label{section:3.4}
@@ -39,7 +39,7 @@ Next.js phiên bản 15 được chọn vì (i) bộ định tuyến ứng dụn
 
 Các giải pháp quản lý bảng biểu cấu trúc thay thế bao gồm (i) MySQL 8, (ii) SQLite ở môi trường cục bộ, và (iii) hệ thống phân tán CockroachDB.
 
-PostgreSQL 16 kết hợp công cụ Prisma được chọn vì (i) có khả năng hỗ trợ kiểu định dạng JSONB nhằm lưu vết các tham số động cực tốt khi cần, (ii) cung cấp chức năng bảo mật truy xuất cấp độ hàng dữ liệu hỗ trợ mạnh mẽ cho định hướng thiết kế đa thuê bao, và (iii) công cụ Prisma ORM tự động khởi tạo hệ sinh thái kiểu tĩnh và phiên bản hóa các đợt di chuyển cấu trúc mạnh mẽ \cite{prisma_docs, postgresql_docs}.
+PostgreSQL 15 kết hợp công cụ Prisma được chọn vì (i) bảo đảm giao dịch ACID cần thiết cho nghiệp vụ đặt hàng và trừ tồn kho, đồng thời hỗ trợ kiểu JSONB cho các trường tham số động, (ii) hệ ràng buộc khóa ngoại và ràng buộc duy nhất theo tổ hợp cột (ví dụ SKU duy nhất trong phạm vi một cửa hàng) phù hợp với thiết kế đa thuê bao mức hàng, và (iii) Prisma ORM tự sinh kiểu dữ liệu tĩnh từ lược đồ và quản lý phiên bản các đợt di trú cấu trúc \cite{prisma_docs, postgresql_docs}.
 
 \section{MongoDB và Mongoose — Cơ sở dữ liệu tài liệu}
 \label{section:3.5}
@@ -48,7 +48,7 @@ PostgreSQL 16 kết hợp công cụ Prisma được chọn vì (i) có khả n�
 
 Các nền tảng giải quyết dữ liệu văn bản phi cấu trúc khác gồm (i) CouchDB, (ii) giải pháp đám mây DynamoDB, và (iii) lợi dụng kiểu JSONB của chính cơ sở dữ liệu PostgreSQL.
 
-MongoDB phiên bản 7 kết hợp bộ thư viện Mongoose được chọn vì (i) mô hình dữ liệu tài liệu cực kỳ tự nhiên khi diễn dịch các khối phần tử giao diện lồng ghép, (ii) tính năng thẩm định dữ liệu linh động của Mongoose cho phép kiểm soát chất lượng tham số cốt lõi mà vẫn chừa lại không gian để linh hoạt biến hóa, và (iii) thuật toán kết hợp đệ quy sâu dễ dàng tích hợp để đồng bộ các mảng dữ liệu đồ sộ \cite{mongodb_docs}.
+MongoDB phiên bản 6 kết hợp thư viện Mongoose được chọn vì (i) mô hình tài liệu biểu diễn tự nhiên các khối giao diện lồng nhau với độ sâu thay đổi theo từng cửa hàng, (ii) một tài liệu có thể chứa đồng thời hai phiên bản nháp và xuất bản của bố cục, giúp thao tác xuất bản chỉ là một lệnh cập nhật nguyên tử, và (iii) Mongoose cung cấp lớp kiểm soát lược đồ vừa đủ ở những trường cốt lõi mà vẫn giữ tính linh hoạt cho phần cấu hình tự do \cite{mongodb_docs}.
 
 \section{Redis — Cache In-memory}
 \label{section:3.6}
@@ -57,7 +57,7 @@ MongoDB phiên bản 7 kết hợp bộ thư viện Mongoose được chọn vì
 
 Các phương pháp thay thế giải quyết độ trễ phổ biến bao gồm (i) Memcached, (ii) kiểm soát bộ nhớ qua giao thức HTTP cơ bản, và (iii) sử dụng mạng phân phối nội dung thuần túy.
 
-Redis được chọn vì (i) hệ lưu trữ trên vùng nhớ trực tiếp đảm bảo độ trễ ở mức vô cùng hoàn hảo, (ii) khả năng thiết lập tuổi thọ tự động hết hạn mà không cần tốn thêm tài nguyên máy chủ để tự thu dọn rác, và (iii) giao thức phát tín hiệu độc lập rất hữu ích cho thao tác vô hiệu hóa bộ đệm khi cửa hàng thực hiện thao tác cập nhật giao diện hiển thị \cite{redis_docs}.
+Redis được chọn vì (i) dữ liệu nằm hoàn toàn trên bộ nhớ trong nên độ trễ đọc ở mức dưới mili-giây, (ii) mỗi khóa được gắn thời gian sống tự hết hạn, không tốn tài nguyên dọn dẹp thủ công, và (iii) việc vô hiệu hóa chủ động chỉ là một lệnh xóa khóa, được hệ thống áp dụng ngay khi dữ liệu nguồn thay đổi (ví dụ xóa cache danh sách cửa hàng khi người dùng tạo cửa hàng mới) \cite{redis_docs}.
 
 \section{MinIO — Object Storage}
 \label{section:3.7}
@@ -71,11 +71,11 @@ MinIO được chọn vì (i) sở hữu chuẩn giao thức giao tiếp y hệt
 \section{Better Auth — Xác thực và Phân quyền}
 \label{section:3.8}
 
-Để đáp ứng đầy đủ yêu cầu bảo mật ở \ref{section:2.4}, toàn hệ thống phụ thuộc vào cơ chế kiểm soát truy cập phân tầng cho quản trị viên và chủ cửa hàng theo định dạng thẻ thông hành JWT, kèm theo thông số định danh thiết lập đa thuê bao.
+Để đáp ứng yêu cầu bảo mật ở mục \ref{section:2.4}, hệ thống cần cơ chế xác thực quản lý được hai loại người dùng tách biệt trên cùng hạ tầng: chủ cửa hàng đăng nhập vào bảng điều khiển và khách mua hàng đăng nhập vào trang cửa hàng, với phiên đăng nhập của hai nhóm không được lẫn vào nhau.
 
-Các công cụ lập trình xác thực bên thứ ba khả dĩ cho giải pháp này bao gồm (i) thư viện chuẩn NextAuth.js, (ii) sử dụng tự động Passport.js kết hợp thẻ xác thực, và (iii) hệ thống dịch vụ Clerk.
+Các công cụ xác thực khả dĩ cho giải pháp này bao gồm (i) thư viện NextAuth.js, (ii) Passport.js kết hợp quản lý phiên thủ công, và (iii) dịch vụ xác thực Clerk.
 
-Thư viện Better Auth được chọn vì (i) xây dựng bằng ngôn ngữ tĩnh TypeScript bảo vệ hệ thống tuyệt đối ở cấp độ biên dịch, (ii) khả năng liên kết tự nhiên ngay trên kiến trúc định tuyến nâng cao của ứng dụng mặt tiền, và (iii) hỗ trợ kết nối thẳng vào trình điều khiển Prisma để đồng bộ phiên làm việc của người dùng vào hệ thống lưu trữ truyền thống \cite{betterauth_docs}.
+Thư viện Better Auth được chọn vì (i) phiên đăng nhập được lưu trong cơ sở dữ liệu qua Prisma, cho phép định nghĩa hai hệ phiên độc lập cho chủ cửa hàng và khách mua hàng với tiền tố cookie riêng, (ii) xây dựng hoàn toàn bằng TypeScript nên kiểu dữ liệu phiên được kiểm tra ngay khi biên dịch, và (iii) tích hợp tự nhiên với cả NestJS (qua Guard) lẫn Next.js (qua middleware) trong cùng monorepo \cite{betterauth_docs}.
 
 \section{Docker và Kubernetes — Containerization và Orchestration}
 \label{section:3.9}
@@ -91,20 +91,20 @@ Sự kết hợp giữa Docker và Kubernetes được chọn vì trong giai đo
 \begin{tabulary}{\textwidth}{|L|L|L|L|}
   \hline
   \textbf{Công nghệ} & \textbf{Phiên bản} & \textbf{Loại} & \textbf{Mục đích trong đề tài} \\ \hline
-  Turborepo & 2.x & Build Tool & Quản lý monorepo, incremental build cache \\ \hline
-  NestJS & 11.x & Backend Framework & REST API, multi-tenancy, DI container \\ \hline
-  Next.js & 15.x & Frontend Framework & Admin Dashboard + Storefront Engine (SSR) \\ \hline
-  PostgreSQL & 16 & RDBMS & Lưu Tenant, User, Order, Product (structured) \\ \hline
-  Prisma & 5.x & ORM & Type-safe query + schema migration \\ \hline
-  MongoDB & 7 & Document DB & Lưu Layout, Config, Navigation (flexible JSON) \\ \hline
-  Mongoose & 8.x & ODM & Schema validation cho MongoDB \\ \hline
-  Redis & 7.x & In-memory Cache & Cache storefront config (TTL=1h) \\ \hline
-  MinIO & Latest & Object Storage & Lưu ảnh sản phẩm, S3-compatible \\ \hline
-  Better Auth & 1.x & Auth Library & JWT, session, role-based access \\ \hline
-  Docker & 26.x & Containerization & Môi trường development nhất quán \\ \hline
-  Kubernetes & 1.29+ & Orchestration & Production deployment, CronJob \\ \hline
-  Tailwind CSS & 4.x & CSS Framework & Styling Admin Dashboard + Storefront \\ \hline
-  Zod & 3.x & Validation & Schema validation API request/response \\ \hline
+  Turborepo & 2.9 & Build Tool & Quản lý monorepo, bộ nhớ đệm xây dựng tăng dần \\ \hline
+  NestJS & 11.0 & Backend Framework & REST API, đa thuê bao, DI container \\ \hline
+  Next.js & 16.2 & Frontend Framework & Admin Dashboard + Storefront (SSR/RSC) \\ \hline
+  PostgreSQL & 15 & RDBMS & Lưu Shop, User, Order, Product (có cấu trúc) \\ \hline
+  Prisma & 5.22 & ORM & Truy vấn an toàn kiểu + di trú lược đồ \\ \hline
+  MongoDB & 6 & Document DB & Lưu GlobalLayout, PageLayout, catalog mẫu \\ \hline
+  Mongoose & 8.2 & ODM & Kiểm soát lược đồ tài liệu MongoDB \\ \hline
+  Redis & 7 & In-memory Cache & Đệm định danh tenant, trạng thái shop (TTL 300s) \\ \hline
+  MinIO + imgproxy & --- & Object Storage & Lưu ảnh gốc S3 + biến đổi ảnh khi phân phối \\ \hline
+  Better Auth & 1.6 & Auth Library & Phiên đăng nhập tách biệt owner/customer \\ \hline
+  Docker & --- & Containerization & Môi trường phát triển nhất quán \\ \hline
+  Kubernetes & --- & Orchestration & Triển khai sản xuất, CronJob sao lưu \\ \hline
+  Tailwind CSS & 4.x & CSS Framework & Giao diện Admin Dashboard + Storefront \\ \hline
+  Zod & 3.24 & Validation & Kiểm tra dữ liệu vào/ra của API \\ \hline
 \end{tabulary}
 \caption{Tổng hợp công nghệ sử dụng trong hệ thống ShopVolo v2}
 \label{table:tong_hop_cong_nghe}
