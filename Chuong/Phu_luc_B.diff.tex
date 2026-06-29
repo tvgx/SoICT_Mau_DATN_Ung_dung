@@ -1,0 +1,135 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmpc_goy3d1.tex   Mon Jun 15 17:22:29 2026
+%DIF ADD /tmp/tmppahiqaal.tex   Mon Jun 15 17:22:29 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+Phụ lục này đặc tả bổ sung các trường hợp sử dụng chưa được trình bày chi tiết trong mục \ref{section:2.3} của Chương 2.
+
+\section{Đặc tả use case ``Quản lý khuyến mãi'' (UC-02)}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Quản lý khuyến mãi \\ \hline
+  \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
+  \textbf{Mục đích} & Tạo và quản lý các mã giảm giá áp dụng khi khách đặt hàng \\ \hline
+  \textbf{Tiền điều kiện} & Chủ cửa hàng đã đăng nhập vào phiên quản trị \\ \hline
+  \textbf{Hậu điều kiện} & Mã khuyến mãi được lưu với các ràng buộc hiệu lực; số lượt dùng được theo dõi tự động qua từng đơn hàng \\ \hline
+  \textbf{Luồng chính} &
+    1. Chủ cửa hàng tạo chương trình khuyến mãi: mã, loại giảm (theo phần trăm hoặc số tiền cố định), giá trị giảm \\
+    & 2. Chủ cửa hàng đặt thời gian hiệu lực (ngày bắt đầu, ngày hết hạn) và giới hạn tổng số lượt dùng \\
+    & 3. Hệ thống lưu chương trình ở trạng thái kích hoạt \\
+    & 4. Khi khách nhập mã lúc thanh toán, hệ thống kiểm tra hiệu lực, trừ giảm giá vào tổng đơn và tăng bộ đếm lượt dùng trong cùng giao dịch với đơn hàng \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[4a]} Mã không tồn tại, chưa đến hạn, đã hết hạn hoặc bị tắt $\rightarrow$ từ chối với thông báo mã không hợp lệ \\
+    & {[4b]} Mã vượt giới hạn lượt dùng $\rightarrow$ từ chối với thông báo đã hết lượt \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Quản lý khuyến mãi (UC-02)}
+\label{table:uc02}
+\end{table}
+
+Bảng \ref{table:uc02} mô tả vòng đời của một mã khuyến mãi; điểm cần lưu ý là việc ghi nhận lượt dùng diễn ra trong cùng giao dịch nguyên tử với việc tạo đơn, nên không thể xảy ra trường hợp mã bị dùng vượt giới hạn do hai đơn đặt đồng thời.
+
+\section{Đặc tả use case ``Quản lý giỏ hàng'' (UC-08)}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Quản lý giỏ hàng \\ \hline
+  \textbf{Tác nhân} & Khách hàng \\ \hline
+  \textbf{Mục đích} & Lưu các sản phẩm khách định mua trước khi thanh toán \\ \hline
+  \textbf{Tiền điều kiện} & Khách hàng đã đăng nhập tài khoản mua hàng của cửa hàng \\ \hline
+  \textbf{Hậu điều kiện} & Giỏ hàng được lưu phía máy chủ, mỗi khách có đúng một giỏ trên mỗi cửa hàng \\ \hline
+  \textbf{Luồng chính} &
+    1. Khách bấm thêm một biến thể sản phẩm vào giỏ kèm số lượng \\
+    & 2. Hệ thống tìm giỏ theo cặp khóa (cửa hàng, khách hàng); chưa có thì tạo mới \\
+    & 3. Hệ thống thêm dòng hàng hoặc cộng dồn số lượng nếu biến thể đã có trong giỏ \\
+    & 4. Khách xem lại giỏ, điều chỉnh số lượng hoặc xóa từng dòng \\
+    & 5. Khi khách đặt hàng từ giỏ, toàn bộ dòng hàng được chuyển thành đơn và giỏ được dọn sạch trong cùng giao dịch \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[1a]} Khách chưa đăng nhập $\rightarrow$ chuyển hướng sang trang đăng nhập kèm đường dẫn quay lại \\
+    & {[3a]} Biến thể không thuộc cửa hàng hiện tại $\rightarrow$ từ chối thao tác \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Quản lý giỏ hàng (UC-08)}
+\label{table:uc08}
+\end{table}
+
+Bảng \ref{table:uc08} cho thấy giỏ hàng được quản lý hoàn toàn phía máy chủ và ràng buộc duy nhất theo cặp (cửa hàng, khách hàng), bảo đảm giỏ của khách tại cửa hàng này không lẫn với giỏ của chính khách đó tại cửa hàng khác.
+
+\section{Đặc tả use case ``Ánh xạ tên miền tùy chỉnh'' (UC-10)}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Ánh xạ tên miền tùy chỉnh \\ \hline
+  \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
+  \textbf{Mục đích} & Cho phép cửa hàng hoạt động dưới tên miền riêng của chủ cửa hàng \\ \hline
+  \textbf{Tiền điều kiện} & Cửa hàng đã được khởi tạo; chủ cửa hàng sở hữu tên miền muốn ánh xạ \\ \hline
+  \textbf{Hậu điều kiện} & Tên miền được ghi vào bản ghi cửa hàng với ràng buộc duy nhất toàn hệ thống; trạng thái xác minh được cập nhật; bước cuối của trình hướng dẫn khởi tạo được đánh dấu hoàn thành \\ \hline
+  \textbf{Luồng chính} &
+    1. Chủ cửa hàng nhập tên miền riêng trong phần cài đặt \\
+    & 2. Hệ thống kiểm tra tên miền chưa thuộc cửa hàng nào khác \\
+    & 3. Chủ cửa hàng trỏ bản ghi DNS của tên miền về hệ thống theo hướng dẫn \\
+    & 4. Hệ thống xác minh tên miền và đánh dấu đã xác minh \\
+    & 5. Mọi truy cập tới tên miền này được middleware của Storefront phân giải về đúng cửa hàng \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[2a]} Tên miền đã được cửa hàng khác sử dụng $\rightarrow$ từ chối với thông báo trùng lặp \\
+    & {[4a]} DNS chưa trỏ đúng $\rightarrow$ trạng thái giữ nguyên chưa xác minh, chủ cửa hàng có thể thử lại \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Ánh xạ tên miền tùy chỉnh (UC-10)}
+\label{table:uc10}
+\end{table}
+
+Bảng \ref{table:uc10} mô tả bước cuối trong trình hướng dẫn tám bước khởi tạo cửa hàng: sau khi tên miền được xác minh, cửa hàng chuyển sang trạng thái xuất bản và có thể truy cập công khai.
+
+\end{document}

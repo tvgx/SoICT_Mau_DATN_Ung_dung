@@ -1,0 +1,403 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmpyo6bpkxp.tex   Mon Jun 15 17:22:26 2026
+%DIF ADD /tmp/tmpgbuurjvl.tex   Mon Jun 15 17:22:26 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+Chương 1 đã xác định bài toán về rào cản chi phí và kỹ thuật mà các doanh nghiệp vừa và nhỏ gặp phải khi tiếp cận thương mại điện tử, đồng thời đề xuất giải pháp nền tảng ShopVolo v2. Chương 2 này đi sâu vào việc khảo sát và phân tích yêu cầu của hệ thống để làm cơ sở cho quá trình thiết kế. Cụ thể, mục \ref{section:2.1} trình bày kết quả khảo sát hiện trạng từ ba nguồn chính nhằm nhận diện rõ vấn đề. Tiếp đó, mục \ref{section:2.2} cung cấp cái nhìn tổng quan về các chức năng của hệ thống thông qua các biểu đồ ca sử dụng và biểu đồ hoạt động. Mục \ref{section:2.3} đặc tả chi tiết luồng nghiệp vụ của các trường hợp sử dụng cốt lõi. Cuối cùng, mục \ref{section:2.4} đưa ra các yêu cầu phi chức năng mà hệ thống cần đáp ứng.
+
+\section{Khảo sát hiện trạng}
+\label{section:2.1}
+
+Đối tượng người dùng của ShopVolo v2 là các doanh nghiệp vừa và nhỏ tại Việt Nam có nhu cầu mở rộng kênh bán hàng trực tuyến. Theo báo cáo về thương mại điện tử Việt Nam \cite{vecom2024}, chi phí xây dựng và duy trì website là một trong những rào cản lớn nhất đối với nhóm doanh nghiệp này. Người dùng cần một nền tảng dễ sử dụng, không yêu cầu kiến thức lập trình, có chi phí duy trì thấp nhưng vẫn cung cấp được giao diện chuyên nghiệp. Từ khảo sát đó, hệ thống xác định \DIFdelbegin \DIFdel{hai nhóm }\DIFdelend \DIFaddbegin \DIFadd{ba tác nhân:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Quản trị nền tảng (Platform Admin):}} \DIFaddend người \DIFaddbegin \DIFadd{vận hành hệ thống, quản lý master template (bộ giao diện mặc định) }\DIFaddend dùng \DIFdelbegin \DIFdel{chính:
+(i) chủ }\DIFdelend \DIFaddbegin \DIFadd{chung cho toàn bộ }\DIFaddend cửa hàng\DIFdelbegin \DIFdel{(Tenant Owner) là }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Chủ cửa hàng (Tenant Owner):}} \DIFaddend người kinh doanh trực tiếp thiết lập và quản lý cửa hàng của mình\DIFdelbegin \DIFdel{, và (ii) khách hàng (End Customer) là }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Khách hàng (End Customer):}} \DIFaddend người truy cập trang cửa hàng để xem và mua sản phẩm.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\DIFaddbegin \DIFadd{Trong đó, chủ cửa hàng và khách hàng là hai nhóm người dùng trọng tâm mà đề tài hướng tới.
+}
+
+\DIFaddend Xét các hệ thống mà nhóm người dùng này đang sử dụng, phổ biến nhất là hai hình thức: tự dựng website bằng WordPress kết hợp WooCommerce, hoặc bán hàng hoàn toàn trên mạng xã hội như Facebook và Zalo. Cả hai hình thức đều bộc lộ hạn chế rõ rệt: không có hệ thống quản lý đơn hàng và tồn kho tập trung, trải nghiệm giao diện không nhất quán giữa các thiết bị, và khó mở rộng khi số lượng sản phẩm cũng như lượng truy cập tăng lên.
+
+Xét các ứng dụng tương tự trên thị trường\DIFdelbegin \DIFdel{, Shopify }\DIFdelend \DIFaddbegin \DIFadd{:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Shopify}} \DIFaddend là nền tảng SaaS hàng đầu với giao diện chuyên nghiệp, nhưng chi phí duy trì hằng tháng cao và khả năng tùy biến sâu bị giới hạn trong khuôn khổ các theme dựng sẵn \cite{shopify_docs}.
+    \DIFdelbegin \DIFdel{WooCommerce }\DIFdelend \DIFaddbegin \item \textbf{\DIFadd{WooCommerce}} \DIFaddend mã nguồn mở cho tự do tùy biến tối đa, nhưng buộc người dùng tự thuê máy chủ, tự cấu hình bảo mật và cập nhật thường xuyên, đòi hỏi nguồn lực kỹ thuật đáng kể \cite{woocommerce}.
+    \DIFdelbegin \DIFdel{Ở thị trường trong nước, Haravan }\DIFdelend \DIFaddbegin \item \textbf{\DIFadd{Haravan}} \DIFaddend tích hợp tốt các dịch vụ vận chuyển và thanh toán nội địa, song công cụ tùy biến giao diện còn hạn chế đối với người không biết lập trình \cite{haravan_platform}.
+\DIFdelbegin \DIFdel{Với phân khúc doanh nghiệp lớn, Adobe Commerce (Magento) rất mạnh nhưng phức tạp và tốn kém để triển khai lẫn duy trì \mbox{%DIFAUXCMD
+\cite{magento_docs}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend \DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\DIFdelbegin %DIFDELCMD < \begin{table}[H]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{table}[htbp]
+\DIFaddendFL \centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|L|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash}p{2.6cm}|Y|Y|Y|Y|}
+  \DIFaddendFL \hline
+  \textbf{Tiêu chí so sánh} & \textbf{Shopify} & \textbf{\DIFdelbeginFL \DIFdelFL{WooCommerce}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Woo\-Commerce}\DIFaddendFL } & \textbf{Haravan} & \textbf{ShopVolo v2 (đề xuất)} \\ \hline
+  Mô hình triển khai & SaaS & Tự vận hành & SaaS & SaaS \\ \hline
+  Chi phí hàng tháng & \DIFdelbeginFL \DIFdelFL{\$29--\$299 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Từ 39 USD }\DIFaddendFL & Miễn phí \DIFdelbeginFL \DIFdelFL{(}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{phần lõi, }\DIFaddendFL tự thuê hosting \DIFdelbeginFL \DIFdelFL{) }\DIFdelendFL & \DIFdelbeginFL \DIFdelFL{200 nghìn--3 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{300 nghìn -- 1,5 }\DIFaddendFL triệu \DIFdelbeginFL \DIFdelFL{VND }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{đồng }\DIFaddendFL & \DIFdelbeginFL \DIFdelFL{Tối ưu nhờ dùng }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Chia sẻ }\DIFaddendFL chung hạ tầng \\ \hline
+  Tùy biến giao diện & Theme dựng sẵn & Cần lập trình viên & Hạn chế & Kéo thả từng khối, không cần lập trình \\ \hline
+  Đa thuê bao thực sự & Có & Không & Không & Có (\DIFdelbeginFL \DIFdelFL{AsyncLocalStorage}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Async\-LocalStorage}\DIFaddendFL ) \\ \hline
+  Thanh toán \DIFdelbeginFL \DIFdelFL{phù hợp }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{nội địa }\DIFaddendFL Việt Nam & Hạn chế & Qua plugin & Có & Có (COD, chuyển khoản QR, ví) \\ \hline
+  \DIFdelbeginFL \DIFdelFL{Vận hành nhiều }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Chi phí biên cho mỗi }\DIFaddendFL cửa hàng \DIFdelbeginFL \DIFdelFL{trên hạ tầng nhỏ }\DIFdelendFL & Không áp dụng & \DIFdelbeginFL \DIFdelFL{Không }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Cao (mỗi cửa hàng một hạ tầng) }\DIFaddendFL & Không áp dụng & \DIFdelbeginFL \DIFdelFL{Mục tiêu thiết kế }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Thấp (vài tài liệu JSON) }\DIFaddendFL \\ \hline
+\DIFdelbeginFL %DIFDELCMD < \end{tabulary}
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \end{tabularx}
+\DIFaddendFL \caption{So sánh chi tiết các nền tảng thương mại điện tử}
+\label{table:so_sanh_chi_tiet}
+\end{table}
+
+Bảng \ref{table:so_sanh_chi_tiet} cho thấy khoảng trống của thị trường: chưa nền tảng nào cân bằng được đồng thời chi phí \DIFdelbegin \DIFdel{, khả năng vận hành nhiều }\DIFdelend \DIFaddbegin \DIFadd{biên thấp cho mỗi }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{trên hạ tầng giới hạn }\DIFdelend và công cụ tùy biến giao diện dành cho người không chuyên. Từ đó, đề tài xác định 10 chức năng cốt lõi cần xây dựng:
+\DIFdelbegin \DIFdel{(i) khởi }\DIFdelend \DIFaddbegin 
+
+\begin{enumerate}[leftmargin=*]
+    \item \DIFadd{Khởi }\DIFaddend tạo cửa hàng\DIFdelbegin \DIFdel{, (ii) quản lý chương trình khuyến mãi, (iii) tùy }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Tùy }\DIFaddend biến giao diện và thương hiệu\DIFdelbegin \DIFdel{, (iv) quản }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Quản }\DIFaddend lý sản phẩm\DIFdelbegin \DIFdel{, (v) thiết lập menu điều hướng, (vi) tạo }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Tạo }\DIFaddend trang nội dung động\DIFdelbegin \DIFdel{, (vii) duyệt }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Duyệt }\DIFaddend sản phẩm trên trang cửa hàng\DIFdelbegin \DIFdel{, (viii) quản }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Quản }\DIFaddend lý giỏ hàng\DIFdelbegin \DIFdel{, (ix) thanh }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Thanh }\DIFaddend toán và xử lý đơn hàng\DIFdelbegin \DIFdel{, và (x) ánh xạ tên miền tùy chỉnh.
+}\DIFdelend \DIFaddbegin \DIFadd{.
+}\end{enumerate}
+\DIFaddend 
+
+\section{Tổng quan chức năng}
+\label{section:2.2}
+
+Phần này mô tả cấu trúc chức năng của hệ thống thông qua biểu đồ ca sử dụng từ mức tổng quát đến mức phân rã, cùng các biểu đồ hoạt động cho những quy trình nghiệp vụ quan trọng. Việc đặc tả chi tiết từng chức năng cốt lõi được trình bày ở mục \ref{section:2.3}.
+
+\subsection{Biểu đồ use case tổng quát}
+\label{subsection:2.2.1}
+
+\begin{figure}[H]
+    \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.7\linewidth]{Hinhve/Chuong2/usecase_tong_quat.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.62\linewidth]{Hinhve/Chuong2/usecase_tong_quat.png}
+    \DIFaddendFL \caption{Biểu đồ use case tổng quát hệ thống ShopVolo v2}
+    \label{fig:usecase_tong_quat}
+\end{figure}
+
+Hình \ref{fig:usecase_tong_quat} thể hiện toàn cảnh tương tác giữa \DIFdelbegin \DIFdel{hai }\DIFdelend \DIFaddbegin \DIFadd{ba }\DIFaddend tác nhân và hệ thống. Tác nhân \DIFaddbegin \DIFadd{quản trị nền tảng phụ trách quản lý master template --- bộ giao diện mặc định mà mọi cửa hàng kế thừa. Tác nhân }\DIFaddend chủ cửa hàng thực hiện nhóm chức năng quản trị \DIFaddbegin \DIFadd{cửa hàng}\DIFaddend : khởi tạo cửa hàng, quản lý sản phẩm\DIFdelbegin \DIFdel{và khuyến mãi}\DIFdelend , tùy biến giao diện \DIFaddbegin \DIFadd{và thương hiệu}\DIFaddend , thiết lập \DIFaddbegin \DIFadd{menu }\DIFaddend điều hướng\DIFaddbegin \DIFadd{, tạo trang nội dung động }\DIFaddend và \DIFaddbegin \DIFadd{ánh xạ }\DIFaddend tên miền; tác nhân này cũng tham gia ca sử dụng thanh toán và xử lý đơn hàng ở vai trò xử lý các đơn phát sinh. Tác nhân khách hàng tương tác với mặt tiền cửa hàng: duyệt sản phẩm, quản lý giỏ hàng và thực hiện thanh toán.
+
+\subsection{Biểu đồ use case phân rã --- Quản lý cửa hàng}
+\label{subsection:2.2.2}
+
+\begin{figure}[H]
+    \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.85\linewidth]{Hinhve/Chuong2/usecase_quan_ly_shop.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.78\linewidth]{Hinhve/Chuong2/usecase_quan_ly_shop.png}
+    \DIFaddendFL \caption{Biểu đồ use case phân rã nhóm Quản lý cửa hàng}
+    \label{fig:usecase_quan_ly_shop}
+\end{figure}
+
+Hình \ref{fig:usecase_quan_ly_shop} phân rã nhóm chức năng thiết lập cửa hàng. Ca sử dụng khởi tạo cửa hàng bao gồm bước chọn mẫu giao diện theo ngành hàng, nhờ đó cửa hàng mới có ngay giao diện hoàn chỉnh. Ca sử dụng tùy biến giao diện bao gồm hai bước con bắt buộc là lưu bản nháp và xuất bản, phản ánh quy trình chỉnh sửa hai pha của hệ thống. Việc ánh xạ tên miền tùy chỉnh bao gồm bước xác minh quyền sở hữu tên miền trước khi kích hoạt.
+
+\subsection{Biểu đồ use case phân rã --- Sản phẩm và Đơn hàng}
+\label{subsection:2.2.3}
+
+\begin{figure}[H]
+    \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.85\linewidth]{Hinhve/Chuong2/usecase_san_pham_don_hang.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.82\linewidth]{Hinhve/Chuong2/usecase_san_pham_don_hang.png}
+    \DIFaddendFL \caption{Biểu đồ use case phân rã nhóm Sản phẩm và Đơn hàng}
+    \label{fig:usecase_san_pham_don_hang}
+\end{figure}
+
+Hình \ref{fig:usecase_san_pham_don_hang} mô tả các chức năng nghiệp vụ bán hàng. Quản lý sản phẩm bao gồm bốn tác vụ con: thêm và cập nhật sản phẩm, quản lý biến thể và giá bán, kiểm soát tồn kho, và tải lên ảnh sản phẩm. Về phía khách hàng, ca sử dụng thanh toán bao gồm việc đọc giỏ hàng (khi khách đặt từ giỏ); sau khi đơn được tạo, chủ cửa hàng tiếp nhận và xử lý đơn qua các thao tác xác nhận, hủy hoặc hoàn tiền.
+
+\subsection{Biểu đồ use case phân rã --- Trải nghiệm khách hàng}
+\label{subsection:2.2.4}
+
+\begin{figure}[H]
+    \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.75\linewidth]{Hinhve/Chuong2/usecase_khach_hang.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=0.72\linewidth]{Hinhve/Chuong2/usecase_khach_hang.png}
+    \DIFaddendFL \caption{Biểu đồ use case phân rã nhóm Trải nghiệm khách hàng}
+    \label{fig:usecase_khach_hang}
+\end{figure}
+
+Hình \ref{fig:usecase_khach_hang} mô tả trải nghiệm phía người mua. Khách hàng xem các trang nội dung do chủ cửa hàng tạo và duyệt danh mục sản phẩm được kết xuất động từ cấu hình. Hai ca sử dụng mở rộng là lọc theo danh mục cùng khoảng giá và tìm kiếm sản phẩm, chỉ kích hoạt khi khách hàng có nhu cầu thu hẹp kết quả.
+
+\subsection{Quy trình nghiệp vụ --- Khởi tạo cửa hàng và kết xuất giao diện}
+\label{subsection:2.2.5}
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=\linewidth]{Hinhve/Chuong2/activity_onboarding.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong2/activity_onboarding.png}
+    \DIFaddendFL \caption{Biểu đồ hoạt động quy trình khởi tạo cửa hàng và kết xuất giao diện động}
+    \label{fig:activity_onboarding}
+\end{figure}
+
+Hình \ref{fig:activity_onboarding} mô tả quy trình nghiệp vụ xuyên suốt nhất của hệ thống, nối từ lúc cửa hàng được khởi tạo đến lúc khách hàng nhìn thấy trang web. Sau khi chủ cửa hàng đăng ký và điền thông tin kèm mẫu ngành hàng, ứng dụng Admin lần lượt gọi hai API: tạo bản ghi cửa hàng và gieo bố cục khởi điểm; bước gieo chỉ ghi vào các tài liệu còn trống nên có thể gọi lại an toàn. Chủ cửa hàng sau đó tùy biến giao diện trên bản nháp và bấm xuất bản. Khi khách truy cập tên miền của cửa hàng, ứng dụng Storefront bóc tách định danh, tải bản bố cục đã xuất bản cùng dữ liệu sản phẩm rồi kết xuất giao diện hoàn chỉnh.
+
+\section{Đặc tả chức năng}
+\label{section:2.3}
+
+Trong 10 chức năng đã xác định ở mục \ref{section:2.1}, phần này đặc tả chi tiết năm trường hợp sử dụng có ảnh hưởng lớn nhất đến thiết kế hệ thống.
+
+\subsection{Đặc tả use case: Khởi tạo cửa hàng (UC-01)}
+\label{subsection:2.3.1}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Khởi tạo cửa hàng \\ \hline
+  \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
+  \textbf{Mục đích} & Tạo cửa hàng mới với giao diện khởi điểm hoạt động được ngay \\ \hline
+  \textbf{Tiền điều kiện} & Chủ cửa hàng đã đăng nhập tài khoản; tên miền dự kiến chưa thuộc cửa hàng nào \\ \hline
+  \textbf{Hậu điều kiện} & Bản ghi cửa hàng được tạo trong PostgreSQL; bố cục khởi điểm (đầu trang, chân trang và ba trang mặc định) được gieo vào MongoDB; cache danh sách cửa hàng của chủ sở hữu được làm mới \\ \hline
+  \textbf{Luồng chính} &
+    1. Chủ cửa hàng điền tên cửa hàng, tên miền, đơn vị tiền tệ và chọn mẫu giao diện theo ngành hàng \\
+    & 2. Ứng dụng Admin gửi POST /api/shops với name, domain, currency, templateKey \\
+    & 3. Hệ thống tạo bản ghi Shop gắn với tài khoản chủ sở hữu \\
+    & 4. Hệ thống xóa cache danh sách cửa hàng của người dùng để quyền sở hữu có hiệu lực ngay \\
+    & 5. Ứng dụng Admin gọi POST /api/layouts/\{shopId\}/seed \\
+    & 6. Hệ thống gieo bố cục mặc định vào các tài liệu còn trống (thao tác lũy đẳng) \\
+    & 7. Ứng dụng Admin chuyển sang trình hướng dẫn tám bước hoàn thiện cửa hàng \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[2a]} Tên miền đã tồn tại (vi phạm ràng buộc duy nhất) $\rightarrow$ trả lỗi, yêu cầu chọn tên khác \\
+    & {[2b]} Người dùng chưa đăng nhập $\rightarrow$ HTTP 401 \\
+    & {[5a]} Bước gieo bố cục thất bại $\rightarrow$ không chặn luồng; trình thiết kế tự dùng bố cục mặc định phía máy khách \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Khởi tạo cửa hàng (UC-01)}
+\label{table:uc01}
+\end{table}
+
+Bảng \ref{table:uc01} mô tả luồng khởi tạo: điểm đáng chú ý là tính lũy đẳng của bước gieo bố cục và việc chủ động làm mới cache quyền sở hữu, hai chi tiết bảo đảm trải nghiệm nhất quán ngay sau khi tạo cửa hàng.
+
+\subsection{Đặc tả use case: Tùy biến giao diện và thương hiệu (UC-03)}
+\label{subsection:2.3.2}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Tùy biến giao diện và thương hiệu \\ \hline
+  \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
+  \textbf{Mục đích} & Thay đổi bố cục, thành phần, màu sắc và phông chữ của trang cửa hàng bằng thao tác kéo thả \\ \hline
+  \textbf{Tiền điều kiện} & Chủ cửa hàng đã đăng nhập; cửa hàng đang hoạt động \\ \hline
+  \textbf{Hậu điều kiện} & Bản nháp được lưu vào trường draftData; sau khi xuất bản, publishedData được cập nhật và khách truy cập thấy giao diện mới trong tối đa 60 giây \\ \hline
+  \textbf{Luồng chính} &
+    1. Chủ cửa hàng mở trình thiết kế; hệ thống tải bản nháp hiện có (nếu nháp trống thì sao lưu từ bản đã xuất bản) \\
+    & 2. Chủ cửa hàng kéo thả thành phần, chỉnh thuộc tính qua biểu mẫu sinh tự động từ lược đồ thành phần \\
+    & 3. Trình thiết kế gửi POST /api/layouts/builder/save/global (hoặc save/page) để lưu draftData \\
+    & 4. Chủ cửa hàng xem trước ở chế độ máy tính hoặc di động \\
+    & 5. Chủ cửa hàng bấm xuất bản; hệ thống sao chép draftData sang publishedData (từng trang hoặc toàn bộ) \\
+    & 6. Bộ nhớ đệm bố cục phía Storefront hết hạn theo chu kỳ 60 giây và tải bản mới \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[5a]} Chưa có bản nháp nào $\rightarrow$ hệ thống báo lỗi ``No layout draft found'' \\
+    & {[5b]} Trang chưa từng chỉnh sửa $\rightarrow$ thao tác xuất bản bỏ qua trang đó \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Tùy biến giao diện và thương hiệu (UC-03)}
+\label{table:uc03}
+\end{table}
+
+Bảng \ref{table:uc03} thể hiện quy trình chỉnh sửa hai pha: mọi thao tác chỉ chạm vào bản nháp, còn khách truy cập luôn nhìn thấy bản đã xuất bản; cơ chế này được phân tích sâu tại mục \ref{section:5.3}.
+
+\subsection{Đặc tả use case: Quản lý sản phẩm (UC-04)}
+\label{subsection:2.3.3}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Quản lý sản phẩm \\ \hline
+  \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
+  \textbf{Mục đích} & Thêm, chỉnh sửa, xóa sản phẩm cùng biến thể, giá bán, tồn kho và hình ảnh \\ \hline
+  \textbf{Tiền điều kiện} & Chủ cửa hàng đã đăng nhập vào phiên quản trị của đúng cửa hàng \\ \hline
+  \textbf{Hậu điều kiện} & Thông tin sản phẩm và biến thể được lưu trong PostgreSQL; ảnh gốc nằm trên MinIO kèm bản ghi Media chứa URL và mã BlurHash \\ \hline
+  \textbf{Luồng chính} &
+    1. Chủ cửa hàng điền tên, mô tả, danh mục và các biến thể (SKU, giá, tồn kho) của sản phẩm \\
+    & 2. Chủ cửa hàng tải ảnh lên; hệ thống kiểm tra dung lượng (tối đa 10MB) và loại tệp thực qua magic bytes \\
+    & 3. Hệ thống trích kích thước ảnh và sinh mã BlurHash làm ảnh giữ chỗ \\
+    & 4. Ảnh gốc được ghi vào MinIO; bản ghi Media được lưu kèm URL và metadata \\
+    & 5. Hệ thống lưu sản phẩm; ràng buộc SKU duy nhất trong phạm vi cửa hàng \\
+    & 6. Khi hiển thị, ảnh được imgproxy biến đổi đúng kích thước và chất lượng theo thiết bị \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[2a]} Tệp vượt 10MB hoặc không phải ảnh hợp lệ $\rightarrow$ trả lỗi 400 kèm lý do \\
+    & {[5a]} SKU trùng trong cùng cửa hàng $\rightarrow$ từ chối và yêu cầu đổi mã \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Quản lý sản phẩm (UC-04)}
+\label{table:uc04}
+\end{table}
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.9\linewidth]{Hinhve/Chuong2/activity_upload_product.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong2/activity_upload_product.png}
+    \DIFaddendFL \caption{Biểu đồ hoạt động luồng tải lên và xử lý ảnh sản phẩm}
+    \label{fig:activity_upload_product}
+\end{figure}
+
+Bảng \ref{table:uc04} và hình \ref{fig:activity_upload_product} mô tả quy trình quản lý sản phẩm, trong đó luồng xử lý ảnh xác thực loại tệp bằng magic bytes thay vì tin vào phần mở rộng, đồng thời sinh BlurHash để trang web hiển thị ảnh giữ chỗ mượt mà trong lúc tải.
+
+\subsection{Đặc tả use case: Duyệt sản phẩm trên trang cửa hàng (UC-07)}
+\label{subsection:2.3.4}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Duyệt sản phẩm trên trang cửa hàng \\ \hline
+  \textbf{Tác nhân} & Khách hàng \\ \hline
+  \textbf{Mục đích} & Hiển thị trang cửa hàng với giao diện riêng của từng cửa hàng và dữ liệu sản phẩm thực \\ \hline
+  \textbf{Tiền điều kiện} & Tên miền cửa hàng trỏ đúng hệ thống; cửa hàng không bị đình chỉ \\ \hline
+  \textbf{Hậu điều kiện} & Trang được kết xuất hoàn chỉnh phía máy chủ; bố cục và dữ liệu được lưu vào bộ nhớ đệm cho các lượt truy cập sau \\ \hline
+  \textbf{Luồng chính} &
+    1. Khách hàng truy cập tên miền của cửa hàng \\
+    & 2. Tầng middleware của Storefront bóc tách định danh cửa hàng từ tên miền và viết lại đường dẫn nội bộ \\
+    & 3. Trang máy chủ tải song song bố cục đã xuất bản (GET /api/layouts/\{shopId\}/page/...) và thông tin cửa hàng, kèm header x-shop-id \\
+    & 4. Kết quả được lưu vào Next.js Data Cache với chu kỳ làm mới 60 giây (bố cục) và 30 giây (sản phẩm) \\
+    & 5. Động cơ kết xuất duyệt danh sách thành phần, ánh xạ componentId sang React component và bơm dữ liệu sản phẩm thực \\
+    & 6. HTML hoàn chỉnh được trả về trình duyệt \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[2a]} Cửa hàng bị đình chỉ $\rightarrow$ HTTP 403, hiển thị thông báo tạm dừng dịch vụ \\
+    & {[3a]} Cửa hàng chưa cấu hình bố cục $\rightarrow$ hiển thị trang giới thiệu mặc định kèm liên kết xem sản phẩm \\
+    & {[5a]} Thành phần không tồn tại trong bảng ánh xạ $\rightarrow$ hiển thị khung cảnh báo tại đúng vị trí, phần còn lại của trang vẫn hoạt động \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Duyệt sản phẩm trên trang cửa hàng (UC-07)}
+\label{table:uc07}
+\end{table}
+
+Bảng \ref{table:uc07} mô tả luồng đọc quan trọng nhất của hệ thống --- nơi kiến trúc Zero-file phát huy tác dụng: toàn bộ trang được dựng từ dữ liệu JSON và bảng ánh xạ thành phần, không có tệp giao diện riêng cho bất kỳ cửa hàng nào. Chi tiết cơ chế được trình bày tại mục \ref{section:5.2}.
+
+\subsection{Đặc tả use case: Thanh toán và đặt đơn hàng (UC-09)}
+\label{subsection:2.3.5}
+
+\begin{table}[H]
+\centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|}
+%DIFDELCMD <   %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tabulary}{\textwidth}{|p{3cm}|L|}
+  \DIFaddendFL \hline
+  \textbf{Tên use case} & Thanh toán và đặt đơn hàng \\ \hline
+  \textbf{Tác nhân} & Khách hàng \\ \hline
+  \textbf{Mục đích} & Chuyển giỏ hàng thành đơn hàng có trạng thái rõ ràng và ghi nhận thanh toán \\ \hline
+  \textbf{Tiền điều kiện} & Khách hàng đã đăng nhập tài khoản mua hàng và có ít nhất một sản phẩm muốn đặt \\ \hline
+  \textbf{Hậu điều kiện} & Đơn hàng, các dòng hàng, bản ghi thanh toán và vận đơn được tạo nhất quán; tồn kho bị trừ; giỏ hàng được dọn; khách nhận thông báo và email xác nhận \\ \hline
+  \textbf{Luồng chính} &
+    1. Khách xác nhận giỏ hàng, địa chỉ giao, phương thức vận chuyển và phương thức thanh toán \\
+    & 2. Storefront gửi POST /api/orders/checkout; nếu thiếu danh sách hàng, hệ thống đọc giỏ phía máy chủ \\
+    & 3. Hệ thống nạp giá các biến thể thuộc đúng cửa hàng và kiểm tra mã khuyến mãi (nếu có) \\
+    & 4. Hệ thống tính phí vận chuyển và xác thực phương thức thanh toán thuộc cửa hàng \\
+    & 5. Trong một giao dịch nguyên tử: trừ tồn kho, ghi lượt dùng khuyến mãi, trừ ví (nếu thanh toán ví), tạo đơn kèm dòng hàng, tạo bản ghi thanh toán, dọn giỏ, tạo vận đơn \\
+    & 6. Với chuyển khoản ngân hàng: hệ thống phát hành token xác nhận hiệu lực 24 giờ và sinh mã QR sau khi giao dịch hoàn tất \\
+    & 7. Hệ thống gửi thông báo thời gian thực và email xác nhận đơn \\ \hline
+  \textbf{Luồng phát sinh} &
+    {[2a]} Giỏ hàng trống và không có danh sách hàng $\rightarrow$ lỗi 400 \\
+    & {[3a]} Biến thể không thuộc cửa hàng, khuyến mãi hết hạn hoặc vượt giới hạn lượt dùng $\rightarrow$ lỗi 400 \\
+    & {[5a]} Thiếu tồn kho hoặc số dư ví không đủ $\rightarrow$ hoàn tác toàn bộ giao dịch, không phát sinh đơn \\
+    & {[6a]} Token xác nhận hết hạn hoặc đã dùng $\rightarrow$ từ chối nâng trạng thái thanh toán \\ \hline
+\end{tabulary}
+\caption{Đặc tả use case Thanh toán và đặt đơn hàng (UC-09)}
+\label{table:uc09}
+\end{table}
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.62\linewidth]{Hinhve/Chuong2/activity_checkout.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong2/activity_checkout.png}
+    \DIFaddendFL \caption{Biểu đồ hoạt động quy trình thanh toán và đặt đơn hàng}
+    \label{fig:activity_checkout}
+\end{figure}
+
+Bảng \ref{table:uc09} và hình \ref{fig:activity_checkout} cho thấy tính nhất quán dữ liệu là trọng tâm của luồng này: mọi thao tác ghi đều nằm trong một giao dịch nguyên tử nên không thể xảy ra trạng thái nửa vời như trừ kho mà không có đơn.
+
+\section{Yêu cầu phi chức năng}
+\label{section:2.4}
+
+Về hiệu năng, mục tiêu thiết kế của hệ thống là \DIFdelbegin \DIFdel{phục vụ đồng thời 20.000 }\DIFdelend \DIFaddbegin \DIFadd{giữ chi phí tài nguyên tăng thêm cho mỗi }\DIFaddend cửa hàng \DIFaddbegin \DIFadd{(chi phí biên) ở mức thấp, để nhiều cửa hàng có thể cùng chạy }\DIFaddend trên một \DIFdelbegin \DIFdel{máy chủ 16GB RAM, với thời gian }\DIFdelend \DIFaddbegin \DIFadd{hạ tầng dùng chung mà vẫn duy trì trải nghiệm }\DIFaddend phản hồi \DIFdelbegin \DIFdel{dưới 500ms cho }\DIFdelend \DIFaddbegin \DIFadd{nhanh. Do toàn bộ cửa hàng chia sẻ một ứng dụng duy nhất thay vì mỗi cửa hàng một tiến trình riêng, bộ nhớ tiêu tốn không tăng tuyến tính theo số cửa hàng. Về độ trễ, các }\DIFaddend yêu cầu \DIFdelbegin \DIFdel{chưa }\DIFdelend \DIFaddbegin \DIFadd{đã }\DIFaddend có \DIFaddbegin \DIFadd{dữ liệu }\DIFaddend trong bộ nhớ đệm \DIFdelbegin \DIFdel{và dưới 10ms cho dữ liệu đã }\DIFdelend được \DIFaddbegin \DIFadd{phục vụ gần như tức thời do đọc trực tiếp từ RAM, còn các yêu cầu chưa được }\DIFaddend đệm \DIFaddbegin \DIFadd{chỉ phụ thuộc vào một vài truy vấn cơ sở dữ liệu}\DIFaddend . Để \DIFdelbegin \DIFdel{hướng tới mục tiêu }\DIFdelend \DIFaddbegin \DIFadd{đạt được điều }\DIFaddend này, mọi thành phần đều \DIFdelbegin \DIFdel{phải }\DIFdelend khai báo giới hạn tài nguyên tường minh khi triển khai (ví dụ dịch vụ API giới hạn 350MB và Redis giới hạn 512MB bộ nhớ trong cấu hình Kubernetes), đồng thời các truy vấn có tần suất cao \DIFdelbegin \DIFdel{phải }\DIFdelend \DIFaddbegin \DIFadd{đều }\DIFaddend đi qua bộ nhớ đệm: định danh cửa hàng được đệm trên Redis với thời gian sống 300 giây, còn bố cục giao diện và dữ liệu sản phẩm được đệm ở tầng kết xuất với chu kỳ làm mới lần lượt 60 và 30 giây.
+
+Về độ tin cậy, hệ thống đặt mục tiêu duy trì thời gian hoạt động từ 99,5\% trở lên. Cơ sở dữ liệu phải được sao lưu tự động hằng ngày (hiện thực bằng CronJob chạy lúc \DIFdelbegin \DIFdel{3 }\DIFdelend \DIFaddbegin \DIFadd{2 }\DIFaddend giờ sáng). Mọi lỗi phát sinh từ tầng dữ liệu phải được chuyển thành ngoại lệ có kiểm soát của NestJS, tuyệt đối không để lộ chi tiết truy vết nội bộ trong phản hồi trả về máy khách. Lỗi kết xuất của một thành phần giao diện không được làm sập toàn trang.
+
+Về tính dễ sử dụng, toàn bộ bảng điều khiển Admin phải dùng được bởi người không có kiến thức kỹ thuật: các thao tác trọng yếu như tải ảnh sản phẩm hay đổi màu thương hiệu phải hoàn thành trong tối đa 3 phút, và cửa hàng mới khởi tạo phải có giao diện hoạt động được ngay thay vì trang trắng. Giao diện phải đáp ứng trên cả thiết bị di động, máy tính bảng và máy tính để bàn.
+
+Về bảo mật, hệ thống xác thực bằng phiên đăng nhập do thư viện Better Auth quản lý, tách biệt hoàn toàn phiên của chủ cửa hàng và phiên của khách mua hàng. Yêu cầu cốt lõi của môi trường đa thuê bao là cô lập dữ liệu tuyệt đối: chủ cửa hàng này không thể truy cập dữ liệu của cửa hàng khác trên cùng hạ tầng. Các khóa bí mật chỉ được nạp qua biến môi trường và không xuất hiện trong mã nguồn; toàn bộ kết nối ra Internet phải được mã hóa TLS.
+
+Về yêu cầu kỹ thuật, hệ thống chạy trên Node.js phiên bản 22 trở lên; phía máy khách hỗ trợ các trình duyệt Chrome và Firefox từ phiên bản 100, Safari từ phiên bản 15. Tầng dữ liệu sử dụng PostgreSQL 15 với Prisma ORM và MongoDB 6 với Mongoose. Môi trường phát triển vận hành bằng Docker Compose, môi trường sản xuất hướng tới Kubernetes; toàn bộ mã nguồn được quản lý theo mô hình Monorepo bằng Turborepo để tối ưu thời gian xây dựng\DIFdelbegin \DIFdel{.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Chương này đã khảo sát hiện trạng từ ba nguồn, xác định 10 nhóm chức năng cốt lõi, đặc tả chi tiết năm trường hợp sử dụng trung tâm và đưa ra các yêu cầu phi chức năng của hệ thống. Chương tiếp theo trình bày các công nghệ được lựa chọn để hiện thực hóa các yêu cầu này}\DIFdelend .
+
+\end{document}

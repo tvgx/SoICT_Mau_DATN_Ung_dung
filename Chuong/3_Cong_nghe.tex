@@ -1,115 +1,179 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
-Chương 2 đã xác định các yêu cầu chức năng và phi chức năng của hệ thống ShopVolo v2 từ quá trình khảo sát kỹ lưỡng thực tiễn người dùng. Chương 3 này sẽ trình bày các công nghệ được lựa chọn để đáp ứng những yêu cầu đó, đồng thời phân tích rõ lý do tại sao chúng được tin dùng hơn so với các giải pháp thay thế trên thị trường. Về mặt tổng thể, nội dung sẽ được liệt kê sơ bộ thông qua các nhóm công nghệ lõi như kiến trúc quản lý tập trung mã nguồn, hệ thống lập trình máy chủ phụ trợ, nền tảng phát triển giao diện hiển thị, cấu trúc cơ sở dữ liệu chuyên biệt, và cuối cùng là các công nghệ đóng gói hạ tầng cũng như lưu trữ đối tượng.
+Chương 2 đã xác định các yêu cầu chức năng và phi chức năng của hệ thống. Chương 3 trình bày các công nghệ được lựa chọn để đáp ứng những yêu cầu đó. Mỗi công nghệ được đặt trong cùng một khung phân tích gồm ba phần:
 
-\section{Turborepo — Quản lý Monorepo}
+\begin{itemize}
+    \item Yêu cầu cụ thể mà công nghệ phải giải quyết.
+    \item Các giải pháp thay thế đã cân nhắc.
+    \item Lý do lựa chọn.
+\end{itemize}
+
+Các nhóm công nghệ được trình bày theo trình tự của một request đi qua hệ thống: công cụ quản lý mã nguồn, framework backend, framework frontend, hai cơ sở dữ liệu, bộ nhớ đệm, lưu trữ ảnh, xác thực, và cuối cùng là hạ tầng triển khai.
+
+\section{Turborepo --- Quản lý Monorepo}
 \label{section:3.1}
 
-Để đáp ứng yêu cầu phi chức năng tại mục \ref{section:2.4} về tính bảo trì và quy trình xây dựng tự động hóa, hệ thống yêu cầu quản lý 4 ứng dụng (admin, api-core, storefront, cli-tool) và 5 gói phần mềm dùng chung (ui-registry, schema, database, i18n, master-templates) một cách nhất quán trong cùng một kho lưu trữ tập trung.
+Hệ thống gồm 4 ứng dụng (admin, api-core, storefront, cli-tool) và 5 gói dùng chung (ui-registry, schema, database, i18n, master-templates) đặt trong cùng một kho mã nguồn. Yêu cầu đặt ra ở mục \ref{section:2.4} là chia sẻ kiểu dữ liệu xuyên suốt giữa các ứng dụng và giữ thời gian build ngắn khi dự án lớn dần.
 
-Các công cụ quản lý kho chứa mã nguồn tập trung phổ biến hiện nay bao gồm (i) Nx, (ii) Lerna, và (iii) trình quản lý không gian làm việc pnpm thuần túy.
+Các công cụ quản lý monorepo phổ biến khác được cân nhắc gồm Nx, Lerna và workspace thuần của pnpm.
 
-Turborepo được chọn vì (i) khả năng lưu trữ bộ nhớ đệm dạng tăng dần giúp hệ thống chỉ tiến hành biên dịch lại đúng các gói phần mềm thực sự bị thay đổi, giúp giảm triệt để thời gian chạy các luồng tự động, (ii) công cụ này thiết lập được quy trình biên dịch tự động dựa vào khái niệm đồ thị có hướng phi chu trình, và (iii) không yêu cầu quá trình chuyển đổi cấu trúc phức tạp khi tích hợp sẵn với không gian làm việc của npm đã tồn tại \cite{turborepo_docs}.
+Turborepo được chọn vì ba lý do:
 
-\section{NestJS — Framework Backend}
+\begin{itemize}
+    \item \textbf{Bộ nhớ đệm theo tác vụ (task cache):} chỉ build lại đúng những gói thực sự thay đổi, nhờ đó rút ngắn đáng kể thời gian build và thời gian chạy CI.
+    \item \textbf{Lập lịch theo đồ thị phụ thuộc:} build được sắp xếp theo đồ thị có hướng không chu trình (DAG) giữa các gói, bảo đảm gói nền tảng được build trước gói phụ thuộc.
+    \item \textbf{Tích hợp sẵn với npm workspace:} không cần chuyển đổi cấu trúc dự án đang có \cite{turborepo_docs}.
+\end{itemize}
+
+\section{NestJS --- Framework Backend}
 \label{section:3.2}
 
-Để đáp ứng các chức năng được thiết kế chi tiết tại \ref{section:2.3}, hệ thống yêu cầu một giải pháp xây dựng giao diện lập trình ứng dụng có cấu trúc mô-đun rõ ràng như quản lý cửa hàng, sản phẩm, đơn hàng, đồng thời hỗ trợ tiêm phụ thuộc, xây dựng tầng trung gian phục vụ đa thuê bao và hỗ trợ định dạng tĩnh cấu trúc mạnh mẽ.
+Các chức năng đã đặc tả ở mục \ref{section:2.3} đòi hỏi một framework backend có cấu trúc module rõ ràng (quản lý cửa hàng, sản phẩm, đơn hàng), hỗ trợ dependency injection và cho phép cài đặt middleware xử lý ngữ cảnh đa thuê bao cho mọi request.
 
-Các công cụ lập trình phụ trợ bằng ngôn ngữ JavaScript nổi bật khác bao gồm (i) Express.js, (ii) Fastify, và (iii) Hono.
+Các framework backend Node.js đáng cân nhắc khác gồm Express.js, Fastify và Hono.
 
-NestJS được chọn vì (i) kiến trúc mô-đun mô phỏng hệ thống Angular hỗ trợ tổ chức mã nguồn theo từng cụm giới hạn rõ ràng, (ii) tích hợp rất tốt với bộ nhớ ngữ cảnh bất đồng bộ nhằm truyền tải định danh khách thuê một cách tự động, và (iii) sử dụng trình trang trí kết hợp với cơ chế lọc ngoại lệ giúp xử lý thống nhất các lỗi nội bộ trên toàn bộ máy chủ \cite{nestjs_docs}.
+NestJS được chọn vì ba lý do:
 
-Cụ thể, tầng trung gian tự động giải mã thông tin định danh khách thuê từ phần mào đầu truy vấn, sau đó lưu vào bộ nhớ bất đồng bộ để toàn bộ quá trình đọc ghi cơ sở dữ liệu tiếp theo đều tự động gắn kết.
+\begin{itemize}
+    \item \textbf{Tổ chức theo module:} cấu trúc lấy cảm hứng từ Angular tạo ranh giới rõ ràng giữa các miền nghiệp vụ và giữ khả năng tách thành microservice về sau.
+    \item \textbf{Hỗ trợ middleware toàn cục:} kết hợp tốt với \texttt{AsyncLocalStorage} của Node.js để truyền định danh tenant (shopId) tự động xuống mọi tầng xử lý.
+    \item \textbf{Xử lý lỗi thống nhất:} cơ chế decorator kết hợp exception filter cho phép xử lý lỗi nhất quán trên toàn bộ API \cite{nestjs_docs}.
+\end{itemize}
 
-\section{Next.js — Framework Frontend}
+Cụ thể, middleware đọc định danh tenant từ HTTP header rồi lưu vào \texttt{AsyncLocalStorage}, nhờ đó mọi truy vấn cơ sở dữ liệu phía sau đều tự động gắn đúng phạm vi cửa hàng; chi tiết cơ chế này được phân tích ở mục \ref{section:5.1}.
+
+\section{Next.js --- Framework Frontend}
 \label{section:3.3}
 
-Để đáp ứng yêu cầu hiệu năng tại \ref{section:2.4}, hệ thống đòi hỏi nền tảng mặt tiền phải phản hồi ở tốc độ dưới mức 500 mili-giây, cùng với đó trang quản trị của người bán phải tải được các dạng biểu mẫu cấu trúc phức tạp với độ tương tác phản ứng tức thì.
+Yêu cầu hiệu năng ở mục \ref{section:2.4} đòi hỏi trang cửa hàng phản hồi nhanh, đồng thời bảng điều khiển của người bán phải xử lý được các biểu mẫu phức tạp với độ tương tác cao.
 
-Các nền tảng xây dựng giao diện nổi bật thay thế bao gồm (i) bộ đôi React và Vite, (ii) Remix, và (iii) hệ thống Nuxt.js dựa trên Vue.
+Các framework frontend đáng cân nhắc khác gồm React kết hợp Vite, Remix và Nuxt.js (trên nền Vue).
 
-Next.js phiên bản 16 được chọn vì (i) bộ định tuyến App Router với React Server Components cho phép kết xuất giao diện hoàn toàn phía máy chủ, giảm đáng kể dung lượng mã tải về cho khách truy cập, (ii) tầng middleware cho phép nhận diện tên miền của từng cửa hàng và viết lại đường dẫn từ rất sớm trong vòng đời request, và (iii) cơ chế Data Cache cho phép đặt chu kỳ làm mới và nhãn vô hiệu hóa cho từng nguồn dữ liệu (bố cục, sản phẩm, thông tin cửa hàng) một cách độc lập \cite{nextjs_docs}.
+Next.js 16 được chọn vì ba lý do:
 
-\section{PostgreSQL và Prisma ORM — Cơ sở dữ liệu quan hệ}
+\begin{itemize}
+    \item \textbf{App Router với React Server Components:} cho phép render phía máy chủ (server-side rendering), giảm khối lượng JavaScript tải về trình duyệt.
+    \item \textbf{Middleware nhận diện tên miền:} tầng middleware nhận diện tên miền của từng cửa hàng và viết lại (rewrite) đường dẫn ngay từ đầu vòng đời request --- nền tảng cho định tuyến đa thuê bao của trang cửa hàng.
+    \item \textbf{Next.js Data Cache:} cho phép đặt chu kỳ làm mới và nhãn vô hiệu hóa (cache tag) riêng cho từng nguồn dữ liệu --- bố cục, sản phẩm, thông tin cửa hàng --- một cách độc lập \cite{nextjs_docs}.
+\end{itemize}
+
+\section{PostgreSQL và Prisma ORM --- Cơ sở dữ liệu quan hệ}
 \label{section:3.4}
 
-Để đáp ứng việc quản lý các thực thể có cấu trúc định hình cố định đã được xác định tại \ref{section:2.1} như chủ cửa hàng, tài khoản, đơn vị mua hàng, hệ thống đòi hỏi một giải pháp bảo đảm tính nguyên tử của giao dịch, ràng buộc chặt chẽ khóa ngoại và khả năng trích xuất thông tin bảng thống kê nâng cao.
+Các thực thể có cấu trúc cố định đã xác định ở mục \ref{section:2.1} (cửa hàng, tài khoản, đơn hàng) đòi hỏi giao dịch nguyên tử, ràng buộc khóa ngoại chặt chẽ và khả năng truy vấn thống kê.
 
-Các giải pháp quản lý bảng biểu cấu trúc thay thế bao gồm (i) MySQL 8, (ii) SQLite ở môi trường cục bộ, và (iii) hệ thống phân tán CockroachDB.
+Các cơ sở dữ liệu quan hệ thay thế gồm MySQL 8, SQLite (cho môi trường cục bộ) và CockroachDB (phân tán).
 
-PostgreSQL 15 kết hợp công cụ Prisma được chọn vì (i) bảo đảm giao dịch ACID cần thiết cho nghiệp vụ đặt hàng và trừ tồn kho, đồng thời hỗ trợ kiểu JSONB cho các trường tham số động, (ii) hệ ràng buộc khóa ngoại và ràng buộc duy nhất theo tổ hợp cột (ví dụ SKU duy nhất trong phạm vi một cửa hàng) phù hợp với thiết kế đa thuê bao mức hàng, và (iii) Prisma ORM tự sinh kiểu dữ liệu tĩnh từ lược đồ và quản lý phiên bản các đợt di trú cấu trúc \cite{prisma_docs, postgresql_docs}.
+PostgreSQL 15 kết hợp Prisma được chọn vì ba lý do:
 
-\section{MongoDB và Mongoose — Cơ sở dữ liệu tài liệu}
+\begin{itemize}
+    \item \textbf{Giao dịch ACID:} PostgreSQL bảo đảm tính nguyên tử cần thiết cho nghiệp vụ đặt hàng và trừ tồn kho, đồng thời hỗ trợ kiểu JSONB cho các trường tham số động.
+    \item \textbf{Ràng buộc toàn vẹn:} khóa ngoại và ràng buộc duy nhất theo tổ hợp cột (ví dụ SKU duy nhất trong phạm vi một cửa hàng) phù hợp với thiết kế đa thuê bao ở mức hàng (row-level).
+    \item \textbf{Prisma ORM:} tự sinh kiểu TypeScript tĩnh từ lược đồ và quản lý phiên bản migration \cite{prisma_docs, postgresql_docs}.
+\end{itemize}
+
+\section{MongoDB và Mongoose --- Cơ sở dữ liệu tài liệu}
 \label{section:3.5}
 
-Để đáp ứng nền tảng kiến trúc Zero-file đã vạch ra tại \ref{section:1.3}, việc lưu trữ các tệp cấu hình JSON phải giải quyết bài toán lồng nhau sâu sắc của bộ khung nền và bộ tùy chỉnh cửa hàng, đồng thời hỗ trợ cập nhật mở rộng không cần theo định dạng cố định khắt khe của kho lưu trữ quan hệ truyền thống.
+Kiến trúc Zero-file ở mục \ref{section:1.3} lưu giao diện cửa hàng dưới dạng tài liệu JSON lồng nhau nhiều cấp (bố cục khung nền hợp nhất với phần tùy biến của từng cửa hàng), với cấu trúc thay đổi tùy theo cách dựng trang, nên không phù hợp với mô hình bảng cố định của cơ sở dữ liệu quan hệ.
 
-Các nền tảng giải quyết dữ liệu văn bản phi cấu trúc khác gồm (i) CouchDB, (ii) giải pháp đám mây DynamoDB, và (iii) lợi dụng kiểu JSONB của chính cơ sở dữ liệu PostgreSQL.
+Các cơ sở dữ liệu tài liệu thay thế gồm CouchDB, DynamoDB (đám mây) và việc tận dụng kiểu JSONB của chính PostgreSQL.
 
-MongoDB phiên bản 6 kết hợp thư viện Mongoose được chọn vì (i) mô hình tài liệu biểu diễn tự nhiên các khối giao diện lồng nhau với độ sâu thay đổi theo từng cửa hàng, (ii) một tài liệu có thể chứa đồng thời hai phiên bản nháp và xuất bản của bố cục, giúp thao tác xuất bản chỉ là một lệnh cập nhật nguyên tử, và (iii) Mongoose cung cấp lớp kiểm soát lược đồ vừa đủ ở những trường cốt lõi mà vẫn giữ tính linh hoạt cho phần cấu hình tự do \cite{mongodb_docs}.
+MongoDB 6 kết hợp Mongoose được chọn vì ba lý do:
 
-\section{Redis — Cache In-memory}
+\begin{itemize}
+    \item \textbf{Mô hình tài liệu:} biểu diễn tự nhiên các khối giao diện lồng nhau với độ sâu thay đổi theo từng cửa hàng.
+    \item \textbf{Lưu hai phiên bản trong một tài liệu:} một tài liệu chứa đồng thời bản nháp (\texttt{draftData}) và bản xuất bản (\texttt{publishedData}) của bố cục, nhờ đó thao tác xuất bản chỉ là một lệnh cập nhật nguyên tử.
+    \item \textbf{Mongoose:} cung cấp lớp kiểm soát lược đồ vừa đủ ở các trường cốt lõi mà vẫn giữ tính linh hoạt cho phần cấu hình tự do \cite{mongodb_docs}.
+\end{itemize}
+
+Thiết kế chi tiết các collection được trình bày ở mục \ref{subsection:4.2.3}.
+
+\section{Redis --- Bộ nhớ đệm trong RAM}
 \label{section:3.6}
 
-Để đáp ứng yêu cầu hiệu năng cực kỳ khắt khe tại \ref{section:2.4}, hệ thống đặt mục tiêu phản hồi trong 10 mili-giây khi duyệt trang phục vụ cho việc lấy cấu hình ở phần \ref{subsection:2.3.4}, điều hoàn toàn bất khả thi nếu cứ liên tục gọi cấu trúc dữ liệu thô.
+Mục tiêu phản hồi nhanh khi duyệt trang ở mục \ref{subsection:2.3.4} không thể đạt được nếu mỗi request đều phải truy vấn cơ sở dữ liệu để định danh cửa hàng.
 
-Các phương pháp thay thế giải quyết độ trễ phổ biến bao gồm (i) Memcached, (ii) kiểm soát bộ nhớ qua giao thức HTTP cơ bản, và (iii) sử dụng mạng phân phối nội dung thuần túy.
+Các giải pháp giảm độ trễ thay thế gồm Memcached, đệm ở tầng HTTP và việc chỉ dùng CDN.
 
-Redis được chọn vì (i) dữ liệu nằm hoàn toàn trên bộ nhớ trong nên độ trễ đọc ở mức dưới mili-giây, (ii) mỗi khóa được gắn thời gian sống tự hết hạn, không tốn tài nguyên dọn dẹp thủ công, và (iii) việc vô hiệu hóa chủ động chỉ là một lệnh xóa khóa, được hệ thống áp dụng ngay khi dữ liệu nguồn thay đổi (ví dụ xóa cache danh sách cửa hàng khi người dùng tạo cửa hàng mới) \cite{redis_docs}.
+Redis được chọn vì ba lý do:
 
-\section{MinIO — Object Storage}
+\begin{itemize}
+    \item \textbf{Độ trễ thấp:} dữ liệu nằm hoàn toàn trong RAM nên độ trễ đọc ở mức dưới một mili-giây.
+    \item \textbf{Tự hết hạn:} mỗi khóa được gắn thời gian sống (TTL) và tự hết hạn, không cần dọn dẹp thủ công.
+    \item \textbf{Vô hiệu hóa chủ động:} việc xóa cache chỉ là một lệnh xóa khóa, được áp dụng ngay khi dữ liệu nguồn thay đổi (ví dụ xóa cache danh sách cửa hàng khi người dùng tạo cửa hàng mới) \cite{redis_docs}.
+\end{itemize}
+
+\section{MinIO --- Lưu trữ đối tượng}
 \label{section:3.7}
 
-Để đáp ứng quy trình quản lý thông tin ở phần \ref{subsection:2.3.3}, hệ thống yêu cầu một giải pháp lưu trữ tệp tin hình ảnh sản phẩm định dạng nhị phân theo nhiều biến thể kích cỡ, đây là một môi trường dữ liệu không thể dồn nén trực tiếp vào kho lưu trữ bảng biểu truyền thống.
+Quy trình quản lý sản phẩm ở mục \ref{subsection:2.3.3} cần một nơi lưu trữ tệp ảnh nhị phân, vốn không phù hợp để nhồi vào cơ sở dữ liệu quan hệ.
 
-Các dịch vụ hỗ trợ cung cấp kho chứa đối tượng thay thế thường được tiếp cận là (i) hệ sinh thái đám mây AWS S3, (ii) không gian lưu trữ Cloudflare R2, và (iii) ghi tệp thẳng vào hệ thống lưu trữ tĩnh trên máy chủ nội bộ.
+Các giải pháp lưu trữ đối tượng thay thế gồm AWS S3, Cloudflare R2 và việc ghi tệp trực tiếp lên ổ đĩa máy chủ.
 
-MinIO được chọn vì (i) sở hữu chuẩn giao thức giao tiếp y hệt như cấu trúc S3, giúp việc di dời toàn bộ dữ liệu hệ thống lên nền tảng trực tuyến lớn không gặp trở ngại gì sau này, (ii) bản thân phần mềm cung cấp khả năng lưu trữ vận hành ngay trên hạ tầng đóng gói khép kín giúp tiết kiệm kinh phí tối đa, và (iii) khả năng ký ủy quyền trực tiếp liên kết giúp trang mặt tiền có thể đưa dữ liệu lên máy chủ ảnh bỏ qua khâu xử lý luân chuyển ở trung tâm \cite{minio_docs}.
+MinIO được chọn vì ba lý do:
 
-\section{Better Auth — Xác thực và Phân quyền}
+\begin{itemize}
+    \item \textbf{Tương thích S3:} có thể chuyển dữ liệu lên AWS S3 về sau mà gần như không phải sửa mã.
+    \item \textbf{Tự host được:} chạy ngay trên hạ tầng container, giúp giảm chi phí ở giai đoạn đầu.
+    \item \textbf{Hỗ trợ presigned URL:} cho phép trình duyệt tải ảnh lên trực tiếp mà không phải đi vòng qua máy chủ API \cite{minio_docs}.
+\end{itemize}
+
+\section{Better Auth --- Xác thực và phân quyền}
 \label{section:3.8}
 
-Để đáp ứng yêu cầu bảo mật ở mục \ref{section:2.4}, hệ thống cần cơ chế xác thực quản lý được hai loại người dùng tách biệt trên cùng hạ tầng: chủ cửa hàng đăng nhập vào bảng điều khiển và khách mua hàng đăng nhập vào trang cửa hàng, với phiên đăng nhập của hai nhóm không được lẫn vào nhau.
+Yêu cầu bảo mật ở mục \ref{section:2.4} cần một cơ chế xác thực quản lý hai loại người dùng tách biệt trên cùng hạ tầng: chủ cửa hàng đăng nhập vào bảng điều khiển và khách hàng đăng nhập vào trang cửa hàng, với phiên đăng nhập của hai nhóm không được lẫn vào nhau.
 
-Các công cụ xác thực khả dĩ cho giải pháp này bao gồm (i) thư viện NextAuth.js, (ii) Passport.js kết hợp quản lý phiên thủ công, và (iii) dịch vụ xác thực Clerk.
+Các thư viện xác thực thay thế gồm NextAuth.js, Passport.js kết hợp quản lý phiên thủ công và dịch vụ Clerk.
 
-Thư viện Better Auth được chọn vì (i) phiên đăng nhập được lưu trong cơ sở dữ liệu qua Prisma, cho phép định nghĩa hai hệ phiên độc lập cho chủ cửa hàng và khách mua hàng với tiền tố cookie riêng, (ii) xây dựng hoàn toàn bằng TypeScript nên kiểu dữ liệu phiên được kiểm tra ngay khi biên dịch, và (iii) tích hợp tự nhiên với cả NestJS (qua Guard) lẫn Next.js (qua middleware) trong cùng monorepo \cite{betterauth_docs}.
+Better Auth được chọn vì ba lý do:
 
-\section{Docker và Kubernetes — Containerization và Orchestration}
+\begin{itemize}
+    \item \textbf{Phiên lưu trong cơ sở dữ liệu:} phiên đăng nhập được lưu qua Prisma, cho phép định nghĩa hai hệ phiên độc lập cho chủ cửa hàng và khách hàng với tiền tố cookie riêng.
+    \item \textbf{An toàn kiểu:} thư viện viết hoàn toàn bằng TypeScript nên kiểu dữ liệu của phiên được kiểm tra ngay khi biên dịch.
+    \item \textbf{Tích hợp đa nền tảng:} dùng được với cả NestJS (qua Guard) lẫn Next.js (qua middleware) trong cùng monorepo \cite{betterauth_docs}.
+\end{itemize}
+
+\section{Docker và Kubernetes --- Đóng gói và điều phối}
 \label{section:3.9}
 
-Để đáp ứng yêu cầu phi chức năng về độ tin cậy được thể hiện tại \ref{section:2.4}, tất cả hệ quản trị phụ trợ khổng lồ phải được giữ cho vận hành đồng bộ và ổn định ở mọi phiên bản triển khai, chưa kể đến yêu cầu bắt buộc phải sao lưu tự động định kỳ vào mỗi ngày cuối ngày.
+Yêu cầu về độ tin cậy ở mục \ref{section:2.4} đòi hỏi hệ thống vận hành ổn định qua nhiều lần triển khai và sao lưu cơ sở dữ liệu tự động hằng ngày.
 
-Các phương pháp triển khai quản lý cụm máy chủ truyền thống có thể kể đến như (i) cấu hình trực tiếp thủ công bằng tiện ích hệ điều hành, (ii) trình quản lý Docker Swarm tập trung, và (iii) hệ thống phân phối của Nomad.
+Các phương pháp triển khai thay thế gồm cấu hình thủ công trên máy chủ, Docker Swarm và Nomad.
 
-Sự kết hợp giữa Docker và Kubernetes được chọn vì trong giai đoạn phát triển, hệ thống tự chứa cấp cho tốc độ khởi chạy tối đa, còn khi vận hành sản xuất thì (i) hệ sinh thái CronJob điều phối chuẩn xác các tác vụ dọn dẹp và dự phòng theo kế hoạch, (ii) chiến lược thay thế cuốn chiếu cho phép cập nhật phiên bản diễn ra hoàn toàn không làm ngưng trệ bất cứ tương tác nào, và (iii) trình quản lý bí mật vô hiệu hóa hoàn toàn mọi rủi ro lộ lọt cấu hình riêng tư \cite{kubernetes_docs, docker_docs}.
+Docker và Kubernetes được chọn để dùng cho hai giai đoạn khác nhau. Ở giai đoạn phát triển, Docker đóng gói toàn bộ hạ tầng phụ trợ (PostgreSQL, MongoDB, Redis, MinIO) thành các container, giúp môi trường nhất quán giữa các máy. Ở giai đoạn vận hành, Kubernetes cung cấp ba khả năng cần thiết:
 
-\begin{table}[H]
+\begin{itemize}
+    \item \textbf{CronJob:} chạy các tác vụ định kỳ như sao lưu cơ sở dữ liệu hằng ngày.
+    \item \textbf{Rolling update:} cập nhật phiên bản mà không gián đoạn dịch vụ.
+    \item \textbf{Quản lý secret:} tách thông tin nhạy cảm khỏi mã nguồn \cite{kubernetes_docs, docker_docs}.
+\end{itemize}
+
+\begin{table}[htbp]
 \centering
 \begin{tabulary}{\textwidth}{|L|L|L|L|}
   \hline
   \textbf{Công nghệ} & \textbf{Phiên bản} & \textbf{Loại} & \textbf{Mục đích trong đề tài} \\ \hline
-  Turborepo & 2.9 & Build Tool & Quản lý monorepo, bộ nhớ đệm xây dựng tăng dần \\ \hline
-  NestJS & 11.0 & Backend Framework & REST API, đa thuê bao, DI container \\ \hline
-  Next.js & 16.2 & Frontend Framework & Admin Dashboard + Storefront (SSR/RSC) \\ \hline
+  Turborepo & 2.9 & Build tool & Quản lý monorepo, bộ nhớ đệm build tăng dần \\ \hline
+  NestJS & 11.0 & Backend framework & REST API, đa thuê bao, dependency injection \\ \hline
+  Next.js & 16.2 & Frontend framework & Admin Dashboard + Storefront (SSR/RSC) \\ \hline
   PostgreSQL & 15 & RDBMS & Lưu Shop, User, Order, Product (có cấu trúc) \\ \hline
-  Prisma & 5.22 & ORM & Truy vấn an toàn kiểu + di trú lược đồ \\ \hline
+  Prisma & 5.22 & ORM & Truy vấn an toàn kiểu + migration lược đồ \\ \hline
   MongoDB & 6 & Document DB & Lưu GlobalLayout, PageLayout, catalog mẫu \\ \hline
   Mongoose & 8.2 & ODM & Kiểm soát lược đồ tài liệu MongoDB \\ \hline
-  Redis & 7 & In-memory Cache & Đệm định danh tenant, trạng thái shop (TTL 300s) \\ \hline
-  MinIO + imgproxy & --- & Object Storage & Lưu ảnh gốc S3 + biến đổi ảnh khi phân phối \\ \hline
-  Better Auth & 1.6 & Auth Library & Phiên đăng nhập tách biệt owner/customer \\ \hline
+  Redis & 7 & In-memory cache & Đệm định danh tenant, trạng thái shop (TTL 300s) \\ \hline
+  MinIO + imgproxy & --- & Object storage & Lưu ảnh gốc theo S3 + biến đổi ảnh khi phân phối \\ \hline
+  Better Auth & 1.6 & Auth library & Phiên đăng nhập tách biệt owner/customer \\ \hline
   Docker & --- & Containerization & Môi trường phát triển nhất quán \\ \hline
-  Kubernetes & --- & Orchestration & Triển khai sản xuất, CronJob sao lưu \\ \hline
-  Tailwind CSS & 4.x & CSS Framework & Giao diện Admin Dashboard + Storefront \\ \hline
+  Kubernetes & --- & Orchestration & Triển khai vận hành, CronJob sao lưu \\ \hline
+  Tailwind CSS & 4.x & CSS framework & Giao diện Admin Dashboard + Storefront \\ \hline
   Zod & 3.24 & Validation & Kiểm tra dữ liệu vào/ra của API \\ \hline
 \end{tabulary}
 \caption{Tổng hợp công nghệ sử dụng trong hệ thống ShopVolo v2}
 \label{table:tong_hop_cong_nghe}
 \end{table}
 
-Chương này đã làm rõ tất cả các công nghệ được chọn để đáp ứng tương ứng từng yêu cầu cốt lõi từ Chương 2. Nhấn mạnh sự bổ sung linh hoạt và hợp lý giữa PostgreSQL trong quản trị các cấu trúc dữ liệu cứng nhắc và MongoDB trong xử lý thông tin mềm dẻo đa biến, cũng như sự đồng hành giữa Docker Compose lúc phát triển và Kubernetes ở giai đoạn vận hành thực tế. Trên cơ sở các công nghệ đã lựa chọn, Chương 4 trình bày thiết kế kiến trúc và kết quả triển khai hệ thống.
+Bảng \ref{table:tong_hop_cong_nghe} tổng hợp toàn bộ công nghệ cùng vai trò của chúng. Hai lựa chọn mang tính then chốt là việc dùng song song PostgreSQL cho dữ liệu có cấu trúc và MongoDB cho cấu hình giao diện linh hoạt, cùng việc tách Docker cho phát triển và Kubernetes cho vận hành.
 
 \end{document}

@@ -1,0 +1,20 @@
+DANH MỤC NGUỒN TÀI LIỆU CHÍNH THỐNG ĐƯỢC SỬ DỤNG TRONG BÁO CÁO THỊ TRƯỜNG
+========================================================================
+
+1. DỮ LIỆU THỊ PHẦN TOÀN CẦU VÀ GMV (GLOBAL MARKET SHARE & GMV DATA):
+   - Nguồn: BuiltWith & StoreLeads Global Insights (2025/2026).
+   - Nội dung trích dẫn: Số liệu phân tích hệ sinh thái thương mại điện tử, tỷ lệ thị phần nền tảng trong nhóm Top 1 triệu website E-commerce lớn nhất thế giới, và tổng lượng active store (cửa hàng đang hoạt động trực tuyến).
+
+2. BIỂU PHÍ VÀ CHÍNH SÁCH THƯƠNG MẠI SHOPIFY:
+   - Nguồn: Shero Commerce & IWD Enterprise Agency (Cập nhật năm 2026).
+   - Nội dung trích dẫn: Biểu phí đăng ký định kỳ hàng tháng của các gói Basic ($39), Grow ($105), Advanced ($399), Plus (từ $2,300); chính sách thu phí giao dịch ngoài hệ thống (Transaction Fees) từ 0.6% đến 2.0% và hệ sinh thái tối ưu hóa dữ liệu Shopify Magic.
+
+3. DỮ LIỆU TÍNH NĂNG VÀ BIỂU PHÍ NỀN TẢNG NỘI ĐỊA HARAVAN:
+   - Nguồn: Haravan Help Center & Services (Cập nhật Q2/2026).
+   - Nội dung trích dẫn: Cơ cấu bảng giá dịch vụ bao gồm các gói Standard (300.000 đ/tháng), Pro (680.000 đ/tháng), Grow (1.500.000 đ/tháng); các tính năng đồng bộ Omnichannel nội địa, giải pháp HaraSocial và chính sách liên kết cổng giao vận/thanh toán tại Việt Nam.
+
+4. THÔNG TIN NGHIÊN CỨU HỆ THỐNG HYBRID/WEBVIEW APP CONVERTER:
+   - Nguồn: MobiLoud Toàn cầu & Đánh giá Hệ thống G2 / Capterra.
+   - Nội dung trích dẫn: Số liệu thống kê vận hành của hơn 2.000 ứng dụng di động; đánh giá độ uy tín, chi phí vận hành và giải pháp chuyển đổi cấu trúc Website-to-App.
+========================================================================
+Báo cáo được tổng hợp và xuất bản vào tháng 06/2026.

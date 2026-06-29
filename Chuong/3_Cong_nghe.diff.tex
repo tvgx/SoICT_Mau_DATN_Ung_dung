@@ -1,0 +1,271 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmpt78a7jsh.tex   Mon Jun 15 17:22:27 2026
+%DIF ADD /tmp/tmp892aee7u.tex   Mon Jun 15 17:22:27 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+Chương 2 đã xác định các yêu cầu chức năng và phi chức năng của hệ thống\DIFdelbegin \DIFdel{ShopVolo v2 từ quá trình khảo sát kỹ lưỡng thực tiễn người dùng}\DIFdelend . Chương 3 \DIFdelbegin \DIFdel{này sẽ }\DIFdelend trình bày các công nghệ được lựa chọn để đáp ứng những yêu cầu đó\DIFdelbegin \DIFdel{, đồng thời }\DIFdelend \DIFaddbegin \DIFadd{. Mỗi công nghệ được đặt trong cùng một khung }\DIFaddend phân tích \DIFdelbegin \DIFdel{rõ lý do tại sao chúng được tin dùng hơn so với các }\DIFdelend \DIFaddbegin \DIFadd{gồm ba phần:
+}
+
+\begin{itemize}
+    \item \DIFadd{Yêu cầu cụ thể mà công nghệ phải }\DIFaddend giải \DIFaddbegin \DIFadd{quyết.
+    }\item \DIFadd{Các giải }\DIFaddend pháp thay thế \DIFdelbegin \DIFdel{trên thị trường.
+    Về mặt tổng thể, nội dung sẽ được liệt kê sơ bộ thông qua các }\DIFdelend \DIFaddbegin \DIFadd{đã cân nhắc.
+    }\item \DIFadd{Lý do lựa chọn.
+}\end{itemize}
+
+\DIFadd{Các }\DIFaddend nhóm công nghệ \DIFdelbegin \DIFdel{lõi như kiến trúc }\DIFdelend \DIFaddbegin \DIFadd{được trình bày theo trình tự của một request đi qua hệ thống: công cụ }\DIFaddend quản lý \DIFdelbegin \DIFdel{tập trung }\DIFdelend mã nguồn, \DIFdelbegin \DIFdel{hệ thống lập trình máy chủ phụ trợ, nền tảng phát triển giao diện hiển thị, cấu trúc }\DIFdelend \DIFaddbegin \DIFadd{framework backend, framework frontend, hai }\DIFaddend cơ sở dữ liệu\DIFdelbegin \DIFdel{chuyên biệt, }\DIFdelend \DIFaddbegin \DIFadd{, bộ nhớ đệm, lưu trữ ảnh, xác thực, }\DIFaddend và cuối cùng là \DIFdelbegin \DIFdel{các công nghệ đóng gói }\DIFdelend hạ tầng \DIFdelbegin \DIFdel{cũng như lưu trữ đối tượng}\DIFdelend \DIFaddbegin \DIFadd{triển khai}\DIFaddend .
+
+\section{Turborepo \DIFdelbegin \DIFdel{— }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend Quản lý Monorepo}
+\label{section:3.1}
+
+\DIFdelbegin \DIFdel{Để đáp ứng yêu cầu phi chức năng tại mục \ref{section:2.4} về tính bảo trì và quy trình xây dựng tự động hóa, hệ }\DIFdelend \DIFaddbegin \DIFadd{Hệ }\DIFaddend thống \DIFdelbegin \DIFdel{yêu cầu quản lý }\DIFdelend \DIFaddbegin \DIFadd{gồm }\DIFaddend 4 ứng dụng (admin, api-core, storefront, cli-tool) và 5 gói \DIFdelbegin \DIFdel{phần mềm }\DIFdelend dùng chung (ui-registry, schema, database, i18n, master-templates) \DIFdelbegin \DIFdel{một cách nhất quán }\DIFdelend \DIFaddbegin \DIFadd{đặt }\DIFaddend trong cùng một kho \DIFdelbegin \DIFdel{lưu trữ tập trung. }\DIFdelend \DIFaddbegin \DIFadd{mã nguồn. Yêu cầu đặt ra ở mục \ref{section:2.4} là chia sẻ kiểu dữ liệu xuyên suốt giữa các ứng dụng và giữ thời gian build ngắn khi dự án lớn dần.
+}\DIFaddend 
+
+Các công cụ quản lý \DIFdelbegin \DIFdel{kho chứa mã nguồn tập trung }\DIFdelend \DIFaddbegin \DIFadd{monorepo }\DIFaddend phổ biến \DIFdelbegin \DIFdel{hiện nay bao }\DIFdelend \DIFaddbegin \DIFadd{khác được cân nhắc }\DIFaddend gồm \DIFdelbegin \DIFdel{(i) Nx, (ii) Lerna }\DIFdelend \DIFaddbegin \DIFadd{Nx}\DIFaddend , \DIFaddbegin \DIFadd{Lerna }\DIFaddend và \DIFdelbegin \DIFdel{(iii) trình quản lý không gian làm việc pnpm }\DIFdelend \DIFaddbegin \DIFadd{workspace }\DIFaddend thuần \DIFdelbegin \DIFdel{túy}\DIFdelend \DIFaddbegin \DIFadd{của pnpm}\DIFaddend .
+
+Turborepo được chọn vì \DIFdelbegin \DIFdel{(i) khả năng lưu trữ bộ nhớ đệm dạng tăng dần giúp hệ thống }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Bộ nhớ đệm theo tác vụ (task cache):}} \DIFaddend chỉ \DIFdelbegin \DIFdel{tiến hành biên dịch }\DIFdelend \DIFaddbegin \DIFadd{build }\DIFaddend lại đúng \DIFdelbegin \DIFdel{các }\DIFdelend \DIFaddbegin \DIFadd{những }\DIFaddend gói \DIFdelbegin \DIFdel{phần mềm }\DIFdelend thực sự \DIFdelbegin \DIFdel{bị }\DIFdelend thay đổi, \DIFdelbegin \DIFdel{giúp giảm triệt để }\DIFdelend \DIFaddbegin \DIFadd{nhờ đó rút ngắn đáng kể }\DIFaddend thời gian \DIFaddbegin \DIFadd{build và thời gian }\DIFaddend chạy \DIFdelbegin \DIFdel{các luồng tự động, (ii) công cụ này thiết lập }\DIFdelend \DIFaddbegin \DIFadd{CI.
+    }\item \textbf{\DIFadd{Lập lịch theo đồ thị phụ thuộc:}} \DIFadd{build }\DIFaddend được \DIFdelbegin \DIFdel{quy trình biên dịch tự động dựa vào khái niệm }\DIFdelend \DIFaddbegin \DIFadd{sắp xếp theo }\DIFaddend đồ thị có hướng \DIFdelbegin \DIFdel{phi }\DIFdelend \DIFaddbegin \DIFadd{không }\DIFaddend chu trình \DIFaddbegin \DIFadd{(DAG) giữa các gói}\DIFaddend , \DIFdelbegin \DIFdel{và (iii) }\DIFdelend \DIFaddbegin \DIFadd{bảo đảm gói nền tảng được build trước gói phụ thuộc.
+    }\item \textbf{\DIFadd{Tích hợp sẵn với npm workspace:}} \DIFaddend không \DIFdelbegin \DIFdel{yêu cầu quá trình }\DIFdelend \DIFaddbegin \DIFadd{cần }\DIFaddend chuyển đổi cấu trúc \DIFdelbegin \DIFdel{phức tạp khi tích hợp sẵn với không gian làm việc của npm đã tồn tại \mbox{%DIFAUXCMD
+\cite{turborepo_docs}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend \DIFaddbegin \DIFadd{dự án đang có \mbox{%DIFAUXCMD
+\cite{turborepo_docs}}\hskip0pt%DIFAUXCMD
+.
+}\end{itemize}
+\DIFaddend 
+
+\section{NestJS \DIFdelbegin \DIFdel{— }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend Framework Backend}
+\label{section:3.2}
+
+\DIFdelbegin \DIFdel{Để đáp ứng các }\DIFdelend \DIFaddbegin \DIFadd{Các }\DIFaddend chức năng \DIFdelbegin \DIFdel{được thiết kế chi tiết tại \ref{section:2.3} , hệ thống yêu cầu }\DIFdelend \DIFaddbegin \DIFadd{đã đặc tả ở mục \ref{section:2.3} đòi hỏi }\DIFaddend một \DIFdelbegin \DIFdel{giải pháp xây dựng giao diện lập trình ứng dụng }\DIFdelend \DIFaddbegin \DIFadd{framework backend }\DIFaddend có cấu trúc \DIFdelbegin \DIFdel{mô-đun }\DIFdelend \DIFaddbegin \DIFadd{module }\DIFaddend rõ ràng \DIFdelbegin \DIFdel{như }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend quản lý cửa hàng, sản phẩm, đơn hàng\DIFdelbegin \DIFdel{, đồng thời }\DIFdelend \DIFaddbegin \DIFadd{), }\DIFaddend hỗ trợ \DIFdelbegin \DIFdel{tiêm phụ thuộc, xây dựng tầng trung gian phục vụ }\DIFdelend \DIFaddbegin \DIFadd{dependency injection và cho phép cài đặt middleware xử lý ngữ cảnh }\DIFaddend đa thuê bao \DIFdelbegin \DIFdel{và hỗ trợ định dạng tĩnh cấu trúc mạnh mẽ}\DIFdelend \DIFaddbegin \DIFadd{cho mọi request}\DIFaddend .
+
+Các \DIFdelbegin \DIFdel{công cụ lập trình phụ trợ bằng ngôn ngữ JavaScript nổi bật }\DIFdelend \DIFaddbegin \DIFadd{framework backend Node.js đáng cân nhắc }\DIFaddend khác \DIFdelbegin \DIFdel{bao }\DIFdelend gồm \DIFdelbegin \DIFdel{(i) }\DIFdelend Express.js, \DIFdelbegin \DIFdel{(ii) Fastify , }\DIFdelend \DIFaddbegin \DIFadd{Fastify }\DIFaddend và \DIFdelbegin \DIFdel{(iii) }\DIFdelend Hono.
+
+NestJS được chọn vì \DIFdelbegin \DIFdel{(i) kiến }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Tổ chức theo module:}} \DIFadd{cấu }\DIFaddend trúc \DIFdelbegin \DIFdel{mô-đun mô phỏng hệ thống Angular hỗ trợ tổ chức mã nguồn theo từng cụm }\DIFdelend \DIFaddbegin \DIFadd{lấy cảm hứng từ Angular tạo ranh }\DIFaddend giới \DIFdelbegin \DIFdel{hạn }\DIFdelend rõ ràng \DIFdelbegin \DIFdel{, (ii) tích }\DIFdelend \DIFaddbegin \DIFadd{giữa các miền nghiệp vụ và giữ khả năng tách thành microservice về sau.
+    }\item \textbf{\DIFadd{Hỗ trợ middleware toàn cục:}} \DIFadd{kết }\DIFaddend hợp \DIFdelbegin \DIFdel{rất }\DIFdelend tốt với \DIFdelbegin \DIFdel{bộ nhớ ngữ cảnh bất đồng bộ nhằm }\DIFdelend \DIFaddbegin \texttt{\DIFadd{AsyncLocalStorage}} \DIFadd{của Node.js để }\DIFaddend truyền \DIFdelbegin \DIFdel{tải }\DIFdelend định danh \DIFdelbegin \DIFdel{khách thuê một cách }\DIFdelend \DIFaddbegin \DIFadd{tenant (shopId) }\DIFaddend tự động \DIFdelbegin \DIFdel{, và (iii) sử dụng trình trang trí kết hợp với }\DIFdelend \DIFaddbegin \DIFadd{xuống mọi tầng xử lý.
+    }\item \textbf{\DIFadd{Xử lý lỗi thống nhất:}} \DIFaddend cơ chế \DIFdelbegin \DIFdel{lọc ngoại lệ giúp }\DIFdelend \DIFaddbegin \DIFadd{decorator kết hợp exception filter cho phép }\DIFaddend xử lý \DIFdelbegin \DIFdel{thống nhất các }\DIFdelend lỗi \DIFdelbegin \DIFdel{nội bộ }\DIFdelend \DIFaddbegin \DIFadd{nhất quán }\DIFaddend trên toàn bộ \DIFdelbegin \DIFdel{máy chủ \mbox{%DIFAUXCMD
+\cite{nestjs_docs}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend \DIFaddbegin \DIFadd{API \mbox{%DIFAUXCMD
+\cite{nestjs_docs}}\hskip0pt%DIFAUXCMD
+.
+}\end{itemize}
+\DIFaddend 
+
+Cụ thể, \DIFdelbegin \DIFdel{tầng trung gian tự động giải mã thông tin }\DIFdelend \DIFaddbegin \DIFadd{middleware đọc }\DIFaddend định danh \DIFdelbegin \DIFdel{khách thuê }\DIFdelend \DIFaddbegin \DIFadd{tenant }\DIFaddend từ \DIFdelbegin \DIFdel{phần mào đầu truy vấn, sau đó }\DIFdelend \DIFaddbegin \DIFadd{HTTP header rồi }\DIFaddend lưu vào \DIFdelbegin \DIFdel{bộ nhớ bất đồng bộ để toàn bộ quá trình đọc ghi }\DIFdelend \DIFaddbegin \texttt{\DIFadd{AsyncLocalStorage}}\DIFadd{, nhờ đó mọi truy vấn }\DIFaddend cơ sở dữ liệu \DIFdelbegin \DIFdel{tiếp theo }\DIFdelend \DIFaddbegin \DIFadd{phía sau }\DIFaddend đều tự động gắn \DIFdelbegin \DIFdel{kết}\DIFdelend \DIFaddbegin \DIFadd{đúng phạm vi cửa hàng; chi tiết cơ chế này được phân tích ở mục \ref{section:5.1}}\DIFaddend .
+
+\section{Next.js \DIFdelbegin \DIFdel{— }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend Framework Frontend}
+\label{section:3.3}
+
+\DIFdelbegin \DIFdel{Để đáp ứng yêu }\DIFdelend \DIFaddbegin \DIFadd{Yêu }\DIFaddend cầu hiệu năng \DIFdelbegin \DIFdel{tại \ref{section:2.4} , hệ thống }\DIFdelend \DIFaddbegin \DIFadd{ở mục \ref{section:2.4} }\DIFaddend đòi hỏi \DIFdelbegin \DIFdel{nền tảng mặt tiền phải }\DIFdelend \DIFaddbegin \DIFadd{trang cửa hàng }\DIFaddend phản hồi \DIFdelbegin \DIFdel{ở tốc độ dưới mức 500 mili-giây, cùng với đó trang quản trị }\DIFdelend \DIFaddbegin \DIFadd{nhanh, đồng thời bảng điều khiển }\DIFaddend của người bán phải \DIFdelbegin \DIFdel{tải }\DIFdelend \DIFaddbegin \DIFadd{xử lý }\DIFaddend được các \DIFdelbegin \DIFdel{dạng }\DIFdelend biểu mẫu \DIFdelbegin \DIFdel{cấu trúc }\DIFdelend phức tạp với độ tương tác \DIFdelbegin \DIFdel{phản ứng tức thì}\DIFdelend \DIFaddbegin \DIFadd{cao}\DIFaddend .
+
+Các \DIFdelbegin \DIFdel{nền tảng xây dựng giao diện nổi bật thay thế bao }\DIFdelend \DIFaddbegin \DIFadd{framework frontend đáng cân nhắc khác }\DIFaddend gồm \DIFdelbegin \DIFdel{(i) bộ đôi React và Vite, (ii) Remix , }\DIFdelend \DIFaddbegin \DIFadd{React kết hợp Vite, Remix }\DIFaddend và \DIFdelbegin \DIFdel{(iii) hệ thống }\DIFdelend Nuxt.js \DIFdelbegin \DIFdel{dựa }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend trên \DIFdelbegin \DIFdel{Vue}\DIFdelend \DIFaddbegin \DIFadd{nền Vue)}\DIFaddend .
+
+Next.js \DIFdelbegin \DIFdel{phiên bản }\DIFdelend 16 được chọn vì \DIFdelbegin \DIFdel{(i) bộ định tuyến App Router với React Server Components }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{App Router với React Server Components:}} \DIFaddend cho phép \DIFdelbegin \DIFdel{kết xuất giao diện hoàn toàn }\DIFdelend \DIFaddbegin \DIFadd{render }\DIFaddend phía máy chủ \DIFaddbegin \DIFadd{(server-side rendering)}\DIFaddend , giảm \DIFdelbegin \DIFdel{đáng kể dung }\DIFdelend \DIFaddbegin \DIFadd{khối }\DIFaddend lượng \DIFdelbegin \DIFdel{mã }\DIFdelend \DIFaddbegin \DIFadd{JavaScript }\DIFaddend tải về \DIFdelbegin \DIFdel{cho khách truy cập, (ii) }\DIFdelend \DIFaddbegin \DIFadd{trình duyệt.
+    }\item \textbf{\DIFadd{Middleware nhận diện tên miền:}} \DIFaddend tầng middleware \DIFdelbegin \DIFdel{cho phép }\DIFdelend nhận diện tên miền của từng cửa hàng và viết lại \DIFaddbegin \DIFadd{(rewrite) }\DIFaddend đường dẫn \DIFaddbegin \DIFadd{ngay }\DIFaddend từ \DIFdelbegin \DIFdel{rất sớm trong }\DIFdelend \DIFaddbegin \DIFadd{đầu }\DIFaddend vòng đời request \DIFdelbegin \DIFdel{, và (iii) cơ chế Data Cache cho }\DIFdelend \DIFaddbegin \DIFadd{--- nền tảng cho định tuyến đa thuê bao của trang cửa hàng.
+    }\item \textbf{\DIFadd{Next.js Data Cache:}} \DIFadd{cho }\DIFaddend phép đặt chu kỳ làm mới và nhãn vô hiệu hóa \DIFaddbegin \DIFadd{(cache tag) riêng }\DIFaddend cho từng nguồn dữ liệu \DIFdelbegin \DIFdel{(}\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend bố cục, sản phẩm, thông tin cửa hàng \DIFdelbegin \DIFdel{) }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend một cách độc lập \cite{nextjs_docs}.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\section{PostgreSQL và Prisma ORM \DIFdelbegin \DIFdel{— }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend Cơ sở dữ liệu quan hệ}
+\label{section:3.4}
+
+\DIFdelbegin \DIFdel{Để đáp ứng việc quản lý các }\DIFdelend \DIFaddbegin \DIFadd{Các }\DIFaddend thực thể có cấu trúc \DIFdelbegin \DIFdel{định hình }\DIFdelend cố định đã \DIFdelbegin \DIFdel{được }\DIFdelend xác định \DIFdelbegin \DIFdel{tại \ref{section:2.1} như chủ }\DIFdelend \DIFaddbegin \DIFadd{ở mục \ref{section:2.1} (}\DIFaddend cửa hàng, tài khoản, đơn \DIFdelbegin \DIFdel{vị mua }\DIFdelend hàng\DIFdelbegin \DIFdel{, hệ thống }\DIFdelend \DIFaddbegin \DIFadd{) }\DIFaddend đòi hỏi \DIFdelbegin \DIFdel{một giải pháp bảo đảm tính nguyên tử của }\DIFdelend giao dịch \DIFaddbegin \DIFadd{nguyên tử}\DIFaddend , ràng buộc \DIFdelbegin \DIFdel{chặt chẽ }\DIFdelend khóa ngoại \DIFaddbegin \DIFadd{chặt chẽ }\DIFaddend và khả năng \DIFdelbegin \DIFdel{trích xuất thông tin bảng }\DIFdelend \DIFaddbegin \DIFadd{truy vấn }\DIFaddend thống kê\DIFdelbegin \DIFdel{nâng cao}\DIFdelend .
+
+Các \DIFdelbegin \DIFdel{giải pháp quản lý bảng biểu cấu trúc }\DIFdelend \DIFaddbegin \DIFadd{cơ sở dữ liệu quan hệ }\DIFaddend thay thế \DIFdelbegin \DIFdel{bao }\DIFdelend gồm \DIFdelbegin \DIFdel{(i) }\DIFdelend MySQL 8, \DIFdelbegin \DIFdel{(ii) SQLite ở }\DIFdelend \DIFaddbegin \DIFadd{SQLite (cho }\DIFaddend môi trường cục bộ\DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{) }\DIFaddend và \DIFdelbegin \DIFdel{(iii) hệ thống }\DIFdelend \DIFaddbegin \DIFadd{CockroachDB (}\DIFaddend phân tán\DIFdelbegin \DIFdel{CockroachDB}\DIFdelend \DIFaddbegin \DIFadd{)}\DIFaddend .
+
+PostgreSQL 15 kết hợp \DIFdelbegin \DIFdel{công cụ }\DIFdelend Prisma được chọn vì \DIFdelbegin \DIFdel{(i) }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Giao dịch ACID:}} \DIFadd{PostgreSQL }\DIFaddend bảo đảm \DIFdelbegin \DIFdel{giao dịch ACID }\DIFdelend \DIFaddbegin \DIFadd{tính nguyên tử }\DIFaddend cần thiết cho nghiệp vụ đặt hàng và trừ tồn kho, đồng thời hỗ trợ kiểu JSONB cho các trường tham số động\DIFdelbegin \DIFdel{, (ii) hệ ràng buộc }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Ràng buộc toàn vẹn:}} \DIFaddend khóa ngoại và ràng buộc duy nhất theo tổ hợp cột (ví dụ SKU duy nhất trong phạm vi một cửa hàng) phù hợp với thiết kế đa thuê bao \DIFaddbegin \DIFadd{ở }\DIFaddend mức hàng \DIFdelbegin \DIFdel{, và (iii)Prisma ORM }\DIFdelend \DIFaddbegin \DIFadd{(row-level).
+    }\item \textbf{\DIFadd{Prisma ORM:}} \DIFaddend tự sinh kiểu \DIFdelbegin \DIFdel{dữ liệu }\DIFdelend \DIFaddbegin \DIFadd{TypeScript }\DIFaddend tĩnh từ lược đồ và quản lý phiên bản \DIFdelbegin \DIFdel{các đợt di trú cấu trúc \mbox{%DIFAUXCMD
+\cite{prisma_docs, postgresql_docs}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend \DIFaddbegin \DIFadd{migration \mbox{%DIFAUXCMD
+\cite{prisma_docs, postgresql_docs}}\hskip0pt%DIFAUXCMD
+.
+}\end{itemize}
+\DIFaddend 
+
+\section{MongoDB và Mongoose \DIFdelbegin \DIFdel{— }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend Cơ sở dữ liệu tài liệu}
+\label{section:3.5}
+
+\DIFdelbegin \DIFdel{Để đáp ứng nền tảng kiến }\DIFdelend \DIFaddbegin \DIFadd{Kiến }\DIFaddend trúc Zero-file \DIFdelbegin \DIFdel{đã vạch ra tại \ref{section:1.3} , việc }\DIFdelend \DIFaddbegin \DIFadd{ở mục \ref{section:1.3} }\DIFaddend lưu \DIFdelbegin \DIFdel{trữ các tệp cấu hình JSON phải giải quyết bài toán }\DIFdelend \DIFaddbegin \DIFadd{giao diện cửa hàng dưới dạng tài liệu JSON }\DIFaddend lồng nhau \DIFdelbegin \DIFdel{sâu sắc của bộ }\DIFdelend \DIFaddbegin \DIFadd{nhiều cấp (bố cục }\DIFaddend khung nền \DIFdelbegin \DIFdel{và bộ }\DIFdelend \DIFaddbegin \DIFadd{hợp nhất với phần }\DIFaddend tùy \DIFdelbegin \DIFdel{chỉnh }\DIFdelend \DIFaddbegin \DIFadd{biến của từng }\DIFaddend cửa hàng\DIFdelbegin \DIFdel{, đồng thời hỗ trợ cập nhật mở rộng }\DIFdelend \DIFaddbegin \DIFadd{), với cấu trúc thay đổi tùy theo cách dựng trang, nên }\DIFaddend không \DIFdelbegin \DIFdel{cần theo định dạng }\DIFdelend \DIFaddbegin \DIFadd{phù hợp với mô hình bảng }\DIFaddend cố định \DIFdelbegin \DIFdel{khắt khe }\DIFdelend của \DIFdelbegin \DIFdel{kho lưu trữ }\DIFdelend \DIFaddbegin \DIFadd{cơ sở dữ liệu }\DIFaddend quan hệ\DIFdelbegin \DIFdel{truyền thống}\DIFdelend .
+
+Các \DIFdelbegin \DIFdel{nền tảng giải quyết }\DIFdelend \DIFaddbegin \DIFadd{cơ sở }\DIFaddend dữ liệu \DIFdelbegin \DIFdel{văn bản phi cấu trúc khác }\DIFdelend \DIFaddbegin \DIFadd{tài liệu thay thế }\DIFaddend gồm \DIFdelbegin \DIFdel{(i) CouchDB, (ii) giải pháp }\DIFdelend \DIFaddbegin \DIFadd{CouchDB, DynamoDB (}\DIFaddend đám mây\DIFdelbegin \DIFdel{DynamoDB, }\DIFdelend \DIFaddbegin \DIFadd{) }\DIFaddend và \DIFdelbegin \DIFdel{(iii) lợi }\DIFdelend \DIFaddbegin \DIFadd{việc tận }\DIFaddend dụng kiểu JSONB của chính \DIFdelbegin \DIFdel{cơ sở dữ liệu }\DIFdelend PostgreSQL.
+
+MongoDB \DIFdelbegin \DIFdel{phiên bản }\DIFdelend 6 kết hợp \DIFdelbegin \DIFdel{thư viện }\DIFdelend Mongoose được chọn vì \DIFdelbegin \DIFdel{(i) mô hình tài liệu }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Mô hình tài liệu:}} \DIFaddend biểu diễn tự nhiên các khối giao diện lồng nhau với độ sâu thay đổi theo từng cửa hàng\DIFdelbegin \DIFdel{, (ii) }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Lưu hai phiên bản trong một tài liệu:}} \DIFaddend một tài liệu \DIFdelbegin \DIFdel{có thể }\DIFdelend chứa đồng thời \DIFdelbegin \DIFdel{hai phiên }\DIFdelend bản nháp \DIFaddbegin \DIFadd{(}\texttt{\DIFadd{draftData}}\DIFadd{) }\DIFaddend và \DIFaddbegin \DIFadd{bản }\DIFaddend xuất bản \DIFaddbegin \DIFadd{(}\texttt{\DIFadd{publishedData}}\DIFadd{) }\DIFaddend của bố cục, \DIFdelbegin \DIFdel{giúp }\DIFdelend \DIFaddbegin \DIFadd{nhờ đó }\DIFaddend thao tác xuất bản chỉ là một lệnh cập nhật nguyên tử\DIFdelbegin \DIFdel{, và (iii) Mongoose }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Mongoose:}} \DIFaddend cung cấp lớp kiểm soát lược đồ vừa đủ ở \DIFdelbegin \DIFdel{những }\DIFdelend \DIFaddbegin \DIFadd{các }\DIFaddend trường cốt lõi mà vẫn giữ tính linh hoạt cho phần cấu hình tự do \cite{mongodb_docs}.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\DIFaddbegin \DIFadd{Thiết kế chi tiết các collection được trình bày ở mục \ref{subsection:4.2.3}.
+}
+
+\DIFaddend \section{Redis \DIFdelbegin \DIFdel{— Cache In-memory}\DIFdelend \DIFaddbegin \DIFadd{--- Bộ nhớ đệm trong RAM}\DIFaddend }
+\label{section:3.6}
+
+\DIFdelbegin \DIFdel{Để đáp ứng yêu cầu hiệu năng cực kỳ khắt khe tại \ref{section:2.4}, hệ thống đặt mục }\DIFdelend \DIFaddbegin \DIFadd{Mục }\DIFaddend tiêu phản hồi \DIFdelbegin \DIFdel{trong 10 mili-giây }\DIFdelend \DIFaddbegin \DIFadd{nhanh }\DIFaddend khi duyệt trang \DIFdelbegin \DIFdel{phục vụ cho việc lấy cấu hình }\DIFdelend ở \DIFdelbegin \DIFdel{phần \ref{subsection:2.3.4} , điều hoàn toàn bất khả thi }\DIFdelend \DIFaddbegin \DIFadd{mục \ref{subsection:2.3.4} không thể đạt được }\DIFaddend nếu \DIFdelbegin \DIFdel{cứ liên tục gọi cấu trúc }\DIFdelend \DIFaddbegin \DIFadd{mỗi request đều phải truy vấn cơ sở }\DIFaddend dữ liệu \DIFdelbegin \DIFdel{thô}\DIFdelend \DIFaddbegin \DIFadd{để định danh cửa hàng}\DIFaddend .
+
+Các \DIFdelbegin \DIFdel{phương pháp thay thế }\DIFdelend giải \DIFdelbegin \DIFdel{quyết }\DIFdelend \DIFaddbegin \DIFadd{pháp giảm }\DIFaddend độ trễ \DIFdelbegin \DIFdel{phổ biến bao }\DIFdelend \DIFaddbegin \DIFadd{thay thế }\DIFaddend gồm \DIFdelbegin \DIFdel{(i) Memcached, (ii) kiểm soát bộ nhớ qua giao thức HTTP cơ bản}\DIFdelend \DIFaddbegin \DIFadd{Memcached}\DIFaddend , \DIFaddbegin \DIFadd{đệm ở tầng HTTP }\DIFaddend và \DIFdelbegin \DIFdel{(iii) sử dụng mạng phân phối nội dung thuần túy}\DIFdelend \DIFaddbegin \DIFadd{việc chỉ dùng CDN}\DIFaddend .
+
+Redis được chọn vì \DIFdelbegin \DIFdel{(i) }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Độ trễ thấp:}} \DIFaddend dữ liệu nằm hoàn toàn \DIFdelbegin \DIFdel{trên bộ nhớ trong }\DIFdelend \DIFaddbegin \DIFadd{trong RAM }\DIFaddend nên độ trễ đọc ở mức dưới \DIFaddbegin \DIFadd{một }\DIFaddend mili-giây\DIFdelbegin \DIFdel{, (ii) }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Tự hết hạn:}} \DIFaddend mỗi khóa được gắn thời gian sống \DIFaddbegin \DIFadd{(TTL) và }\DIFaddend tự hết hạn, không \DIFdelbegin \DIFdel{tốn tài nguyên }\DIFdelend \DIFaddbegin \DIFadd{cần }\DIFaddend dọn dẹp thủ công\DIFdelbegin \DIFdel{, và (iii) }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Vô hiệu hóa chủ động:}} \DIFaddend việc \DIFdelbegin \DIFdel{vô hiệu hóa chủ động }\DIFdelend \DIFaddbegin \DIFadd{xóa cache }\DIFaddend chỉ là một lệnh xóa khóa, được \DIFdelbegin \DIFdel{hệ thống }\DIFdelend áp dụng ngay khi dữ liệu nguồn thay đổi (ví dụ xóa cache danh sách cửa hàng khi người dùng tạo cửa hàng mới) \cite{redis_docs}.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\section{MinIO \DIFdelbegin \DIFdel{— Object Storage}\DIFdelend \DIFaddbegin \DIFadd{--- Lưu trữ đối tượng}\DIFaddend }
+\label{section:3.7}
+
+\DIFdelbegin \DIFdel{Để đáp ứng quy }\DIFdelend \DIFaddbegin \DIFadd{Quy }\DIFaddend trình quản lý \DIFdelbegin \DIFdel{thông tin }\DIFdelend \DIFaddbegin \DIFadd{sản phẩm }\DIFaddend ở \DIFdelbegin \DIFdel{phần \ref{subsection:2.3.3} , hệ thống yêu cầu }\DIFdelend \DIFaddbegin \DIFadd{mục \ref{subsection:2.3.3} cần }\DIFaddend một \DIFdelbegin \DIFdel{giải pháp }\DIFdelend \DIFaddbegin \DIFadd{nơi }\DIFaddend lưu trữ tệp \DIFdelbegin \DIFdel{tin hình }\DIFdelend ảnh \DIFdelbegin \DIFdel{sản phẩm định dạng }\DIFdelend nhị phân\DIFdelbegin \DIFdel{theo nhiều biến thể kích cỡ, đây là một môi trường dữ liệu }\DIFdelend \DIFaddbegin \DIFadd{, vốn }\DIFaddend không \DIFdelbegin \DIFdel{thể dồn nén trực tiếp }\DIFdelend \DIFaddbegin \DIFadd{phù hợp để nhồi }\DIFaddend vào \DIFdelbegin \DIFdel{kho lưu trữ bảng biểu truyền thống}\DIFdelend \DIFaddbegin \DIFadd{cơ sở dữ liệu quan hệ}\DIFaddend .
+
+Các \DIFdelbegin \DIFdel{dịch vụ hỗ trợ cung cấp kho chứa }\DIFdelend \DIFaddbegin \DIFadd{giải pháp lưu trữ }\DIFaddend đối tượng thay thế \DIFdelbegin \DIFdel{thường được tiếp cận là (i) hệ sinh thái đám mây }\DIFdelend \DIFaddbegin \DIFadd{gồm }\DIFaddend AWS S3, \DIFdelbegin \DIFdel{(ii) không gian lưu trữ }\DIFdelend Cloudflare R2 \DIFdelbegin \DIFdel{, }\DIFdelend và \DIFdelbegin \DIFdel{(iii) }\DIFdelend \DIFaddbegin \DIFadd{việc }\DIFaddend ghi tệp \DIFdelbegin \DIFdel{thẳng vào hệ thống lưu trữ tĩnh trên }\DIFdelend \DIFaddbegin \DIFadd{trực tiếp lên ổ đĩa }\DIFaddend máy chủ\DIFdelbegin \DIFdel{nội bộ}\DIFdelend .
+
+MinIO được chọn vì \DIFdelbegin \DIFdel{(i) sở hữu chuẩn giao thức giao tiếp y hệt như cấu trúc S3, giúp việc di dời toàn bộ }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Tương thích S3:}} \DIFadd{có thể chuyển }\DIFaddend dữ liệu \DIFdelbegin \DIFdel{hệ thống }\DIFdelend lên \DIFdelbegin \DIFdel{nền tảng trực tuyến lớn }\DIFdelend \DIFaddbegin \DIFadd{AWS S3 về sau mà gần như }\DIFaddend không \DIFdelbegin \DIFdel{gặp trở ngại gì sau này, (ii) bản thân phần mềm cung cấp khả năng lưu trữ vận hành }\DIFdelend \DIFaddbegin \DIFadd{phải sửa mã.
+    }\item \textbf{\DIFadd{Tự host được:}} \DIFadd{chạy }\DIFaddend ngay trên hạ tầng \DIFdelbegin \DIFdel{đóng gói khép kín }\DIFdelend \DIFaddbegin \DIFadd{container, }\DIFaddend giúp \DIFdelbegin \DIFdel{tiết kiệm kinh }\DIFdelend \DIFaddbegin \DIFadd{giảm chi }\DIFaddend phí \DIFdelbegin \DIFdel{tối đa, và (iii) khả năng ký ủy quyền }\DIFdelend \DIFaddbegin \DIFadd{ở giai đoạn đầu.
+    }\item \textbf{\DIFadd{Hỗ trợ presigned URL:}} \DIFadd{cho phép trình duyệt tải ảnh lên }\DIFaddend trực tiếp \DIFdelbegin \DIFdel{liên kết giúp trang mặt tiền có thể đưa dữ liệu lên }\DIFdelend \DIFaddbegin \DIFadd{mà không phải đi vòng qua }\DIFaddend máy chủ \DIFdelbegin \DIFdel{ảnh bỏ qua khâu xử lý luân chuyển ở trung tâm \mbox{%DIFAUXCMD
+\cite{minio_docs}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend \DIFaddbegin \DIFadd{API \mbox{%DIFAUXCMD
+\cite{minio_docs}}\hskip0pt%DIFAUXCMD
+.
+}\end{itemize}
+\DIFaddend 
+
+\section{Better Auth \DIFdelbegin \DIFdel{— }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend Xác thực và \DIFdelbegin \DIFdel{Phân }\DIFdelend \DIFaddbegin \DIFadd{phân }\DIFaddend quyền}
+\label{section:3.8}
+
+\DIFdelbegin \DIFdel{Để đáp ứng yêu }\DIFdelend \DIFaddbegin \DIFadd{Yêu }\DIFaddend cầu bảo mật ở mục \ref{section:2.4} \DIFdelbegin \DIFdel{, hệ thống }\DIFdelend cần \DIFaddbegin \DIFadd{một }\DIFaddend cơ chế xác thực quản lý \DIFdelbegin \DIFdel{được }\DIFdelend hai loại người dùng tách biệt trên cùng hạ tầng: chủ cửa hàng đăng nhập vào bảng điều khiển và khách \DIFdelbegin \DIFdel{mua }\DIFdelend hàng đăng nhập vào trang cửa hàng, với phiên đăng nhập của hai nhóm không được lẫn vào nhau.
+
+Các \DIFdelbegin \DIFdel{công cụ }\DIFdelend \DIFaddbegin \DIFadd{thư viện }\DIFaddend xác thực \DIFdelbegin \DIFdel{khả dĩ cho giải pháp này bao }\DIFdelend \DIFaddbegin \DIFadd{thay thế }\DIFaddend gồm \DIFdelbegin \DIFdel{(i) thư viện }\DIFdelend NextAuth.js, \DIFdelbegin \DIFdel{(ii) }\DIFdelend Passport.js kết hợp quản lý phiên thủ công \DIFdelbegin \DIFdel{, }\DIFdelend và \DIFdelbegin \DIFdel{(iii) }\DIFdelend dịch vụ \DIFdelbegin \DIFdel{xác thực }\DIFdelend Clerk.
+
+\DIFdelbegin \DIFdel{Thư viện }\DIFdelend Better Auth được chọn vì \DIFdelbegin \DIFdel{(i) }\DIFdelend \DIFaddbegin \DIFadd{ba lý do:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Phiên lưu trong cơ sở dữ liệu:}} \DIFaddend phiên đăng nhập được lưu \DIFdelbegin \DIFdel{trong cơ sở dữ liệu }\DIFdelend qua Prisma, cho phép định nghĩa hai hệ phiên độc lập cho chủ cửa hàng và khách \DIFdelbegin \DIFdel{mua }\DIFdelend hàng với tiền tố cookie riêng\DIFdelbegin \DIFdel{, (ii) xây dựng }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{An toàn kiểu:}} \DIFadd{thư viện viết }\DIFaddend hoàn toàn bằng TypeScript nên kiểu dữ liệu \DIFaddbegin \DIFadd{của }\DIFaddend phiên được kiểm tra ngay khi biên dịch\DIFdelbegin \DIFdel{, và (iii) tích hợp tự nhiên }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Tích hợp đa nền tảng:}} \DIFadd{dùng được }\DIFaddend với cả NestJS (qua Guard) lẫn Next.js (qua middleware) trong cùng monorepo \cite{betterauth_docs}.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\section{Docker và Kubernetes \DIFdelbegin \DIFdel{— Containerization }\DIFdelend \DIFaddbegin \DIFadd{--- Đóng gói }\DIFaddend và \DIFdelbegin \DIFdel{Orchestration}\DIFdelend \DIFaddbegin \DIFadd{điều phối}\DIFaddend }
+\label{section:3.9}
+
+\DIFdelbegin \DIFdel{Để đáp ứng yêu }\DIFdelend \DIFaddbegin \DIFadd{Yêu }\DIFaddend cầu \DIFdelbegin \DIFdel{phi chức năng }\DIFdelend về độ tin cậy \DIFdelbegin \DIFdel{được thể hiện tại \ref{section:2.4} , tất cả }\DIFdelend \DIFaddbegin \DIFadd{ở mục \ref{section:2.4} đòi hỏi }\DIFaddend hệ \DIFdelbegin \DIFdel{quản trị phụ trợ khổng lồ phải được giữ cho }\DIFdelend \DIFaddbegin \DIFadd{thống }\DIFaddend vận hành \DIFdelbegin \DIFdel{đồng bộ và }\DIFdelend ổn định \DIFdelbegin \DIFdel{ở mọi phiên bản }\DIFdelend \DIFaddbegin \DIFadd{qua nhiều lần }\DIFaddend triển khai \DIFdelbegin \DIFdel{, chưa kể đến yêu cầu bắt buộc phải }\DIFdelend \DIFaddbegin \DIFadd{và }\DIFaddend sao lưu \DIFaddbegin \DIFadd{cơ sở dữ liệu }\DIFaddend tự động \DIFdelbegin \DIFdel{định kỳ vào mỗi }\DIFdelend \DIFaddbegin \DIFadd{hằng }\DIFaddend ngày\DIFdelbegin \DIFdel{cuối ngày}\DIFdelend .
+
+Các phương pháp triển khai \DIFdelbegin \DIFdel{quản lý cụm máy chủ truyền thống có thể kể đến như (i) }\DIFdelend \DIFaddbegin \DIFadd{thay thế gồm }\DIFaddend cấu hình \DIFdelbegin \DIFdel{trực tiếp }\DIFdelend thủ công \DIFdelbegin \DIFdel{bằng tiện ích hệ điều hành, (ii) trình quản lý Docker Swarm tập trung, }\DIFdelend \DIFaddbegin \DIFadd{trên máy chủ, Docker Swarm }\DIFaddend và \DIFdelbegin \DIFdel{(iii) hệ thống phân phối của }\DIFdelend Nomad.
+
+\DIFdelbegin \DIFdel{Sự kết hợp giữa }\DIFdelend Docker và Kubernetes được chọn \DIFdelbegin \DIFdel{vì trong }\DIFdelend \DIFaddbegin \DIFadd{để dùng cho hai }\DIFaddend giai đoạn \DIFaddbegin \DIFadd{khác nhau. Ở giai đoạn }\DIFaddend phát triển, \DIFdelbegin \DIFdel{hệ thống tự chứa cấp cho tốc độ khởi chạy tối đa, còn khi }\DIFdelend \DIFaddbegin \DIFadd{Docker đóng gói toàn bộ hạ tầng phụ trợ (PostgreSQL, MongoDB, Redis, MinIO) thành các container, giúp môi trường nhất quán giữa các máy. Ở giai đoạn }\DIFaddend vận hành\DIFdelbegin \DIFdel{sản xuất thì (i) hệ sinh thái CronJob điều phối chuẩn xác }\DIFdelend \DIFaddbegin \DIFadd{, Kubernetes cung cấp ba khả năng cần thiết:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{CronJob:}} \DIFadd{chạy }\DIFaddend các tác vụ \DIFdelbegin \DIFdel{dọn dẹp và dự phòng theo kế hoạch, (ii) chiến lược thay thế cuốn chiếu cho phép }\DIFdelend \DIFaddbegin \DIFadd{định kỳ như sao lưu cơ sở dữ liệu hằng ngày.
+    }\item \textbf{\DIFadd{Rolling update:}} \DIFaddend cập nhật phiên bản \DIFdelbegin \DIFdel{diễn ra hoàn toàn }\DIFdelend \DIFaddbegin \DIFadd{mà }\DIFaddend không \DIFdelbegin \DIFdel{làm ngưng trệ bất cứ tương tác nào, và (iii) trình quản lý bí mật vô hiệu hóa hoàn toàn mọi rủi ro lộ lọt cấu hình riêng tư \mbox{%DIFAUXCMD
+\cite{kubernetes_docs, docker_docs}}\hskip0pt%DIFAUXCMD
+.
+}\DIFdelend \DIFaddbegin \DIFadd{gián đoạn dịch vụ.
+    }\item \textbf{\DIFadd{Quản lý secret:}} \DIFadd{tách thông tin nhạy cảm khỏi mã nguồn \mbox{%DIFAUXCMD
+\cite{kubernetes_docs, docker_docs}}\hskip0pt%DIFAUXCMD
+.
+}\end{itemize}
+\DIFaddend 
+
+\DIFdelbegin %DIFDELCMD < \begin{table}[H]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{table}[htbp]
+\DIFaddendFL \centering
+\begin{tabulary}{\textwidth}{|L|L|L|L|}
+  \hline
+  \textbf{Công nghệ} & \textbf{Phiên bản} & \textbf{Loại} & \textbf{Mục đích trong đề tài} \\ \hline
+  Turborepo & 2.9 & Build \DIFdelbeginFL \DIFdelFL{Tool }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{tool }\DIFaddendFL & Quản lý monorepo, bộ nhớ đệm \DIFdelbeginFL \DIFdelFL{xây dựng }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{build }\DIFaddendFL tăng dần \\ \hline
+  NestJS & 11.0 & Backend \DIFdelbeginFL \DIFdelFL{Framework }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{framework }\DIFaddendFL & REST API, đa thuê bao, \DIFdelbeginFL \DIFdelFL{DI container }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{dependency injection }\DIFaddendFL \\ \hline
+  Next.js & 16.2 & Frontend \DIFdelbeginFL \DIFdelFL{Framework }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{framework }\DIFaddendFL & Admin Dashboard + Storefront (SSR/RSC) \\ \hline
+  PostgreSQL & 15 & RDBMS & Lưu Shop, User, Order, Product (có cấu trúc) \\ \hline
+  Prisma & 5.22 & ORM & Truy vấn an toàn kiểu + \DIFdelbeginFL \DIFdelFL{di trú }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{migration }\DIFaddendFL lược đồ \\ \hline
+  MongoDB & 6 & Document DB & Lưu GlobalLayout, PageLayout, catalog mẫu \\ \hline
+  Mongoose & 8.2 & ODM & Kiểm soát lược đồ tài liệu MongoDB \\ \hline
+  Redis & 7 & In-memory \DIFdelbeginFL \DIFdelFL{Cache }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{cache }\DIFaddendFL & Đệm định danh tenant, trạng thái shop (TTL 300s) \\ \hline
+  MinIO + imgproxy & --- & Object \DIFdelbeginFL \DIFdelFL{Storage }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{storage }\DIFaddendFL & Lưu ảnh gốc \DIFaddbeginFL \DIFaddFL{theo }\DIFaddendFL S3 + biến đổi ảnh khi phân phối \\ \hline
+  Better Auth & 1.6 & Auth \DIFdelbeginFL \DIFdelFL{Library }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{library }\DIFaddendFL & Phiên đăng nhập tách biệt owner/customer \\ \hline
+  Docker & --- & Containerization & Môi trường phát triển nhất quán \\ \hline
+  Kubernetes & --- & Orchestration & Triển khai \DIFdelbeginFL \DIFdelFL{sản xuất}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{vận hành}\DIFaddendFL , CronJob sao lưu \\ \hline
+  Tailwind CSS & 4.x & CSS \DIFdelbeginFL \DIFdelFL{Framework }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{framework }\DIFaddendFL & Giao diện Admin Dashboard + Storefront \\ \hline
+  Zod & 3.24 & Validation & Kiểm tra dữ liệu vào/ra của API \\ \hline
+\end{tabulary}
+\caption{Tổng hợp công nghệ sử dụng trong hệ thống ShopVolo v2}
+\label{table:tong_hop_cong_nghe}
+\end{table}
+
+\DIFdelbegin \DIFdel{Chương này đã làm rõ tất cả các }\DIFdelend \DIFaddbegin \DIFadd{Bảng \ref{table:tong_hop_cong_nghe} tổng hợp toàn bộ }\DIFaddend công nghệ \DIFdelbegin \DIFdel{được }\DIFdelend \DIFaddbegin \DIFadd{cùng vai trò của chúng. Hai lựa }\DIFaddend chọn \DIFdelbegin \DIFdel{để đáp ứng tương ứng từng yêu cầu cốt lõi từ Chương 2. Nhấn mạnh sự bổ sung linh hoạt và hợp lý giữa PostgreSQL trong quản trị các cấu trúc }\DIFdelend \DIFaddbegin \DIFadd{mang tính then chốt là việc dùng song song PostgreSQL cho }\DIFaddend dữ liệu \DIFdelbegin \DIFdel{cứng nhắc }\DIFdelend \DIFaddbegin \DIFadd{có cấu trúc }\DIFaddend và MongoDB \DIFdelbegin \DIFdel{trong xử lý thông tin mềm dẻo đa biến, cũng như sự đồng hành giữa Docker Compose lúc }\DIFdelend \DIFaddbegin \DIFadd{cho cấu hình giao diện linh hoạt, cùng việc tách Docker cho }\DIFaddend phát triển và Kubernetes \DIFdelbegin \DIFdel{ở giai đoạn }\DIFdelend \DIFaddbegin \DIFadd{cho }\DIFaddend vận hành\DIFdelbegin \DIFdel{thực tế. Trên cơ sở các công nghệ đã lựa chọn, Chương 4 trình bày thiết kế kiến trúc và kết quả triển khai hệ thống}\DIFdelend .
+
+\end{document}

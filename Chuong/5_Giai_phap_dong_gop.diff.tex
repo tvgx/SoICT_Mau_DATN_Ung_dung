@@ -1,0 +1,241 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmpo5mfcpip.tex   Mon Jun 15 17:22:28 2026
+%DIF ADD /tmp/tmp2nbm0szf.tex   Mon Jun 15 17:22:28 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+Chương 4 đã trình bày thiết kế tổng thể và kết quả xây dựng hệ thống ShopVolo v2. Chương 5 này đi sâu phân tích ba giải pháp kỹ thuật được xem là đóng góp nổi bật nhất của đồ án\DIFdelbegin \DIFdel{, bao gồm:
+(i) cơ }\DIFdelend \DIFaddbegin \DIFadd{:
+}
+
+\begin{itemize}
+    \item \DIFadd{Cơ }\DIFaddend chế cô lập dữ liệu đa thuê bao tự động dựa trên \texttt{AsyncLocalStorage} \DIFdelbegin \DIFdel{được trình bày tại }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend mục \ref{section:5.1}\DIFdelbegin \DIFdel{, (ii)kiến }\DIFdelend \DIFaddbegin \DIFadd{).
+    }\item \DIFadd{Kiến }\DIFaddend trúc giao diện Zero-file cùng động cơ kết xuất động \DIFdelbegin \DIFdel{được phân tích tại }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend mục \ref{section:5.2}\DIFdelbegin \DIFdel{, và (iii)mô }\DIFdelend \DIFaddbegin \DIFadd{).
+    }\item \DIFadd{Mô }\DIFaddend hình Master Template với quy trình cá nhân hóa giao diện hai pha nháp--xuất bản \DIFdelbegin \DIFdel{được mô tả tại }\DIFdelend \DIFaddbegin \DIFadd{(}\DIFaddend mục \ref{section:5.3}\DIFdelbegin \DIFdel{. }\DIFdelend \DIFaddbegin \DIFadd{).
+}\end{itemize}
+
+\DIFaddend Mỗi giải pháp được trình bày theo cấu trúc ba phần: dẫn dắt bài toán, chi tiết giải pháp \DIFdelbegin \DIFdel{, }\DIFdelend và kết quả đạt được. \DIFaddbegin \DIFadd{Cả ba giải pháp cùng hướng tới một mục tiêu chung là hạ chi phí biên của mỗi cửa hàng xuống mức tối thiểu trong khi vẫn giữ trải nghiệm dịch vụ tốt.
+}\DIFaddend 
+
+% ===========================================================
+\section{Cơ chế cô lập dữ liệu đa thuê bao dựa trên AsyncLocalStorage}
+\label{section:5.1}
+
+\subsection{Bài toán}
+\label{subsection:5.1.1}
+
+Như đã phân tích tại mục \ref{section:2.4}, yêu cầu bảo mật quan trọng nhất của một nền tảng đa thuê bao theo chiến lược dùng chung cơ sở dữ liệu (Shared Database, Row-Level Isolation) là mọi truy vấn dữ liệu đều phải được ràng buộc theo định danh cửa hàng \texttt{shopId}. Chỉ cần một truy vấn duy nhất bỏ sót điều kiện này, dữ liệu của một cửa hàng có thể bị lộ sang cửa hàng khác.
+
+Cách tiếp cận phổ biến là truyền tham số \texttt{shopId} một cách tường minh qua mọi tầng xử lý, từ Controller xuống Service rồi tới tầng truy cập dữ liệu. Với quy mô của hệ thống gồm 24 Controller và 27 Service, cách làm này khiến mọi chữ ký hàm đều phải mang thêm một tham số lặp lại, làm tăng khối lượng mã trùng lặp và đặc biệt là đặt toàn bộ trách nhiệm cô lập dữ liệu lên kỷ luật của người lập trình. Một hướng khác là sử dụng provider phạm vi request (\texttt{Scope.REQUEST}) của NestJS, tuy nhiên cơ chế này buộc framework khởi tạo lại toàn bộ chuỗi phụ thuộc cho từng request, gây tổn hao hiệu năng đáng kể trên các API có tần suất truy cập cao \cite{nestjs_docs}. Hướng thứ ba là tách riêng lược đồ hoặc cơ sở dữ liệu cho từng cửa hàng; với mục tiêu \DIFdelbegin \DIFdel{vận hành hàng chục nghìn }\DIFdelend \DIFaddbegin \DIFadd{giữ chi phí biên thấp khi phục vụ nhiều }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{nhỏ }\DIFdelend trên một hạ tầng \DIFdelbegin \DIFdel{khiêm tốn}\DIFdelend \DIFaddbegin \DIFadd{dùng chung}\DIFaddend , chi phí kết nối và quản trị \DIFaddbegin \DIFadd{tăng dần theo từng cửa hàng }\DIFaddend của hướng này là không \DIFdelbegin \DIFdel{khả thi }\DIFdelend \DIFaddbegin \DIFadd{phù hợp }\DIFaddend \cite{bezemer2010multi}.
+
+Bài toán đặt ra là: làm thế nào để mọi Service nghiệp vụ luôn biết được request hiện tại thuộc về cửa hàng nào mà không cần truyền tham số tường minh, đồng thời không phá vỡ mô hình singleton hiệu quả của container \DIFdelbegin \DIFdel{tiêm phụ thuộc}\DIFdelend \DIFaddbegin \DIFadd{dependency injection}\DIFaddend .
+
+\subsection{Giải pháp}
+\label{subsection:5.1.2}
+
+Giải pháp của đồ án khai thác \texttt{AsyncLocalStorage} -- cơ chế lưu trữ ngữ cảnh theo chuỗi tác vụ bất đồng bộ của Node.js \cite{nodejs_docs}. Đặc tính quan trọng của cơ chế này là ngữ cảnh được bảo toàn xuyên suốt toàn bộ chuỗi \texttt{await} của một request, và các request chạy đồng thời không thể đọc nhầm ngữ cảnh của nhau. Toàn bộ cơ chế được hiện thực hóa chỉ với hai thành phần đặt tại gói \texttt{common} của \texttt{api-core}.
+
+Thành phần thứ nhất là lớp \texttt{TenantService} đóng vai trò bao bọc \texttt{AsyncLocalStorage}, với hai phương thức: \texttt{run(context, callback)} mở ra một vùng ngữ cảnh mới chứa \texttt{shopId}, và \texttt{getTenantId()} cho phép bất kỳ tầng nào đọc lại định danh đó. Mã nguồn \ref{lst:tenant_service} thể hiện toàn bộ phần lõi của cơ chế.
+
+\begin{lstlisting}[caption={Lớp TenantService bao bọc AsyncLocalStorage}, label={lst:tenant_service}]
+@Injectable()
+export class TenantService {
+  private static readonly als = new AsyncLocalStorage<TenantContext>();
+
+  run(context: TenantContext, callback: () => void) {
+    return TenantService.als.run(context, callback);
+  }
+
+  getTenantId(): string | undefined {
+    return TenantService.als.getStore()?.shopId;
+  }
+}
+\end{lstlisting}
+
+Thành phần thứ hai là \texttt{TenantMiddleware} được đăng ký toàn cục, chịu trách nhiệm định danh cửa hàng cho từng request theo hai kênh:
+\DIFdelbegin \DIFdel{(i) đọc }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Đọc }\DIFaddend trực tiếp header \texttt{x-shop-id} hoặc \texttt{x-tenant-id} do tầng frontend chuyển tiếp\DIFdelbegin \DIFdel{, và (ii) nếu }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Nếu }\DIFaddend không có header thì bóc tách tên miền con từ header \texttt{Host}, ví dụ \texttt{duck.myapp.com} cho ra định danh \texttt{duck}.
+\DIFaddbegin \end{itemize}
+
+\DIFaddend Việc ánh xạ từ tên miền sang \texttt{shopId} đòi hỏi truy vấn cơ sở dữ liệu, do đó kết quả được lưu vào Redis với khóa \texttt{domain:\{subdomain\}} trong 300 giây; chỉ khi trượt cache hệ thống mới truy vấn PostgreSQL. Middleware đồng thời kiểm tra trạng thái cửa hàng và chặn ngay các cửa hàng bị đình chỉ (\texttt{SUSPENDED}) với mã lỗi HTTP 403 trước khi request đi sâu vào hệ thống. Cuối cùng, middleware gọi \texttt{tenantService.run(\{shopId\}, next)}, nhờ đó toàn bộ phần còn lại của chu trình xử lý request được thực thi bên trong vùng ngữ cảnh của đúng cửa hàng đó.
+
+Ở phía sử dụng, mọi Service nghiệp vụ (\texttt{OrderService}, \texttt{ShopService}, \texttt{LayoutService}, v.v.) chỉ cần gọi một phương thức nội bộ \texttt{getShopId()}; phương thức này đọc định danh từ \texttt{TenantService} và chủ động ném ngoại lệ \texttt{BadRequestException} với thông điệp ``Shop context is missing'' nếu ngữ cảnh không tồn tại. Thiết kế ``an toàn khi thiếu'' (fail-safe) này đảo ngược rủi ro của cách truyền tham số tường minh: nếu người lập trình quên thiết lập ngữ cảnh, hệ thống từ chối phục vụ thay vì âm thầm trả về dữ liệu sai phạm vi.
+
+Cơ chế trên được bổ trợ bởi tầng xác thực: \texttt{BetterAuthGuard} sau khi xác minh phiên đăng nhập của chủ cửa hàng sẽ nạp danh sách các \texttt{shopId} mà người dùng đó sở hữu, lưu vào Redis với khóa \texttt{user:\{userId\}:shopIds} trong 300 giây. Khóa cache này bị xóa chủ động ngay khi người dùng tạo cửa hàng mới (trong \texttt{ShopService.createShop}), bảo đảm quyền sở hữu có hiệu lực tức thì thay vì phải chờ cache hết hạn. Hình \ref{fig:seq_tenant_context} mô tả trình tự đầy đủ của quá trình định danh và truyền ngữ cảnh cho một request từ trang cửa hàng.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \includegraphics[width=\linewidth]{Hinhve/Chuong5/seq_tenant_context.png}
+    \caption{Biểu đồ trình tự quá trình định danh tenant và truyền ngữ cảnh qua AsyncLocalStorage}
+    \label{fig:seq_tenant_context}
+\end{figure}
+
+Hình \ref{fig:seq_tenant_context} cho thấy hai nhánh xử lý của quá trình định danh: khi Redis đã có sẵn ánh xạ tên miền (cache hit), request không hề chạm tới PostgreSQL; ngược lại (cache miss), kết quả truy vấn được ghi ngược vào Redis để các request kế tiếp của cùng cửa hàng được phục vụ từ bộ nhớ đệm. Sau bước định danh, lời gọi \texttt{run()} bao trùm toàn bộ chuỗi Controller--Service--Prisma, do đó \texttt{OrderService} lấy được \texttt{shopId} mà không nhận bất kỳ tham số nào từ Controller.
+
+\subsection{Kết quả đạt được}
+\label{subsection:5.1.3}
+
+Về mặt kiến trúc, toàn bộ 27 Service nghiệp vụ của \texttt{api-core} không có bất kỳ chữ ký hàm nào phải khai báo tham số \texttt{shopId} cho mục đích cô lập dữ liệu; logic định danh tenant tập trung tại đúng một điểm duy nhất là \texttt{TenantMiddleware}, giúp việc kiểm toán bảo mật chỉ cần tập trung vào một tệp mã nguồn thay vì rà soát từng truy vấn. Cơ chế cache hai lớp trên Redis (ánh xạ tên miền và trạng thái cửa hàng) giới hạn số truy vấn định danh tới PostgreSQL ở mức tối đa một lần mỗi 300 giây cho mỗi cửa hàng, bất kể lưu lượng truy cập.
+
+\DIFdelbegin \DIFdel{Các }\DIFdelend \DIFaddbegin \DIFadd{Về tài nguyên, do logic định danh tập trung tại middleware và không khởi tạo lại chuỗi phụ thuộc cho từng request (khác với hướng }\texttt{\DIFadd{Scope.REQUEST}}\DIFadd{), cơ chế này không làm tăng }\DIFaddend số \DIFdelbegin \DIFdel{liệu }\DIFdelend \DIFaddbegin \DIFadd{tiến trình hay bộ nhớ theo số cửa hàng. Các phép }\DIFaddend đo \DIFdelbegin \DIFdel{lường định lượng về }\DIFdelend độ trễ \DIFdelbegin \DIFdel{của bước định danh (trường hợp }\DIFdelend \DIFaddbegin \DIFadd{thực tế (}\DIFaddend trúng và trượt cache) \DIFdelbegin \DIFdel{cũng như chi phí phụ trội của }\texttt{\DIFdel{AsyncLocalStorage}} %DIFAUXCMD
+\DIFdelend sẽ được \DIFdelbegin \DIFdel{bổ sung sau khi hệ thống được triển khai chính thức trên máy chủ }\DIFdelend thực \DIFdelbegin \DIFdel{tế theo }\DIFdelend \DIFaddbegin \DIFadd{hiện theo quy trình benchmark }\DIFaddend mô \DIFdelbegin \DIFdel{hình đã mô }\DIFdelend tả tại mục \DIFdelbegin \DIFdel{\ref{section:4.5}}\DIFdelend \DIFaddbegin \DIFadd{\ref{subsection:4.5.1}}\DIFaddend .
+
+% ===========================================================
+\section{Kiến trúc Zero-file và động cơ kết xuất giao diện động}
+\label{section:5.2}
+
+\subsection{Bài toán}
+\label{subsection:5.2.1}
+
+Các nền tảng thương mại điện tử truyền thống quản lý giao diện theo hướng mỗi cửa hàng sở hữu một bộ giao diện (theme) gồm các tệp mã nguồn riêng. Cách tổ chức này kéo theo hai hệ quả khi vận hành ở quy mô lớn:
+\DIFdelbegin \DIFdel{(i) mỗi }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Mỗi }\DIFaddend lần cửa hàng thay đổi giao diện, hệ thống phải biên dịch và triển khai lại tài nguyên riêng của cửa hàng đó\DIFdelbegin \DIFdel{, và (ii) chi }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Chi }\DIFaddend phí lưu trữ cùng bộ nhớ máy chủ tăng tuyến tính theo số cửa hàng, bởi mỗi cửa hàng chiếm một bộ tệp và một tiến trình phục vụ riêng.
+\DIFaddbegin \end{itemize}
+
+\DIFaddend Với mục tiêu \DIFdelbegin \DIFdel{vận hành 20.000 }\DIFdelend \DIFaddbegin \DIFadd{giữ chi phí biên cho mỗi }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{trên một hạ tầng 16GB RAM }\DIFdelend \DIFaddbegin \DIFadd{ở mức thấp }\DIFaddend như đã đặt ra tại mục \ref{section:2.4}, mô hình mỗi cửa hàng một bộ tệp là không \DIFdelbegin \DIFdel{khả thi}\DIFdelend \DIFaddbegin \DIFadd{phù hợp}\DIFaddend .
+
+Bài toán đặt ra là thiết kế một cơ chế cho phép mỗi cửa hàng có giao diện hoàn toàn khác nhau về bố cục, màu sắc và nội dung, trong khi toàn hệ thống chỉ chạy đúng một ứng dụng Storefront duy nhất và việc thay đổi giao diện không sinh ra bất kỳ tệp mã nguồn hay lần biên dịch nào -- nguyên lý mà đồ án gọi là ``Zero-file''.
+
+\subsection{Giải pháp}
+\label{subsection:5.2.2}
+
+Giải pháp gồm ba khối hợp thành: biểu diễn giao diện bằng dữ liệu JSON, định tuyến đa thuê bao tại tầng biên, và động cơ kết xuất động phía máy chủ.
+
+Thứ nhất, toàn bộ cấu trúc giao diện của một cửa hàng được biểu diễn bằng các tài liệu JSON lưu trong MongoDB: tài liệu \texttt{GlobalLayout} chứa các thành phần dùng chung (đầu trang, chân trang, bộ chủ đề màu sắc và phông chữ), còn mỗi tài liệu \texttt{PageLayout} mô tả một trang cụ thể theo \texttt{pageType} (trang chủ, danh sách sản phẩm, chi tiết sản phẩm). Mỗi thành phần giao diện trong tài liệu là một bản ghi \texttt{UIComponentRef} gồm ba thông tin cốt lõi: định danh loại thành phần \texttt{componentId}, tập thuộc tính hiển thị \texttt{props}, và danh sách khối con \texttt{blocks}. Nhờ biểu diễn này, ``giao diện'' của một cửa hàng chỉ là dữ liệu thuần túy, không gắn với bất kỳ tệp mã nguồn nào.
+
+Thứ hai, tầng định tuyến đa thuê bao được hiện thực trong \texttt{proxy.ts} của ứng dụng Storefront bằng Next.js Middleware. Khi khách truy cập \texttt{duck.example.com/san-pham}, middleware bóc tách định danh cửa hàng từ tên miền và viết lại đường dẫn nội bộ thành \texttt{/duck/san-pham} mà không thay đổi URL trên trình duyệt. Cơ chế viết lại (rewrite) này cho phép một cây định tuyến App Router duy nhất với phân đoạn động \texttt{[shopSlug]} phục vụ mọi cửa hàng \cite{nextjs_docs}.
+
+Thứ ba, động cơ kết xuất động hoạt động hoàn toàn trên máy chủ thông qua React Server Components. Khi nhận một request, trang RSC tải song song tài liệu bố cục và thông tin cửa hàng từ \texttt{api-core}, sau đó giao cho thành phần \texttt{DynamicRenderer} duyệt qua mảng \texttt{UIComponentRef}. \DIFdelbegin \DIFdel{Trái tim }\DIFdelend \DIFaddbegin \DIFadd{Thành phần cốt lõi }\DIFaddend của động cơ là \texttt{ComponentRegistry} -- bảng ánh xạ từ chuỗi \texttt{componentId} sang React component thực tế trong gói \texttt{ui-registry}, hiện gồm hơn 40 thành phần được phân nhóm theo nghiệp vụ (banner, bộ sưu tập, sản phẩm, kể chuyện, văn bản và hai ``mega section'' cho trang danh mục và chi tiết sản phẩm). Mỗi mục trong bảng ánh xạ được khai báo qua \texttt{next/dynamic} với đường dẫn import sâu tới đúng tệp thành phần, nhờ đó mã của một thành phần chỉ được tải khi bố cục của cửa hàng thực sự sử dụng nó -- tránh việc khách truy cập phải tải về toàn bộ thư viện giao diện. Ba cơ chế phòng vệ được cài sẵn trong động cơ:
+\DIFdelbegin \DIFdel{thành }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Thành }\DIFaddend phần không tồn tại trong bảng ánh xạ được thay bằng khung cảnh báo thay vì làm sập trang\DIFdelbegin \DIFdel{; mỗi }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Mỗi }\DIFaddend thành phần được bọc trong một \texttt{ErrorBoundary} riêng để lỗi kết xuất của một khối không lan sang phần còn lại\DIFdelbegin \DIFdel{; và dữ }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Dữ }\DIFaddend liệu nghiệp vụ thực (danh sách sản phẩm, chi tiết sản phẩm) được bơm vào qua \texttt{pageContext} tại thời điểm kết xuất, tách biệt hoàn toàn cấu hình giao diện khỏi dữ liệu.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+Hiệu năng của kiến trúc được bảo đảm bằng chiến lược bộ nhớ đệm phân tầng theo độ biến động của dữ liệu: tài liệu bố cục được Next.js Data Cache lưu với chu kỳ làm mới 60 giây, dữ liệu sản phẩm 30 giây, thông tin cửa hàng 300 giây; mỗi mục cache được gắn nhãn (tag) theo cửa hàng và loại trang để có thể chủ động vô hiệu hóa khi chủ cửa hàng xuất bản giao diện mới. Ảnh sản phẩm không được xử lý trước theo nhiều kích cỡ mà được biến đổi tại thời điểm phân phối qua máy chủ imgproxy, với bộ nạp ảnh tùy biến sinh URL chứa tham số chiều rộng và chất lượng phù hợp với từng thiết bị. Hình \ref{fig:zero_file_render} mô tả toàn bộ đường đi của một request từ trình duyệt tới HTML hoàn chỉnh.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \includegraphics[width=0.62\linewidth]{Hinhve/Chuong5/zero_file_render.png}
+    \caption{Biểu đồ hoạt động luồng kết xuất giao diện động theo kiến trúc Zero-file}
+    \label{fig:zero_file_render}
+\end{figure}
+
+Hình \ref{fig:zero_file_render} cho thấy điểm mấu chốt của kiến trúc: tại mọi bước từ định tuyến, tải bố cục đến kết xuất, hệ thống chỉ thao tác trên dữ liệu JSON và bảng ánh xạ trong bộ nhớ; không tồn tại bước đọc tệp giao diện riêng hay biên dịch lại mã nguồn cho từng cửa hàng.
+
+\subsection{Kết quả đạt được}
+\label{subsection:5.2.3}
+
+Kiến trúc Zero-file đạt được mục tiêu thiết kế ở mức cấu trúc: việc khởi tạo thêm một cửa hàng mới không tạo ra bất kỳ tệp mã nguồn nào và không yêu cầu biên dịch hay triển khai lại; chi phí biên của mỗi cửa hàng chỉ còn là vài tài liệu JSON trong MongoDB. Một ứng dụng Storefront duy nhất với hơn 40 thành phần giao diện trong \texttt{ui-registry} phục vụ được không gian tùy biến lớn (tổ hợp tùy ý các thành phần trên ba loại trang cùng bộ chủ đề riêng), trong khi cơ chế import sâu kết hợp \texttt{next/dynamic} giữ cho dung lượng JavaScript của mỗi trang tỷ lệ với số thành phần thực dùng thay vì với kích thước toàn thư viện.
+
+\DIFaddbegin \DIFadd{Chính nhờ đặc tính ``một ứng dụng phục vụ mọi cửa hàng'' này mà chi phí bộ nhớ trên mỗi cửa hàng được giữ ở mức rất thấp do không sinh tiến trình riêng cho từng cửa hàng. }\DIFaddend Các phép đo \DIFdelbegin \DIFdel{định lượng về }\DIFdelend thời gian phản hồi khi trúng và trượt cache \DIFdelbegin \DIFdel{, }\DIFdelend cùng mức tiêu thụ bộ nhớ \DIFdelbegin \DIFdel{khi mô phỏng }\DIFdelend \DIFaddbegin \DIFadd{theo }\DIFaddend số \DIFdelbegin \DIFdel{lượng lớn }\DIFdelend cửa hàng \DIFdelbegin \DIFdel{, }\DIFdelend sẽ được thực hiện \DIFdelbegin \DIFdel{và bổ sung sau khi hệ thống được triển khai trên máy chủ thực tế như }\DIFdelend \DIFaddbegin \DIFadd{theo quy }\DIFaddend trình \DIFdelbegin \DIFdel{bày }\DIFdelend \DIFaddbegin \DIFadd{benchmark }\DIFaddend tại mục \DIFdelbegin \DIFdel{\ref{section:4.5}}\DIFdelend \DIFaddbegin \DIFadd{\ref{subsection:4.5.1}}\DIFaddend .
+
+% ===========================================================
+\section{Mô hình Master Template và quy trình cá nhân hóa giao diện hai pha}
+\label{section:5.3}
+
+\subsection{Bài toán}
+\label{subsection:5.3.1}
+
+Kiến trúc Zero-file tại mục \ref{section:5.2} trả lời câu hỏi ``hệ thống kết xuất giao diện từ dữ liệu như thế nào'', nhưng để nền tảng dùng được bởi người không biết lập trình thì còn phải trả lời hai câu hỏi tiếp theo. Thứ nhất, dữ liệu bố cục ban đầu của một cửa hàng mới đến từ đâu -- không thể bắt một chủ cửa hàng mới mở phải tự lắp ráp từng khối giao diện từ trang trắng. Thứ hai, làm thế nào để chủ cửa hàng chỉnh sửa giao diện một cách an toàn -- nếu mọi thao tác kéo thả đều có hiệu lực tức thì trên trang đang bán hàng, khách truy cập sẽ nhìn thấy giao diện dở dang trong suốt quá trình chỉnh sửa.
+
+\subsection{Giải pháp}
+\label{subsection:5.3.2}
+
+Đối với câu hỏi thứ nhất, đồ án xây dựng cơ chế Master Template gồm hai phần. Phần tĩnh là gói \texttt{master-templates} chứa các bộ khung giao diện mẫu được thiết kế sẵn theo phong cách trình bày (chuẩn mực, thiên về hình ảnh, thiên về thông số kỹ thuật, và dịch vụ); mỗi bộ khung là một tài liệu JSON hoàn chỉnh gồm bộ chủ đề (bảng màu, kiểu chữ), các thành phần dùng chung và danh sách thành phần cho từng trang. Phần động là bộ sưu tập \texttt{MasterTemplateCatalog} trong MongoDB liệt kê các mẫu theo ngành hàng (thời trang, điện tử, mẹ và bé, thể thao, thực phẩm đóng gói, v.v.) để hiển thị trong bước chọn mẫu của quy trình khởi tạo cửa hàng. Khi chủ cửa hàng hoàn tất biểu mẫu khởi tạo, ứng dụng Admin gọi tuần tự hai API: tạo bản ghi cửa hàng trong PostgreSQL, sau đó gieo bố cục khởi điểm qua \texttt{POST /api/layouts/\{shopId\}/seed}. Thao tác gieo được thiết kế lũy đẳng (idempotent): hệ thống chỉ ghi dữ liệu mặc định vào những tài liệu còn trống (kiểm tra qua hàm \texttt{hasContent}), do đó việc gọi lại API này không bao giờ ghi đè lên các chỉnh sửa đã có của chủ cửa hàng. Nhờ vậy, ngay sau bước khởi tạo, cửa hàng đã có đầu trang, chân trang cùng ba trang khởi điểm hoạt động được, thay vì một trang trắng hay thông báo lỗi thiếu bố cục.
+
+Đối với câu hỏi thứ hai, đồ án áp dụng mô hình dữ liệu hai pha: mỗi tài liệu bố cục (cả \texttt{GlobalLayout} lẫn \texttt{PageLayout}) chứa đồng thời hai phiên bản -- \texttt{draftData} là bản nháp đang chỉnh sửa và \texttt{publishedData} là bản đã xuất bản. Hai phiên bản này phân tách triệt để hai phía của hệ thống: trình thiết kế kéo thả trong Admin chỉ đọc và ghi \texttt{draftData} (khi bản nháp trống thì sao lưu từ bản đã xuất bản để chỉnh tiếp), còn Storefront công khai chỉ đọc \texttt{publishedData} thông qua truy vấn \texttt{lean()} kèm phép chiếu trường (projection) nhằm giảm tối đa chi phí trên đường dẫn nóng nhất của hệ thống. Thao tác xuất bản là một phép sao chép nguyên tử \texttt{draftData} $\rightarrow$ \texttt{publishedData}, được cung cấp ở hai mức hạt: xuất bản từng trang riêng lẻ phục vụ trình hướng dẫn từng bước (chủ cửa hàng hoàn thiện trang nào thì trang đó lên sóng ngay), và xuất bản toàn bộ bằng một lệnh \texttt{bulkWrite} duy nhất gom mọi trang trong một vòng giao tiếp tới MongoDB. Trình thiết kế phía Admin được xây dựng theo hướng schema-driven: mỗi loại thành phần khai báo một lược đồ thuộc tính (kiểu trường, nhãn hiển thị, giá trị mặc định, các khối con được phép), từ đó giao diện chỉnh sửa được sinh tự động và giá trị mặc định của lược đồ được hợp nhất với phần tùy biến của chủ cửa hàng tại thời điểm thêm thành phần.
+
+\DIFaddbegin \DIFadd{Hình \ref{fig:activity_draft_publish} mô tả luồng thực tế của quy trình hai pha: từ thao tác kéo thả của chủ cửa hàng (đầu vào), qua cơ chế lưu bản nháp và xuất bản nguyên tử ở hạ tầng, tới thời điểm khách truy cập nhận được giao diện mới (đầu ra). Vòng lặp chỉnh sửa chỉ tác động vào }\texttt{\DIFadd{draftData}}\DIFadd{, do đó trang đang bán hàng không bị ảnh hưởng cho tới khi chủ cửa hàng chủ động bấm xuất bản.
+}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\linewidth,height=0.82\textheight,keepaspectratio]{Hinhve/Chuong5/activity_draft_publish.png}
+    \caption{\DIFaddFL{Biểu đồ hoạt động quy trình chỉnh sửa nháp và xuất bản giao diện hai pha}}
+    \label{fig:activity_draft_publish}
+\end{figure}
+
+\DIFaddend Tổng hợp lại, cấu hình giao diện mà khách truy cập nhìn thấy là kết quả hợp nhất của bốn tầng kế thừa lần lượt: giá trị mặc định trong lược đồ thành phần, bộ khung Master Template được gieo lúc khởi tạo, các chỉnh sửa nháp của chủ cửa hàng, và bản xuất bản cuối cùng; tầng sau ghi đè tầng trước ở đúng phạm vi nó thay đổi. Hình \ref{fig:template_layered_config} minh họa mô hình phân tầng này cùng chu trình nháp--xuất bản.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \includegraphics[width=0.95\linewidth]{Hinhve/Chuong5/template_layered_config.png}
+    \caption{Mô hình hợp nhất cấu hình giao diện phân tầng và chu trình nháp--xuất bản}
+    \label{fig:template_layered_config}
+\end{figure}
+
+Hình \ref{fig:template_layered_config} cho thấy hai dòng chảy tách biệt quanh kho dữ liệu bố cục: dòng chỉnh sửa của chủ cửa hàng chỉ tác động vào bản nháp, còn dòng phục vụ khách truy cập chỉ đọc bản xuất bản; điểm giao duy nhất giữa hai dòng là thao tác xuất bản có chủ đích của chủ cửa hàng.
+
+\subsection{Kết quả đạt được}
+\label{subsection:5.3.3}
+
+Mô hình Master Template kết hợp quy trình hai pha hoàn thiện trải nghiệm khởi tạo cửa hàng mô tả tại mục \ref{subsection:2.3.1}: chủ cửa hàng đi từ biểu mẫu đăng ký đến một trang web hoàn chỉnh có thể truy cập được mà không cần viết bất kỳ dòng mã nào, sau đó tùy biến dần qua trình hướng dẫn \DIFdelbegin \DIFdel{tám }\DIFdelend \DIFaddbegin \DIFadd{6 }\DIFaddend bước (tạo cửa hàng, thêm sản phẩm, tạo bộ sưu tập, thiết \DIFdelbegin \DIFdel{lập menu, thiết }\DIFdelend kế \DIFdelbegin \DIFdel{trang chủ}\DIFdelend \DIFaddbegin \DIFadd{giao diện}\DIFaddend , cấu hình thanh toán \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{và }\DIFaddend vận chuyển\DIFdelbegin \DIFdel{và xác minh tên miền}\DIFdelend ). Cơ chế gieo lũy đẳng loại bỏ hoàn toàn lớp lỗi ``trang trắng'' cho cửa hàng mới, trong khi mô hình nháp--xuất bản bảo đảm khách truy cập không bao giờ nhìn thấy trạng thái chỉnh sửa dở dang. Về hiệu năng ghi, thao tác xuất bản toàn bộ gom mọi trang vào một lệnh \texttt{bulkWrite} duy nhất; về hiệu năng đọc, đường phục vụ khách chỉ tải về trường \texttt{publishedData} cần thiết.
+
+\DIFdelbegin \DIFdel{Số liệu thống kê về dung lượng trung bình của tài liệu bố cục trên mỗi cửa hàng -- cơ sở để ước lượng chi }\DIFdelend \DIFaddbegin \DIFadd{Chi }\DIFaddend phí lưu trữ biên \DIFdelbegin \DIFdel{khi nhân rộng số lượng cửa hàng -- sẽ được thu thập và bổ sung sau khi hệ thống vận hành trên môi trường triển khai thực tế.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+%DIF <  ===========================================================
+%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Chương này đã phân tích ba đóng góp kỹ thuật trọng tâm }\DIFdelend của \DIFdelbegin \DIFdel{đồ án: cơ chế cô lập dữ liệu đa thuê bao tự động qua }\texttt{\DIFdel{AsyncLocalStorage}}%DIFAUXCMD
+\DIFdel{, kiến trúc giao diện Zero-file với động cơ kết xuất động, và mô hình Master Template cùng quy trình cá nhân hóa hai pha. Ba giải pháp này lần lượt giải quyết ba bài toán cốt lõi đã đặt ra từ Chương 1: an toàn dữ liệu giữa các }\DIFdelend \DIFaddbegin \DIFadd{mỗi }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{chỉ là một số tài liệu JSON bố cục thay vì một bộ tệp theme riêng, góp phần trực tiếp vào mục tiêu }\DIFaddend chi phí biên \DIFdelbegin \DIFdel{gần như bằng không khi nhân rộng số cửa hàng, và khả năng tùy biến sâu dành cho người không biết lập trình. Chương tiếp theo tổng kết các kết quả đã đạt được }\DIFdelend \DIFaddbegin \DIFadd{thấp }\DIFaddend của toàn \DIFdelbegin \DIFdel{bộ đồ án và đề xuất các hướng phát triển tiếp theo}\DIFdelend \DIFaddbegin \DIFadd{hệ thống}\DIFaddend .
+
+\end{document}

@@ -11,11 +11,22 @@ Quy tắc vẽ theo IT3120: actor người que, tên đối tượng gạch châ
 hoạt trên trục thời gian, thông điệp đánh số, trả về nét đứt, khung alt/opt.
 """
 
-import json
 import os
+import subprocess
 import urllib.request
 
-STYLE = """skinparam monochrome true
+# Render cục bộ bằng plantuml.jar + font DejaVu Sans. Đây là điểm mấu chốt:
+# server kroki không có font phủ đủ dấu tiếng Việt nên các ký tự ghép dấu (ể,
+# ấ, ệ, ờ...) bị rơi mất. DejaVu Sans cài sẵn trên máy có đủ glyph nên render
+# cục bộ cho chữ tiếng Việt chính xác. Layout dùng engine Smetana tích hợp của
+# PlantUML để không phụ thuộc Graphviz (dot). Xuất PNG độ phân giải cao.
+PLANTUML_JAR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools", "plantuml.jar")
+PLANTUML_URL = "https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar"
+
+STYLE = """!pragma layout smetana
+skinparam dpi 300
+skinparam defaultFontName "DejaVu Sans"
+skinparam monochrome true
 skinparam shadowing false
 skinparam defaultFontSize 13
 """
@@ -25,20 +36,36 @@ autonumber
 """
 
 
+def ensure_jar():
+    if os.path.exists(PLANTUML_JAR):
+        return
+    os.makedirs(os.path.dirname(PLANTUML_JAR), exist_ok=True)
+    print(f"... tải plantuml.jar về {PLANTUML_JAR}")
+    req = urllib.request.Request(PLANTUML_URL, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=120) as r, open(PLANTUML_JAR, "wb") as f:
+        f.write(r.read())
+
+
 def generate(puml, filename):
+    # filename kết thúc bằng .png; ghi nguồn .puml cạnh đó rồi gọi plantuml.jar.
     os.makedirs(os.path.dirname(filename), exist_ok=True)
-    url = "https://kroki.io/plantuml/png"
-    data = json.dumps({"diagram_source": puml}).encode("utf-8")
-    req = urllib.request.Request(
-        url, data=data,
-        headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-    )
+    puml_path = filename[:-4] + ".puml"
+    with open(puml_path, "w", encoding="utf-8") as f:
+        f.write(puml)
     try:
-        with urllib.request.urlopen(req, timeout=30) as response, open(filename, "wb") as out:
-            out.write(response.read())
+        # PLANTUML_LIMIT_SIZE mặc định 4096 px khiến các sơ đồ rộng (nhiều
+        # swimlane) hoặc dài (luồng nhiều bước) bị cắt cụt. Nâng giới hạn lên để
+        # render đầy đủ; các sơ đồ rộng sẽ được đặt trên trang ngang (landscape)
+        # trong báo cáo để chữ đủ lớn.
+        subprocess.run(
+            ["java", "-DPLANTUML_LIMIT_SIZE=16384", "-jar", PLANTUML_JAR,
+             "-tpng", "-charset", "UTF-8", puml_path],
+            check=True, capture_output=True, text=True,
+        )
+        os.remove(puml_path)
         print(f"OK   {filename}")
-    except Exception as e:
-        print(f"FAIL {filename}: {e}")
+    except subprocess.CalledProcessError as e:
+        print(f"FAIL {filename}: {e.stderr}")
 
 
 # ============================================================
@@ -48,12 +75,13 @@ def generate(puml, filename):
 usecase_tong_quat = """@startuml
 left to right direction
 """ + STYLE + """skinparam packageStyle rectangle
+actor "Quản trị nền tảng\\n(Platform Admin)" as Admin
 actor "Chủ cửa hàng\\n(Tenant Owner)" as Tenant
 actor "Khách hàng\\n(End Customer)" as Customer
 
 rectangle "Hệ thống ShopVolo v2" {
+  usecase "UC-02: Quản lý master template" as UC02
   usecase "UC-01: Khởi tạo cửa hàng" as UC01
-  usecase "UC-02: Quản lý khuyến mãi" as UC02
   usecase "UC-03: Tùy biến giao diện\\nvà thương hiệu" as UC03
   usecase "UC-04: Quản lý sản phẩm" as UC04
   usecase "UC-05: Thiết lập menu điều hướng" as UC05
@@ -65,8 +93,9 @@ rectangle "Hệ thống ShopVolo v2" {
   usecase "UC-09: Thanh toán và\\nxử lý đơn hàng" as UC09
 }
 
+Admin -- UC02
+
 Tenant -- UC01
-Tenant -- UC02
 Tenant -- UC03
 Tenant -- UC04
 Tenant -- UC05
@@ -85,22 +114,22 @@ left to right direction
 """ + STYLE + """skinparam packageStyle rectangle
 actor "Chủ cửa hàng\\n(Tenant Owner)" as Tenant
 
-rectangle "Phân hệ Quản lý cửa hàng" {
+rectangle "Phân hệ Quản lý và cấu hình cửa hàng" {
   usecase "UC-01: Khởi tạo cửa hàng" as UC01
   usecase "Chọn mẫu giao diện\\ntheo ngành hàng" as UCtpl
-  usecase "UC-02: Quản lý khuyến mãi" as UC02
   usecase "UC-03: Tùy biến giao diện\\nvà thương hiệu" as UC03
   usecase "Lưu bản nháp bố cục" as UCdraft
   usecase "Xuất bản giao diện" as UCpub
   usecase "UC-05: Thiết lập menu điều hướng" as UC05
+  usecase "UC-06: Tạo trang nội dung động" as UC06
   usecase "UC-10: Ánh xạ tên miền tùy chỉnh" as UC10
   usecase "Xác minh tên miền" as UCverify
 }
 
 Tenant -- UC01
-Tenant -- UC02
 Tenant -- UC03
 Tenant -- UC05
+Tenant -- UC06
 Tenant -- UC10
 
 UC01 .> UCtpl : <<include>>
@@ -147,14 +176,16 @@ left to right direction
 actor "Khách hàng\\n(End Customer)" as Customer
 
 rectangle "Phân hệ Trải nghiệm khách hàng" {
-  usecase "UC-06: Xem trang nội dung" as UC06
   usecase "UC-07: Duyệt sản phẩm\\ntrên trang cửa hàng" as UC07
+  usecase "Xem trang nội dung động\\n(do chủ cửa hàng tạo)" as UCcontent
+  usecase "UC-08: Quản lý giỏ hàng" as UC08
   usecase "Lọc theo danh mục\\nvà khoảng giá" as Filter
   usecase "Tìm kiếm sản phẩm" as Search
 }
 
-Customer -- UC06
 Customer -- UC07
+Customer -- UCcontent
+Customer -- UC08
 Filter .> UC07 : <<extend>>
 Search .> UC07 : <<extend>>
 @enduml
@@ -170,31 +201,23 @@ activity_onboarding = """@startuml
 start
 :Đăng ký / đăng nhập tài khoản;
 :Điền thông tin cửa hàng,\\nchọn mẫu theo ngành hàng;
-|Ứng dụng Admin|
-:Gửi POST /api/shops\\n(name, domain, templateKey);
+:Gửi POST /api/shops\\n(qua ứng dụng Admin);
 |API Core|
-:Tạo bản ghi Shop trong PostgreSQL;
-:Xóa cache danh sách shop của chủ sở hữu;
-|Ứng dụng Admin|
-:Gọi POST /api/layouts/{shopId}/seed;
-|API Core|
-if (Tài liệu bố cục còn trống?) then (đúng)
-  :Gieo bố cục mặc định: GlobalLayout\\n+ 3 trang khởi điểm (MongoDB);
-else (đã có nội dung)
-  :Bỏ qua, không ghi đè (lũy đẳng);
+:Tạo bản ghi Shop (PostgreSQL),\\nxóa cache danh sách shop;
+if (Bố cục còn trống?) then (đúng)
+  :Gieo bố cục\\nmặc định (MongoDB);
+else (đã có)
+  :Bỏ qua\\n(lũy đẳng);
 endif
 |Chủ cửa hàng|
-:Kéo thả tùy biến giao diện\\n(lưu vào draftData);
+:Kéo thả tùy biến\\n(lưu draftData);
 :Bấm xuất bản;
 |API Core|
-:Sao chép draftData sang publishedData;
+:Sao chép draftData\\nsang publishedData;
 |Khách hàng|
 :Truy cập tên miền cửa hàng;
-|Storefront|
-:proxy.ts bóc tách định danh cửa hàng,\\nviết lại đường dẫn nội bộ;
-:Tải publishedData và dữ liệu sản phẩm;
-:Kết xuất giao diện động (RSC);
-|Khách hàng|
+:proxy.ts phân giải cửa hàng,\\nviết lại path nội bộ;
+:Tải publishedData, kết xuất\\ngiao diện động (RSC);
 :Nhận trang web hoàn chỉnh;
 stop
 @enduml
@@ -206,36 +229,35 @@ activity_upload_product = """@startuml
 start
 :Chọn ảnh, gửi multipart\\nPOST /api/media/upload;
 |API Core|
-if (Kích thước tệp <= 10MB?) then (đúng)
-  :Đọc magic bytes,\\nxác định MIME thực của tệp;
-  if (Là tệp ảnh hợp lệ?) then (đúng)
-    :Trích kích thước ảnh (sharp);
-    :Sinh mã BlurHash làm ảnh giữ chỗ;
-    |Hạ tầng lưu trữ|
-    :Ghi object vào MinIO;
-    |API Core|
-    :Lưu bản ghi Media (PostgreSQL)\\ngồm URL, kích thước, BlurHash;
-    |Chủ cửa hàng|
-    :Nhận URL ảnh và BlurHash;
-    note right
-      Khi hiển thị, imgproxy biến đổi ảnh
-      theo chiều rộng và chất lượng yêu cầu
-      (resize on-the-fly), không lưu sẵn
-      nhiều phiên bản kích thước.
-    end note
-    stop
-  else (sai)
-    :Trả lỗi 400:\\nloại tệp không hợp lệ;
-    |Chủ cửa hàng|
-    :Nhận thông báo lỗi;
-    stop
-  endif
-else (sai)
-  :Trả lỗi 400: vượt giới hạn 10MB;
+if (Kích thước tệp > 10MB?) then (đúng)
+  :Trả lỗi 400:\\nvượt giới hạn 10MB;
   |Chủ cửa hàng|
   :Nhận thông báo lỗi;
   stop
 endif
+|API Core|
+:Đọc magic bytes,\\nxác định MIME thực của tệp;
+if (Không phải ảnh hợp lệ?) then (đúng)
+  :Trả lỗi 400:\\nloại tệp không hợp lệ;
+  |Chủ cửa hàng|
+  :Nhận thông báo lỗi;
+  stop
+endif
+|API Core|
+:Trích kích thước (sharp),\\nsinh BlurHash giữ chỗ;
+|Hạ tầng lưu trữ|
+:Ghi object vào MinIO;
+|API Core|
+:Lưu bản ghi Media:\\nURL, kích thước, BlurHash;
+|Chủ cửa hàng|
+:Nhận URL ảnh\\nvà BlurHash;
+note right
+  imgproxy resize ảnh
+  on-the-fly khi hiển thị,
+  không lưu sẵn nhiều
+  phiên bản kích thước.
+end note
+stop
 @enduml
 """
 
@@ -247,31 +269,17 @@ start
 |Storefront|
 :Gửi POST /api/orders/checkout;
 |API Core|
-if (Request thiếu lineItems?) then (đúng)
-  :Đọc giỏ hàng server-side\\ntheo (shopId, customerId);
-endif
-:Nạp giá các Variant thuộc đúng shopId;
-if (Có mã khuyến mãi?) then (có)
-  :Kiểm tra hiệu lực, thời hạn\\nvà giới hạn lượt dùng;
-endif
-:Tính phí vận chuyển, chốt địa chỉ nhận;
-:Kiểm tra phương thức thanh toán thuộc cửa hàng;
+:Xác định danh sách hàng\\n(đọc giỏ server-side nếu request thiếu);
+:Nạp giá Variant theo shopId; kiểm tra\\nkhuyến mãi, phí vận chuyển và\\nphương thức thanh toán của cửa hàng;
 partition "Giao dịch nguyên tử (PostgreSQL)" {
-  :Trừ tồn kho từng Variant;
-  :Ghi nhận lượt dùng khuyến mãi;
+  :Trừ tồn kho và ghi lượt dùng khuyến mãi;
   if (Thanh toán bằng ví?) then (có)
     :Trừ số dư ví\\n(thiếu thì rollback toàn bộ);
   endif
-  :Tạo Order kèm các LineItem;
-  :Tạo bản ghi Payment;
-  :Xóa giỏ hàng;
-  :Tạo Shipment trạng thái pending;
-  if (Chuyển khoản ngân hàng?) then (có)
-    :Tạo token xác nhận hiệu lực 24 giờ;
-  endif
+  :Tạo Order, LineItem, Payment, Shipment\\nvà xóa giỏ hàng;
 }
 if (Chuyển khoản ngân hàng?) then (có)
-  :Sinh mã QR từ URL xác nhận\\n(ngoài giao dịch);
+  :Sinh token xác nhận 24 giờ\\nvà mã QR (ngoài giao dịch);
 endif
 :Gửi thông báo WebSocket\\nvà email xác nhận đơn;
 |Khách hàng|
@@ -288,10 +296,10 @@ package_diagram = """@startuml
 """ + STYLE + """skinparam packageStyle rectangle
 
 package "Tầng ứng dụng (apps)" as LayerApps {
-  [admin\\n(Next.js)] as admin
-  [storefront\\n(Next.js)] as storefront
-  [api-core\\n(NestJS)] as apicore
-  [cli-tool\\n(công cụ vận hành)] as cli
+  [admin] as admin
+  [storefront] as storefront
+  [api-core] as apicore
+  [cli-tool] as cli
 }
 
 package "Tầng gói dùng chung (packages)" as LayerPkgs {
@@ -320,29 +328,25 @@ mtpl -[hidden]down-> mongo
 admin ..> uireg
 admin ..> i18n
 storefront ..> uireg
-storefront ..> i18n
 storefront ..> schema
 uireg ..> schema
 apicore ..> db
 cli ..> mtpl
 
-admin --> apicore : REST API
-storefront --> apicore : REST API
-cli --> apicore : REST API
+admin --> apicore : REST
+storefront --> apicore : REST
 storefront ..> imgproxy : URL ảnh
 
 db ..> pg : Prisma
 db ..> mongo : Mongoose
-apicore ..> mongo : Mongoose
-apicore ..> redis : cache-manager
-apicore ..> minio : S3 API
-imgproxy ..> minio : đọc ảnh gốc
+apicore ..> redis : cache
+apicore ..> minio : S3
+imgproxy ..> minio
 @enduml
 """
 
 apicore_detail = """@startuml
 """ + STYLE + """skinparam packageStyle rectangle
-left to right direction
 
 package "api-core (NestJS)" {
   package "Tầng Middleware / Guard" {
@@ -350,16 +354,13 @@ package "api-core (NestJS)" {
     [BetterAuthGuard] as guard
   }
   package "Tầng Controller" {
-    [OrderController] as octrl
-    [LayoutController] as lctrl
-    [ShopController] as sctrl
+    [Controllers\\n(Order, Layout, Shop)] as ctrl
   }
   package "Tầng Service" {
     [OrderService] as osvc
     [LayoutService] as lsvc
-    [ShopService] as ssvc
-    [TenantService\\n(AsyncLocalStorage)] as tsvc
     [AuthService] as asvc
+    [TenantService\\n(AsyncLocalStorage)] as tsvc
   }
   package "Tầng truy cập dữ liệu" {
     [PrismaService] as prisma
@@ -371,32 +372,29 @@ database "Redis" as redis
 database "PostgreSQL" as pg
 database "MongoDB" as mongo
 
-tmw --> redis : tra cứu domain,\\ntrạng thái shop
-tmw --> prisma : truy vấn khi\\ntrượt cache
-tmw --> tsvc : run({shopId}, next)
-guard --> asvc : kiểm tra phiên
-guard --> redis : cache shopIds
+' Xếp các service thành hai cột cho gọn
+osvc -[hidden]right- asvc
+lsvc -[hidden]right- tsvc
 
 tmw --> guard
-guard --> octrl
-guard --> lctrl
-guard --> sctrl
+tmw --> tsvc : run({shopId})
+tmw --> redis : tra cứu domain
+guard --> asvc : kiểm tra phiên
+guard --> ctrl
 
-octrl --> osvc
-lctrl --> lsvc
-sctrl --> ssvc
+ctrl --> osvc
+ctrl --> lsvc
 
 osvc --> tsvc : getTenantId()
 lsvc --> tsvc : getTenantId()
-ssvc --> tsvc : getTenantId()
 
 osvc --> prisma
-ssvc --> prisma
 asvc --> prisma
 lsvc --> mongoose
 
 prisma --> pg
 mongoose --> mongo
+redis -[hidden]down- pg
 @enduml
 """
 
@@ -404,70 +402,66 @@ class_diagram = """@startuml
 """ + STYLE + """skinparam classAttributeIconSize 0
 hide circle
 
-class TenantService {
-  - {static} als: AsyncLocalStorage<TenantContext>
-  + run(context: TenantContext, callback: Function): void
-  + getTenantId(): string
-}
-
 class TenantMiddleware {
-  - tenantService: TenantService
-  - prisma: PrismaService
-  - cacheManager: Cache
-  + use(req: Request, res: Response, next: Function): void
+  - tenantService
+  - prisma
+  - cacheManager
+  + use(req, res, next)
 }
 
 class BetterAuthGuard {
-  - authService: AuthService
-  - reflector: Reflector
-  - prisma: PrismaService
-  - cacheManager: Cache
-  + canActivate(context: ExecutionContext): boolean
-}
-
-class AuthService {
-  - prisma: PrismaService
-  - ownerAuth: OwnerAuth
-  - customerAuth: CustomerAuth
-  + getOwnerSession(request: Request): Session
-  + getCustomerSession(request: Request): Session
-  + register(dto): BaseResponseDto
-  + login(dto): BaseResponseDto
+  - authService
+  - prisma
+  - cacheManager
+  + canActivate(context)
 }
 
 class OrderService {
-  - prisma: PrismaService
-  - tenantService: TenantService
-  - inventoryService: InventoryService
-  - emailService: EmailService
-  - walletService: WalletService
-  + createOrder(customerId: string, dto: CheckoutDto): Order
-  + findAllOrders(query: GetOrdersDto): Order[]
-  + updateOrderStatus(id: string, dto): Order
-  + cancelOrder(id: string, customerId?: string): Order
-  + refundOrder(id: string): Order
+  - prisma
+  - tenantService
+  - inventoryService
+  + createOrder(customerId, dto)
+  + cancelOrder(id, customerId?)
+  + refundOrder(id)
 }
 
 class LayoutService {
-  - tenantService: TenantService
-  - globalLayoutModel: Model<GlobalLayout>
-  - pageLayoutModel: Model<PageLayout>
-  + getGlobalLayout(shopId: string): JSON
-  + getPageLayout(shopId, pageType, slug?): JSON
-  + saveBuilderGlobal(shopId, components, theme): JSON
-  + publishLayoutByShopId(shopId: string): JSON
-  + seedDefaultLayouts(shopId, opts): JSON
+  - tenantService
+  - globalLayoutModel
+  - pageLayoutModel
+  + getPageLayout(shopId, type)
+  + publishLayoutByShopId(shopId)
+  + seedDefaultLayouts(shopId)
+}
+
+class TenantService {
+  - {static} als: AsyncLocalStorage
+  + run(context, callback)
+  + getTenantId()
+}
+
+class AuthService {
+  - prisma
+  + getOwnerSession(req)
+  + getCustomerSession(req)
+  + login(dto)
 }
 
 class PrismaService {
-  + onModuleInit(): void
-  + $transaction(fn): Promise<any>
+  + onModuleInit()
+  + $transaction(fn)
 }
+
+' Hai cột: trái = thành phần nghiệp vụ, phải = hạ tầng dùng chung
+TenantMiddleware -[hidden]down- BetterAuthGuard
+BetterAuthGuard -[hidden]down- OrderService
+OrderService -[hidden]down- LayoutService
+TenantService -[hidden]down- AuthService
+AuthService -[hidden]down- PrismaService
 
 TenantMiddleware ..> TenantService : <<use>>
 TenantMiddleware ..> PrismaService : <<use>>
 BetterAuthGuard ..> AuthService : <<use>>
-BetterAuthGuard ..> PrismaService : <<use>>
 OrderService ..> TenantService : <<use>>
 OrderService ..> PrismaService : <<use>>
 LayoutService ..> TenantService : <<use>>
@@ -480,47 +474,40 @@ seq_checkout = """@startuml
 actor "Khách hàng" as KH
 participant "__:OrderController__" as OC
 participant "__:OrderService__" as OS
-participant "__:InventoryService__" as IS
 participant "__:PrismaService__" as PR
 
-KH -> OC : POST /api/orders/checkout (dto)
+KH -> OC : POST /orders/checkout
 activate OC
-OC -> OS : createOrder(customerId, dto)
+OC -> OS : createOrder(dto)
 activate OS
-OS -> PR : variant.findMany({id in dto, shopId})
+OS -> PR : variant.findMany\\n({id, shopId})
 activate PR
-PR --> OS : danh sách Variant kèm giá
+PR --> OS : Variant kèm giá
 deactivate PR
 
-opt dto có promotionCode
-  OS -> PR : promotion.findFirst({shopId, code})
+opt có promotionCode
+  OS -> PR : promotion.findFirst\\n({shopId, code})
   activate PR
-  PR --> OS : thông tin khuyến mãi
+  PR --> OS : khuyến mãi
   deactivate PR
 end
 
 OS -> PR : $transaction(fn)
 activate PR
-
-alt đủ tồn kho
-  PR -> IS : decrementStock(lineItems, orderId, tx)
-  activate IS
-  IS --> PR : trừ kho thành công
-  deactivate IS
-  PR -> PR : order.create(kèm lineItems)
-  PR -> PR : payment.create()
+alt đủ tồn kho và số dư
+  PR -> PR : decrementStock()
+  PR -> PR : order.create()\\n+ payment + shipment
   PR -> PR : cartItem.deleteMany()
-  PR -> PR : shipment.create()
-  PR --> OS : Order {id, number, state}
-else hết hàng / thiếu số dư ví
-  PR --> OS : ném ngoại lệ, rollback toàn bộ
+  PR --> OS : Order {id, number}
+else thiếu kho / số dư
+  PR --> OS : rollback toàn bộ
 end
 deactivate PR
 
-OS ->> OS : gửi thông báo + email (bất đồng bộ)
-OS --> OC : finalOrder (kèm QR nếu chuyển khoản)
+OS ->> OS : gửi thông báo\\n+ email (bất đồng bộ)
+OS --> OC : finalOrder\\n(kèm QR nếu CK)
 deactivate OS
-OC --> KH : HTTP 201 Created / 400 Bad Request
+OC --> KH : 201 / 400
 deactivate OC
 @enduml
 """
@@ -530,31 +517,27 @@ seq_auth = """@startuml
 actor "Người dùng" as ND
 participant "__:BetterAuthGuard__" as G
 participant "__:AuthService__" as AS
-participant "__:better-auth__" as BA
 participant "__:PrismaService__" as PR
 
-ND -> G : HTTP Request (cookie phiên)
+ND -> G : HTTP Request\\n(cookie phiên)
 activate G
 
-alt endpoint gắn @Public()
-  G --> ND : cho qua, không kiểm tra
-else endpoint cần xác thực
-  G -> AS : getOwnerSession(request)\\nhoặc getCustomerSession(request)
+alt endpoint @Public()
+  G --> ND : cho qua
+else cần xác thực
+  G -> AS : getOwnerSession(req)
   activate AS
-  AS -> BA : api.getSession({headers})
-  activate BA
-  BA --> AS : {user, session} hoặc null
-  deactivate BA
-  AS --> G : kết quả phiên
+  AS -> AS : better-auth\\napi.getSession()
+  AS --> G : {user, session}\\nhoặc null
   deactivate AS
 
-  alt [phiên hợp lệ]
-    G -> PR : shop.findMany({ownerId})\\n(khi trượt cache shopIds)
+  alt phiên hợp lệ
+    G -> PR : shop.findMany\\n({ownerId})
     activate PR
-    PR --> G : danh sách shopId sở hữu
+    PR --> G : danh sách shopId
     deactivate PR
-    G --> ND : canActivate = true\\n(gắn user, shopIds vào request)
-  else [phiên không hợp lệ]
+    G --> ND : canActivate = true
+  else phiên không hợp lệ
     G --> ND : 401 Unauthorized
   end
 end
@@ -705,47 +688,40 @@ participant "__:TenantMiddleware__" as TM
 participant "__:Redis__" as RD
 participant "__:PrismaService__" as PR
 participant "__:TenantService__" as TS
-participant "__:OrderController__" as OC
 participant "__:OrderService__" as OS
 
 KH -> TM : GET /api/...\\n(Host: duck.myapp.com)
 activate TM
-TM -> TM : bóc tách subdomain "duck"
+TM -> TM : bóc tách "duck"
 TM -> RD : get("domain:duck")
 activate RD
 RD --> TM : kết quả cache
 deactivate RD
 
-alt trúng cache
-  TM -> TM : dùng {id, status} từ cache
-else trượt cache
-  TM -> PR : shop.findUnique({domain: "duck"})
+alt trượt cache
+  TM -> PR : shop.findUnique\\n({domain})
   activate PR
   PR --> TM : {id, status}
   deactivate PR
-  TM -> RD : set("domain:duck", shop, 300s)
+  TM -> RD : set(domain, 300s)
 end
 
 opt status = SUSPENDED
-  TM --> KH : HTTP 403 Shop is suspended
+  TM --> KH : HTTP 403
 end
 
 TM -> TS : run({shopId}, next)
 activate TS
-TS -> OC : thực thi chuỗi xử lý\\ntrong vùng ngữ cảnh
-activate OC
-OC -> OS : createOrder(customerId, dto)
+TS -> OS : xử lý trong\\nvùng ngữ cảnh
 activate OS
 OS -> TS : getTenantId()
 TS --> OS : shopId
-OS -> PR : truy vấn ràng buộc theo shopId
+OS -> PR : truy vấn\\ntheo shopId
 activate PR
-PR --> OS : dữ liệu đúng phạm vi cửa hàng
+PR --> OS : dữ liệu đúng\\ncửa hàng
 deactivate PR
-OS --> OC : kết quả nghiệp vụ
+OS --> KH : HTTP Response
 deactivate OS
-OC --> KH : HTTP Response
-deactivate OC
 deactivate TS
 deactivate TM
 @enduml
@@ -788,6 +764,28 @@ stop
 @enduml
 """
 
+activity_draft_publish = """@startuml
+""" + STYLE + """
+|Chủ cửa hàng|
+start
+:Mở trình thiết kế kéo thả;
+:Tải draftData\\n(trống thì sao từ publishedData);
+repeat
+  :Kéo thả, chỉnh thuộc tính;
+  :Lưu draftData\\n(POST /layouts/builder/save);
+  :Xem trước máy tính / di động;
+repeat while (Còn chỉnh sửa?) is (có)
+->không;
+:Bấm xuất bản;
+|API Core|
+:Sao chép nguyên tử\\ndraftData -> publishedData\\n(từng trang hoặc bulkWrite);
+:Vô hiệu hóa cache bố cục\\ntheo nhãn cửa hàng;
+|Khách hàng|
+:Lần truy cập kế tiếp nhận\\nbản giao diện mới;
+stop
+@enduml
+"""
+
 template_layered_config = """@startuml
 """ + STYLE + """skinparam packageStyle rectangle
 
@@ -815,6 +813,74 @@ pub --> sf : chỉ đọc\\n(lean + projection)
 """
 
 # ============================================================
+# CHƯƠNG 4 — THIẾT KẾ TÀI LIỆU MONGODB (MongoDB Atlas)
+# ============================================================
+
+mongo_design = """@startuml
+""" + STYLE + """skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class "GlobalLayout (collection)" as GL {
+  _id : ObjectId
+  shopId : string <<index>>
+  draftData : object
+  publishedData : object
+  updatedAt : date
+}
+
+class "PageLayout (collection)" as PL {
+  _id : ObjectId
+  shopId : string <<index>>
+  pageType : string  /' home | product-list | product-detail '/
+  slug : string
+  draftData : object
+  publishedData : object
+}
+
+class "publishedData / draftData" as DATA {
+  theme : { colors, fonts }
+  header : UIComponentRef[]
+  footer : UIComponentRef[]
+  components : UIComponentRef[]
+}
+
+class "UIComponentRef (sub-document)" as REF {
+  componentId : string
+  props : object
+  blocks : UIComponentRef[]  /' đệ quy '/
+}
+
+class "MasterTemplateCatalog (collection)" as MTC {
+  _id : ObjectId
+  industry : string  /' thời trang, điện tử... '/
+  templateKey : string
+  isCustom : boolean
+  layout : object
+}
+
+class "UIComponentCatalog (collection)" as UCC {
+  _id : ObjectId
+  componentId : string
+  propSchema : object  /' lược đồ sinh form '/
+}
+
+GL *-- DATA : nhúng
+PL *-- DATA : nhúng
+DATA *-- REF : danh sách
+REF *-- REF : blocks (lồng nhau)
+MTC ..> DATA : gieo lúc khởi tạo
+UCC ..> REF : kiểm soát props
+
+legend bottom left
+  Mỗi cửa hàng (shopId) tương ứng một bộ tài liệu bố cục trong MongoDB.
+  Cấu trúc lồng nhau, không cần schema cố định, lưu đồng thời hai phiên bản
+  draft (đang sửa) và published (đang chạy) trong cùng một tài liệu.
+endlegend
+@enduml
+"""
+
+# ============================================================
 
 DIAGRAMS = {
     # Chương 2
@@ -832,12 +898,15 @@ DIAGRAMS = {
     "Hinhve/Chuong4/seq_checkout.png": seq_checkout,
     "Hinhve/Chuong4/seq_auth.png": seq_auth,
     "Hinhve/Chuong4/er_diagram.png": er_diagram,
+    "Hinhve/Chuong4/mongo_design.png": mongo_design,
     # Chương 5
     "Hinhve/Chuong5/seq_tenant_context.png": seq_tenant_context,
     "Hinhve/Chuong5/zero_file_render.png": zero_file_render,
     "Hinhve/Chuong5/template_layered_config.png": template_layered_config,
+    "Hinhve/Chuong5/activity_draft_publish.png": activity_draft_publish,
 }
 
 if __name__ == "__main__":
+    ensure_jar()
     for path, src in DIAGRAMS.items():
         generate(src, path)

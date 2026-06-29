@@ -1,0 +1,296 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmp4umvnvg3.tex   Mon Jun 15 17:22:25 2026
+%DIF ADD /tmp/tmpjwttuk9d.tex   Mon Jun 15 17:22:25 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+Chương này giới thiệu tổng quan về bối cảnh và mục tiêu của đề tài nghiên cứu. Đầu tiên, phần \ref{section:1.1} đặt vấn đề từ thực tiễn nhu cầu xây dựng cửa hàng trực tuyến của các doanh nghiệp vừa và nhỏ tại Việt Nam. Tiếp đó, phần \ref{section:1.2} phân tích các giải pháp hiện có trên thị trường để làm rõ những hạn chế và xác định các mục tiêu cụ thể của hệ thống đề xuất. Phần \ref{section:1.3} trình bày ngắn gọn định hướng kiến trúc đa thuê bao và công nghệ được lựa chọn để giải quyết bài toán. Cuối cùng, phần \ref{section:1.4} mô tả bố cục chi tiết của toàn bộ báo cáo đồ án tốt nghiệp này.
+
+\section{Đặt vấn đề}
+\label{section:1.1}
+
+Thương mại điện tử tại Việt Nam đang trải qua giai đoạn tăng trưởng mạnh mẽ trong những năm gần đây \cite{vecom}. Sự chuyển dịch thói quen mua sắm của người tiêu dùng sang các nền tảng trực tuyến đã thúc đẩy các hộ kinh doanh và doanh nghiệp vừa và nhỏ liên tục tìm kiếm cơ hội mở rộng kênh bán hàng. Nhu cầu sở hữu một cửa hàng trực tuyến riêng biệt, chuyên nghiệp để xây dựng thương hiệu đang ngày càng trở nên cấp thiết.
+
+Tuy nhiên, để \DIFdelbegin \DIFdel{xây dựng và vận hành }\DIFdelend \DIFaddbegin \DIFadd{sở hữu }\DIFaddend một cửa hàng trực tuyến độc lập, các doanh nghiệp vừa và nhỏ \DIFdelbegin \DIFdel{phải đối mặt với nhiều }\DIFdelend \DIFaddbegin \DIFadd{hiện đứng trước hai lựa chọn, mỗi lựa chọn đều kèm theo }\DIFaddend rào cản \DIFdelbegin \DIFdel{lớn. Chi }\DIFdelend \DIFaddbegin \DIFadd{riêng:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Thuê bao một nền tảng dịch vụ (SaaS):}} \DIFadd{chi }\DIFaddend phí \DIFdelbegin \DIFdel{ban đầu cho việc thiết kế và phát triển website thường }\DIFdelend \DIFaddbegin \DIFadd{định kỳ }\DIFaddend dao động từ \DIFdelbegin \DIFdel{mười }\DIFdelend \DIFaddbegin \DIFadd{khoảng 300.000 đồng }\DIFaddend đến \DIFdelbegin \DIFdel{năm mươi triệu }\DIFdelend \DIFaddbegin \DIFadd{hơn 1.500.000 }\DIFaddend đồng \DIFaddbegin \DIFadd{mỗi tháng với nền tảng nội địa Haravan \mbox{%DIFAUXCMD
+\cite{haravan_pricing2026}}\hskip0pt%DIFAUXCMD
+, hoặc từ 39 USD mỗi tháng trở lên với nền tảng quốc tế Shopify \mbox{%DIFAUXCMD
+\cite{shopify_docs, shero_pricing2026}}\hskip0pt%DIFAUXCMD
+, chưa tính chi phí mua giao diện và tiện ích mở rộng}\DIFaddend .
+    \DIFdelbegin \DIFdel{Bên cạnh đó, việc duy trì một đội ngũ kỹ thuật để quản lý }\DIFdelend \DIFaddbegin \item \textbf{\DIFadd{Tự triển khai một giải pháp mã nguồn mở}} \DIFadd{như WooCommerce: phần lõi miễn phí nhưng doanh nghiệp phải tự thuê }\DIFaddend máy chủ \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{(khoảng 10--100 USD mỗi tháng) và tự chịu trách nhiệm về }\DIFaddend bảo mật\DIFaddbegin \DIFadd{, sao lưu }\DIFaddend và cập nhật\DIFdelbegin \DIFdel{tính năng liên tục là }\DIFdelend \DIFaddbegin \DIFadd{; chi phí xây dựng }\DIFaddend một \DIFaddbegin \DIFadd{cửa hàng tùy biến qua đơn vị phát triển có thể vượt 8.000 USD \mbox{%DIFAUXCMD
+\cite{swell_woo2026}}\hskip0pt%DIFAUXCMD
+.
+}\end{itemize}
+
+\DIFadd{Cả hai lựa chọn đều đặt ra }\DIFaddend gánh nặng \DIFdelbegin \DIFdel{tài chính không nhỏ. Hơn nữa, }\DIFdelend \DIFaddbegin \DIFadd{về chi phí hoặc về năng lực kỹ thuật, đồng }\DIFaddend thời \DIFdelbegin \DIFdel{gian triển khai từ khi lên ý tưởng đến khi ra mắt thường kéo dài từ }\DIFdelend \DIFaddbegin \DIFadd{thời gian thiết lập }\DIFaddend một \DIFdelbegin \DIFdel{đến ba tháng}\DIFdelend \DIFaddbegin \DIFadd{cửa hàng hoàn chỉnh cũng đáng kể}\DIFaddend , làm chậm khả năng phản ứng với thị trường.
+
+Các nền tảng phần mềm dưới dạng dịch vụ hiện có trên thị trường vẫn tồn tại nhiều hạn chế đáng kể. Các nền tảng quốc tế thường có chi phí duy trì hàng tháng cao, không tối ưu cho các phương thức thanh toán địa phương và giới hạn khả năng can thiệp sâu. Các giải pháp tự triển khai lại đòi hỏi người sử dụng phải có kiến thức kỹ thuật chuyên sâu để tự thiết lập hạ tầng và bảo mật. Trong khi đó, các nền tảng trong nước tuy dễ tiếp cận nhưng lại thiếu đi khả năng cho phép người dùng tự do tùy biến giao diện một cách sâu rộng mà không cần viết mã. Hiện tại, chưa có giải pháp nào đáp ứng đồng thời cả ba tiêu chí: chi phí thấp, khả năng tùy biến cao, và khả năng vận hành \DIFdelbegin \DIFdel{hàng chục ngàn }\DIFdelend \DIFaddbegin \DIFadd{nhiều }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{mà không làm tăng tuyến tính chi phí }\DIFdelend \DIFaddbegin \DIFadd{trên cùng một }\DIFaddend hạ tầng \DIFaddbegin \DIFadd{dùng chung với chi phí biên thấp cho mỗi cửa hàng tăng thêm}\DIFaddend .
+
+Một nền tảng phần mềm mở, cho phép các doanh nghiệp vừa và nhỏ tại Việt Nam khởi động cửa hàng trực tuyến chỉ trong vài phút mà không cần kỹ năng lập trình sẽ là một bước tiến quan trọng. Giải pháp này không chỉ giúp tiết kiệm chi phí và thời gian triển khai, mà còn cung cấp một giao diện chuyên nghiệp, góp phần đẩy nhanh quá trình số hóa thương mại.
+
+\section{Mục tiêu và phạm vi đề tài}
+\label{section:1.2}
+
+Trên thị trường hiện nay, có nhiều nền tảng cung cấp giải pháp xây dựng cửa hàng trực tuyến với các đặc điểm khác nhau\DIFdelbegin \DIFdel{. Shopify }\DIFdelend \DIFaddbegin \DIFadd{:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Shopify}} \DIFaddend là \DIFdelbegin \DIFdel{một trong những }\DIFdelend nền tảng \DIFdelbegin \DIFdel{cung cấp phần mềm dưới dạng dịch vụ hàng }\DIFdelend \DIFaddbegin \DIFadd{SaaS dẫn }\DIFaddend đầu \DIFaddbegin \DIFadd{thị trường, chiếm khoảng 28}\DIFaddend ,\DIFaddbegin \DIFadd{8\% thị phần trong nhóm một triệu website thương mại điện tử lớn nhất thế giới \mbox{%DIFAUXCMD
+\cite{builtwith2026, redstag_shopify2026}}\hskip0pt%DIFAUXCMD
+. Nền tảng }\DIFaddend cung cấp giao diện đẹp \DIFdelbegin \DIFdel{mắt }\DIFdelend \DIFaddbegin \DIFadd{và hạ tầng ổn định, }\DIFaddend nhưng \DIFdelbegin \DIFdel{có }\DIFdelend chi phí \DIFdelbegin \DIFdel{duy trì khá cao từ \$29 đến \$299 }\DIFdelend \DIFaddbegin \DIFadd{thuê bao cao (gói Basic 39 USD, Advanced 399 USD }\DIFaddend mỗi tháng\DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{shopify_docs}}\hskip0pt%DIFAUXCMD
+. Hơn nữa, nền tảng này cũng }\DIFdelend \DIFaddbegin \DIFadd{) \mbox{%DIFAUXCMD
+\cite{shopify_docs, shero_pricing2026}}\hskip0pt%DIFAUXCMD
+, }\DIFaddend giới hạn khả năng tùy biến sâu vào mã nguồn giao diện \DIFdelbegin \DIFdel{, }\DIFdelend và chưa \DIFdelbegin \DIFdel{thực sự phù hợp với các doanh nghiệp nhỏ tại Việt Nam về mặt chi phí và hỗ trợ }\DIFdelend \DIFaddbegin \DIFadd{tối ưu cho }\DIFaddend thanh toán nội địa \DIFdelbegin \DIFdel{.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{WooCommerce }\DIFdelend \DIFaddbegin \DIFadd{Việt Nam.
+    }\item \textbf{\DIFadd{WooCommerce}} \DIFaddend là \DIFdelbegin \DIFdel{một }\DIFdelend thành phần \DIFdelbegin \DIFdel{mở rộng }\DIFdelend mã nguồn mở \DIFdelbegin \DIFdel{dành cho hệ thống quản trị nội dung WordPress, cho phép tạo }\DIFdelend \DIFaddbegin \DIFadd{chạy trên WordPress, chiếm khoảng 18,2\% nhóm một triệu website lớn nhất với hơn 4,5 triệu }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{trực tuyến hoàn toàn }\DIFdelend \DIFaddbegin \DIFadd{đang hoạt động \mbox{%DIFAUXCMD
+\cite{mobiloud2026, storeleads_woo2025}}\hskip0pt%DIFAUXCMD
+. Phần lõi }\DIFaddend miễn phí \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{woocommerce}}\hskip0pt%DIFAUXCMD
+. Mặc dù mang lại khả năng }\DIFdelend \DIFaddbegin \DIFadd{và }\DIFaddend tùy biến sâu, \DIFdelbegin \DIFdel{giải pháp này lại yêu cầu }\DIFdelend \DIFaddbegin \DIFadd{nhưng }\DIFaddend người \DIFdelbegin \DIFdel{sử dụng }\DIFdelend \DIFaddbegin \DIFadd{dùng }\DIFaddend phải tự thuê máy chủ\DIFdelbegin \DIFdel{lưu trữ}\DIFdelend , tự cấu hình bảo mật và \DIFdelbegin \DIFdel{thường xuyên thực hiện các bản }\DIFdelend cập nhật \DIFdelbegin \DIFdel{. Việc này }\DIFdelend \DIFaddbegin \DIFadd{--- }\DIFaddend đòi hỏi trình độ kỹ thuật cao\DIFdelbegin \DIFdel{và tiêu tốn nhiều thời gian vận hành hệ thống.
+    }%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Tại Việt Nam, Haravan }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \textbf{\DIFadd{Haravan}} \DIFaddend là \DIFdelbegin \DIFdel{một }\DIFdelend nền tảng phổ biến \DIFaddbegin \DIFadd{tại Việt Nam với hơn 50.000 doanh nghiệp đăng ký}\DIFaddend , thân thiện \DIFdelbegin \DIFdel{với người dùng trong nước }\DIFdelend và tích hợp tốt \DIFdelbegin \DIFdel{các dịch vụ }\DIFdelend vận chuyển, thanh toán nội địa \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{haravan_platform}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{haravan_platform, haravan_pricing2026}}\hskip0pt%DIFAUXCMD
+}\DIFaddend . Tuy nhiên \DIFdelbegin \DIFdel{, giải pháp này }\DIFdelend \DIFaddbegin \DIFadd{nền tảng }\DIFaddend vẫn \DIFdelbegin \DIFdel{có những }\DIFdelend hạn chế \DIFdelbegin \DIFdel{nhất định trong việc }\DIFdelend \DIFaddbegin \DIFadd{khả năng }\DIFaddend tùy biến giao diện nếu người dùng không biết lập trình \DIFdelbegin \DIFdel{, đồng thời hệ thống }\DIFdelend \DIFaddbegin \DIFadd{và }\DIFaddend chưa được xây dựng \DIFdelbegin \DIFdel{dựa }\DIFdelend trên kiến trúc đa thuê bao \DIFdelbegin \DIFdel{thực sự }\DIFdelend tối ưu cho \DIFdelbegin \DIFdel{việc }\DIFdelend cá nhân hóa giao diện động.
+\DIFdelbegin \DIFdel{Đối với các doanh nghiệp lớn, Magento là }\DIFdelend \DIFaddbegin \end{itemize}
+
+\DIFadd{Hình \ref{fig:market_share} so sánh thị phần của ba nền tảng tiêu biểu trong nhóm }\DIFaddend một \DIFdelbegin \DIFdel{lựa chọn mạnh mẽ, nhưng đi kèm với sự phức tạp và chi phí triển khai cực kỳ đắt đỏ \mbox{%DIFAUXCMD
+\cite{magento_docs}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{triệu website thương mại điện tử lớn nhất, cho thấy thị trường bị chi phối bởi các nền tảng quốc tế, trong khi nền tảng nội địa còn chiếm tỷ trọng rất nhỏ ở phạm vi toàn cầu}\DIFaddend .
+
+\DIFdelbegin %DIFDELCMD < \begin{table}[H]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[H]
+\DIFaddendFL \centering
+\DIFdelbeginFL %DIFDELCMD < \begin{tabulary}{\textwidth}{|L|L|L|L|L|}
+%DIFDELCMD <   \hline
+%DIFDELCMD <   %%%
+\textbf{\DIFdelFL{Tiêu chí}} %DIFAUXCMD
+%DIFDELCMD < & %%%
+\textbf{\DIFdelFL{Shopify}} %DIFAUXCMD
+%DIFDELCMD < & %%%
+\textbf{\DIFdelFL{WooCommerce}} %DIFAUXCMD
+%DIFDELCMD < & %%%
+\textbf{\DIFdelFL{Haravan}} %DIFAUXCMD
+%DIFDELCMD < & %%%
+\textbf{\DIFdelFL{ShopVolo v2}} %DIFAUXCMD
+%DIFDELCMD < \\ \hline
+%DIFDELCMD <   %%%
+\DIFdelFL{Chi phí thấp      }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < & %%%
+\DIFdelFL{Trung bình }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < \\ \hline
+%DIFDELCMD <   %%%
+\DIFdelFL{Không cần lập trình    }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$     }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < \\ \hline
+%DIFDELCMD <   %%%
+\DIFdelFL{Tùy biến giao diện sâu }%DIFDELCMD < & %%%
+\DIFdelFL{Hạn chế }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ (cần dev) }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < \\ \hline
+%DIFDELCMD <   %%%
+\DIFdelFL{Multi-tenant thực sự }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < \\ \hline
+%DIFDELCMD <   %%%
+\DIFdelFL{Phù hợp SME Việt Nam }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{Khó }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < \\ \hline
+%DIFDELCMD <   %%%
+\DIFdelFL{Vận hành 20k+ shop / hạ tầng nhỏ }%DIFDELCMD < & %%%
+\DIFdelFL{N/A }%DIFDELCMD < & %%%
+\DIFdelFL{$\times$ }%DIFDELCMD < & %%%
+\DIFdelFL{N/A }%DIFDELCMD < & %%%
+\DIFdelFL{$\checkmark$ }%DIFDELCMD < \\ \hline
+%DIFDELCMD < \end{tabulary}
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    width=0.85\textwidth,
+    height=6.0cm,
+    bar width=26pt,
+    ymin=0, ymax=33,
+    ylabel={Thị phần (\%)},
+    symbolic x coords={Shopify, WooCommerce, Haravan},
+    xtick=data,
+    nodes near coords,
+    nodes near coords style={font=\small},
+    enlarge x limits=0.3,
+    ymajorgrids=true,
+    grid style=dashed,
+    tick label style={font=\small},
+    label style={font=\small},
+]
+\addplot[fill=blue!55] coordinates {
+    (Shopify,28.8) (WooCommerce,18.2) (Haravan,0.6)
+};
+\end{axis}
+\end{tikzpicture}
+\DIFaddendFL \caption{\DIFdelbeginFL \DIFdelFL{So sánh }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Thị phần }\DIFaddendFL các nền tảng \DIFaddbeginFL \DIFaddFL{trong nhóm một triệu website }\DIFaddendFL thương mại điện tử \DIFaddbeginFL \DIFaddFL{lớn nhất (đơn vị: \%, số liệu năm 2025--2026) \mbox{%DIFAUXCMD
+\cite{builtwith2026, redstag_shopify2026, mobiloud2026}}\hskip0pt%DIFAUXCMD
+}\DIFaddendFL }
+\DIFdelbeginFL %DIFDELCMD < \label{table:so_sanh_nen_tang}
+%DIFDELCMD < \end{table}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \label{fig:market_share}
+\end{figure}
+\DIFaddend 
+
+\DIFdelbegin \DIFdel{Bảng \ref{table:so_sanh_nen_tang} tổng hợp sự khác biệt giữa các nền tảng }\DIFdelend \DIFaddbegin \begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    width=0.92\textwidth,
+    height=6.2cm,
+    bar width=18pt,
+    ymin=0, ymax=30,
+    ylabel={Doanh thu (tỷ USD)},
+    xlabel={Năm},
+    symbolic x coords={2020,2021,2022,2023,2024},
+    xtick=data,
+    nodes near coords,
+    nodes near coords style={font=\small},
+    enlarge x limits=0.15,
+    ymajorgrids=true,
+    grid style=dashed,
+    tick label style={font=\small},
+    label style={font=\small},
+]
+\addplot[fill=blue!55] coordinates {
+    (2020,11.8) (2021,13.7) (2022,16.4) (2023,20.5) (2024,25.0)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{\DIFaddFL{Doanh thu thương mại điện tử bán lẻ B2C của Việt Nam giai đoạn 2020--2024 (đơn vị: tỷ USD) \mbox{%DIFAUXCMD
+\cite{idea_whitebook, vecom2025}}\hskip0pt%DIFAUXCMD
+}}
+\label{fig:tmdt_growth}
+\end{figure}
+
+\DIFadd{Hình \ref{fig:tmdt_growth} cho thấy doanh thu }\DIFaddend thương mại điện tử \DIFdelbegin \DIFdel{hiện nay. Có thể }\DIFdelend \DIFaddbegin \DIFadd{bán lẻ B2C của Việt Nam tăng từ 11,8 tỷ USD năm 2020 lên khoảng 25 tỷ USD năm 2024, tương ứng tốc độ tăng trưởng kép hằng năm khoảng 20\% \mbox{%DIFAUXCMD
+\cite{idea_whitebook, vecom2025}}\hskip0pt%DIFAUXCMD
+. Đà tăng trưởng liên tục này, cùng với việc số lượng doanh nghiệp tham gia bán hàng trực tuyến ngày càng lớn, cho }\DIFaddend thấy \DIFaddbegin \DIFadd{nhu cầu sở hữu cửa hàng trực tuyến riêng là rất cao và còn nhiều dư địa. Tuy nhiên, như đã phân tích ở trên}\DIFaddend , các nền tảng hiện có chưa giải quyết được đồng thời ba vấn đề cốt lõi:
+\DIFdelbegin \DIFdel{(i) chi }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Chi }\DIFaddend phí triển khai và duy trì thấp\DIFdelbegin \DIFdel{, (ii) khả }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Khả }\DIFaddend năng tùy biến giao diện sâu rộng mà không cần lập trình\DIFdelbegin \DIFdel{, và (iii) khả năng vận hành một số lượng lớn }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Chi phí biên thấp khi phục vụ thêm }\DIFaddend cửa hàng trên \DIFaddbegin \DIFadd{cùng }\DIFaddend một hạ tầng \DIFdelbegin \DIFdel{phần cứng tối ưu.
+}\DIFdelend \DIFaddbegin \DIFadd{dùng chung.
+}\end{itemize}
+\DIFaddend 
+
+\DIFaddbegin \DIFadd{Bảng so sánh chi tiết các nền tảng theo từng tiêu chí được trình bày ở mục \ref{section:2.1} (Bảng \ref{table:so_sanh_chi_tiet}).
+}
+
+\DIFaddend Đề tài hướng đến xây dựng nền tảng ShopVolo v2 nhằm giải quyết các bài toán trên với các chức năng chính bao gồm:
+\DIFdelbegin \DIFdel{(i) khởi }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Khởi }\DIFaddend tạo cửa hàng trực tuyến trong vài phút thông qua các bước hướng dẫn tự động\DIFdelbegin \DIFdel{, (ii) cung }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Cung }\DIFaddend cấp công cụ tùy biến giao diện trực quan không cần lập trình\DIFdelbegin \DIFdel{, (iii) quản }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Quản }\DIFaddend lý vòng đời sản phẩm và trạng thái đơn hàng đầy đủ\DIFdelbegin \DIFdel{, (iv) xử }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Xử }\DIFaddend lý thanh toán trực tuyến qua các cổng thanh toán \DIFaddbegin \DIFadd{nội địa (VNPAY, MoMo) }\DIFaddend hoặc \DIFaddbegin \DIFadd{hình thức }\DIFaddend nhận hàng trả tiền \DIFdelbegin \DIFdel{, và (v)hỗ }\DIFdelend \DIFaddbegin \DIFadd{(COD).
+    }\item \DIFadd{Hỗ }\DIFaddend trợ ánh xạ tên miền tùy chỉnh riêng biệt cho từng cửa hàng.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+\section{Định hướng giải pháp}
+\label{section:1.3}
+
+Để \DIFdelbegin \DIFdel{giải quyết bài toán vận hành số lượng lớn cửa hàng với }\DIFdelend \DIFaddbegin \DIFadd{hạ }\DIFaddend chi phí \DIFaddbegin \DIFadd{biên khi phục vụ thêm cửa hàng trên một }\DIFaddend hạ tầng \DIFdelbegin \DIFdel{tối ưu}\DIFdelend \DIFaddbegin \DIFadd{dùng chung}\DIFaddend , đề tài lựa chọn kiến trúc phần mềm Multi-tenant SaaS kết hợp với nguyên lý thiết kế "Zero-file". Đây là phương pháp quản lý giao diện trong đó toàn bộ cấu trúc trang của các cửa hàng được biểu diễn hoàn toàn dưới dạng tệp dữ liệu cấu hình JSON thay vì các tệp mã nguồn riêng lẻ. Cách tiếp cận này cho phép một mã nguồn duy nhất có thể phục vụ \DIFdelbegin \DIFdel{hàng ngàn }\DIFdelend \DIFaddbegin \DIFadd{nhiều }\DIFaddend cửa hàng khác nhau mà không cần thực hiện quá trình triển khai lại từng ứng dụng riêng biệt.
+
+Hệ thống ShopVolo v2 được xây dựng dưới dạng Monorepo sử dụng Turborepo, bao gồm bốn ứng dụng chính. Ứng dụng Admin Dashboard phát triển bằng Next.js 16 cho phép người bán quản lý cửa hàng toàn diện. Ứng dụng API Core viết bằng NestJS 11 cung cấp các giao diện lập trình ứng dụng REST API có khả năng cô lập dữ liệu tự động qua AsyncLocalStorage. Ứng dụng Storefront cũng dùng Next.js 16 để kết xuất giao diện động từ cấu hình, cùng với một công cụ dòng lệnh hỗ trợ vận hành hệ thống hàng loạt. Cơ sở dữ liệu PostgreSQL được dùng cho các dữ liệu có cấu trúc chặt chẽ như đơn hàng, trong khi MongoDB lưu trữ các dữ liệu có tính chất linh hoạt như cấu hình giao diện.
+
+Đóng góp của đề tài tập trung ở ba giải pháp kỹ thuật\DIFdelbegin \DIFdel{. Thứ nhất là cơ chế cô lập dữ liệu đa thuê bao tự động bằng AsyncLocalStorage, giúp }\DIFdelend \DIFaddbegin \DIFadd{:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Cô lập dữ liệu đa thuê bao tự động bằng AsyncLocalStorage:}} \DIFaddend mọi truy vấn \DIFaddbegin \DIFadd{được }\DIFaddend gắn đúng phạm vi cửa hàng mà không cần truyền tham số qua các tầng xử lý\DIFaddbegin \DIFadd{, đưa trách nhiệm cô lập dữ liệu về một điểm duy nhất thay vì phụ thuộc kỷ luật của người lập trình}\DIFaddend .
+    \DIFdelbegin \DIFdel{Thứ hai là kiến trúc giao diện ``Zero-file'' với động cơ kết xuất động, }\DIFdelend \DIFaddbegin \item \textbf{\DIFadd{Kiến trúc giao diện ``Zero-file'' với động cơ kết xuất động:}} \DIFaddend cho phép thêm cửa hàng mới mà không sinh thêm tệp mã nguồn hay lần biên dịch nào\DIFdelbegin \DIFdel{. Thứ ba }\DIFdelend \DIFaddbegin \DIFadd{; chi phí biên của mỗi cửa hàng chỉ còn }\DIFaddend là \DIFdelbegin \DIFdel{mô }\DIFdelend \DIFaddbegin \DIFadd{vài tài liệu cấu }\DIFaddend hình \DIFdelbegin \DIFdel{Master Template kết hợp quy trình nháp--xuất bản hai pha, giúp }\DIFdelend \DIFaddbegin \DIFadd{JSON.
+    }\item \textbf{\DIFadd{Mô hình Master Template kết hợp quy trình nháp--xuất bản hai pha:}} \DIFaddend chủ cửa hàng có ngay giao diện hoàn chỉnh theo ngành hàng rồi tùy biến an toàn; hệ thống chỉ lưu cấu hình thay đổi của từng cửa hàng và dùng bộ nhớ đệm phân tầng (Redis cho định danh cửa hàng, Next.js Data Cache cho bố cục) để đạt hiệu năng cao.
+\DIFdelbegin \DIFdel{Mục }\DIFdelend \DIFaddbegin \end{itemize}
+
+\DIFadd{Ba giải pháp trên cùng hướng tới một mục }\DIFaddend tiêu\DIFdelbegin \DIFdel{thiết kế }\DIFdelend \DIFaddbegin \DIFadd{: hạ chi phí biên }\DIFaddend của \DIFdelbegin \DIFdel{hệ thống là }\DIFdelend \DIFaddbegin \DIFadd{mỗi cửa hàng xuống mức tối thiểu để có thể }\DIFaddend phục vụ \DIFdelbegin \DIFdel{đồng thời 20.000 }\DIFdelend \DIFaddbegin \DIFadd{nhiều }\DIFaddend cửa hàng trên một \DIFdelbegin \DIFdel{máy chủ 16GB RAM với thời gian phản hồi dưới 500ms đối với dữ liệu mới và dưới 10ms đối với dữ liệu đã có trong bộ nhớ đệm}\DIFdelend \DIFaddbegin \DIFadd{hạ tầng dùng chung mà vẫn giữ được trải nghiệm dịch vụ tốt}\DIFaddend . Chi tiết về \DIFdelbegin \DIFdel{các }\DIFdelend \DIFaddbegin \DIFadd{cách hiện thực hóa và phân tích từng }\DIFaddend giải pháp kỹ thuật \DIFdelbegin \DIFdel{này sẽ }\DIFdelend được trình bày cụ thể trong Chương 5.
+
+\section{Bố cục đồ án}
+\label{section:1.4}
+
+Phần còn lại của báo cáo đồ án tốt nghiệp này được tổ chức như sau.
+
+Chương 2 trình bày quá trình khảo sát hiện trạng từ ba nguồn chính bao gồm người dùng, hệ thống hiện có, và ứng dụng tương tự, qua đó xác định yêu cầu chức năng thông qua mười trường hợp sử dụng, đặc tả chi tiết năm trường hợp sử dụng quan trọng nhất, và đưa ra các yêu cầu phi chức năng về hiệu năng, bảo mật, cũng như hạ tầng hệ thống.
+
+Chương 3 giới thiệu các công nghệ và nền tảng kiến trúc được lựa chọn để hiện thực hóa các yêu cầu đã xác định ở Chương 2, bao gồm Turborepo, NestJS, Next.js, Prisma, Mongoose, Redis, MinIO, và Docker, cùng lý do chọn mỗi công nghệ thay vì các giải pháp thay thế có sẵn trên thị trường.
+
+Chương 4 trình bày thiết kế kiến trúc tổng quan theo mô hình phân tầng, thiết kế giao diện cho trang quản trị và trang hiển thị cửa hàng, thiết kế lớp cho các thành phần chính, lược đồ cơ sở dữ liệu PostgreSQL và MongoDB, cùng với kết quả xây dựng ứng dụng, quy trình kiểm thử và mô hình triển khai hệ thống.
+
+Chương 5 phân tích chuyên sâu ba đóng góp kỹ thuật nổi bật của đề tài, bao gồm cơ chế cô lập dữ liệu đa thuê bao bằng AsyncLocalStorage, kiến trúc giao diện ``Zero-file'' với động cơ kết xuất thành phần động, và mô hình Master Template với quy trình cá nhân hóa giao diện hai pha nháp--xuất bản.
+
+Chương 6 tổng kết các kết quả đã đạt được trong quá trình nghiên cứu và phát triển, so sánh sản phẩm hoàn thiện với các nền tảng tương tự trên thị trường, đánh giá một cách khách quan những điểm chưa hoàn thiện và đề xuất các hướng phát triển tiếp theo\DIFdelbegin \DIFdel{.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Chương này đã làm rõ bài toán thực tiễn về sự thiếu hụt một nền tảng phù hợp cho các doanh nghiệp vừa và nhỏ, đồng thời phân tích những điểm còn hạn chế của các hệ thống thương mại điện tử hiện tại. Dựa trên cơ sở đó, đề tài đề xuất việc phát triển hệ thống ShopVolo v2 ứng dụng kiến trúc đa thuê bao và nguyên lý giao diện "Zero-file" để tối ưu hóa quá trình vận hành và tùy biến. Chương tiếp theo sẽ trình bày chi tiết kết quả khảo sát hiện trạng và phân tích yêu cầu của hệ thống}\DIFdelend .
+

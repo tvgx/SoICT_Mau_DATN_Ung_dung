@@ -13,7 +13,12 @@
       "Bash(awk '/^!/{c=8} c&&c--' build/main.log)",
       "Bash(awk '/^!/{c=6} c&&c--' build/main.log)",
       "Bash(pdftotext -layout main.pdf /tmp/main.txt)",
-      "Bash(pdfinfo main.pdf)"
+      "Bash(pdfinfo main.pdf)",
+      "Bash(java -jar plantuml.jar -tpng smtest.puml)",
+      "Bash(PERL5LIB=tools/lib perl tools/latexdiff --flatten --encoding=utf8 main.tex main.tex)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(PERL5LIB=tools/lib perl tools/latexdiff --encoding=utf8 /tmp/old_snap/Chuong/2_Khao_sat.tex Chuong/2_Khao_sat.tex)",
+      "Bash(python3 tools/make_diff.py)"
     ]
   }
 }

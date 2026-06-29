@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Report: Shopify vs WooCommerce vs Haravan 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --shopify: #96bf48;
+    --shopify-dark: #5a7a1b;
+    --woo: #7f54b3;
+    --woo-dark: #5a3a8a;
+    --haravan: #e94560;
+    --haravan-dark: #b22040;
+    --bg: #0d0f18;
+    --surface: #151824;
+    --surface2: #1e2235;
+    --border: #252a3d;
+    --text: #e8eaf2;
+    --muted: #8890ab;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* ─── Header ─── */
+  .header {
+    background: linear-gradient(135deg, #0d0f18 0%, #151824 50%, #0d1525 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(150,191,72,.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 20%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(127,84,179,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .report-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  h1 span {
+    background: linear-gradient(90deg, var(--shopify), var(--woo), var(--haravan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+  }
+  .header-meta span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+
+  /* ─── Layout ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px 80px; }
+
+  /* ─── Section ─── */
+  .section { margin-top: 56px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    min-width: 28px;
+  }
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── Cards ─── */
+  .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cards-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  @media (max-width: 768px) {
+    .cards-3, .cards-2 { grid-template-columns: 1fr; }
+    .container { padding: 0 20px 60px; }
+    .header { padding: 40px 20px 36px; }
+  }
+
+  .platform-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .platform-card:hover { transform: translateY(-2px); }
+  .platform-card.shopify { border-top: 3px solid var(--shopify); }
+  .platform-card.shopify:hover { border-color: var(--shopify); }
+  .platform-card.woo { border-top: 3px solid var(--woo); }
+  .platform-card.woo:hover { border-color: var(--woo); }
+  .platform-card.haravan { border-top: 3px solid var(--haravan); }
+  .platform-card.haravan:hover { border-color: var(--haravan); }
+
+  .card-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .card-logo.shopify { color: var(--shopify); }
+  .card-logo.woo { color: var(--woo); }
+  .card-logo.haravan { color: var(--haravan); }
+
+  .card-tagline {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { font-size: 12px; color: var(--muted); }
+  .stat-value { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  /* ─── Chart containers ─── */
+  .chart-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .chart-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .chart-source {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap-tall { position: relative; height: 340px; }
+
+  /* ─── Pricing table ─── */
+  .pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  .pricing-table th {
+    background: var(--surface2);
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .pricing-table th:first-child { border-radius: 8px 0 0 0; }
+  .pricing-table th:last-child { border-radius: 0 8px 0 0; }
+  .pricing-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .pricing-table tr:last-child td { border-bottom: none; }
+  .pricing-table tr:hover td { background: rgba(255,255,255,.02); }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: .3px;
+  }
+  .tag-shopify { background: rgba(150,191,72,.15); color: var(--shopify); }
+  .tag-woo { background: rgba(127,84,179,.15); color: #a97de0; }
+  .tag-haravan { background: rgba(233,69,96,.15); color: #f47289; }
+
+  /* ─── Comparison table ─── */
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  .cmp-table th {
+    background: var(--surface2);
+    padding: 12px 16px;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .cmp-table th:first-child { text-align: left; }
+  .cmp-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .cmp-table td:first-child {
+    text-align: left;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .check { color: #4cdb8f; font-size: 17px; }
+  .partial { color: #f5a623; font-size: 13px; font-weight: 600; }
+  .cross { color: #e94560; font-size: 17px; }
+
+  /* ─── Highlights ─── */
+  .highlight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 768px) { .highlight-grid { grid-template-columns: 1fr; } }
+
+  .highlight-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .hi-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .hi-label { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* ─── Sources ─── */
+  .sources-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-size: 12px;
+  }
+  .sources-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .sources-list { list-style: none; }
+  .sources-list li {
+    color: var(--muted);
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .sources-list li::before { content: '·'; color: var(--border); flex-shrink: 0; }
+  .sources-list a { color: #5b8ef0; text-decoration: none; }
+  .sources-list a:hover { text-decoration: underline; }
+
+  /* ─── Prose text ─── */
+  .prose { color: var(--muted); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+  .prose strong { color: var(--text); }
+
+  /* ─── Insight box ─── */
+  .insight {
+    border-left: 3px solid;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 16px 0;
+  }
+  .insight.shopify { border-color: var(--shopify); background: rgba(150,191,72,.06); }
+  .insight.woo { border-color: var(--woo); background: rgba(127,84,179,.06); }
+  .insight.haravan { border-color: var(--haravan); background: rgba(233,69,96,.06); }
+
+  .verdict-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 768px) { .verdict-grid { grid-template-columns: 1fr; } }
+  .verdict-card {
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid;
+  }
+  .verdict-card.shopify { border-color: rgba(150,191,72,.3); background: rgba(150,191,72,.06); }
+  .verdict-card.woo { border-color: rgba(127,84,179,.3); background: rgba(127,84,179,.06); }
+  .verdict-card.haravan { border-color: rgba(233,69,96,.3); background: rgba(233,69,96,.06); }
+  .verdict-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .verdict-title.shopify { color: var(--shopify); }
+  .verdict-title.woo { color: #a97de0; }
+  .verdict-title.haravan { color: #f47289; }
+  .verdict-list { list-style: none; }
+  .verdict-list li { font-size: 12.5px; color: var(--muted); padding: 3px 0; padding-left: 14px; position: relative; }
+  .verdict-list li::before { content: '→'; position: absolute; left: 0; color: var(--border); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <p class="report-label">Market Intelligence Report · Q2 2025</p>
+    <h1>So sánh nền tảng<br>Thương mại Điện tử:<br><span>Shopify · WooCommerce · Haravan</span></h1>
+    <div class="header-meta">
+      <span><span class="dot" style="background:var(--shopify)"></span> Shopify (Global)</span>
+      <span><span class="dot" style="background:var(--woo)"></span> WooCommerce (Global)</span>
+      <span><span class="dot" style="background:var(--haravan)"></span> Haravan (Việt Nam)</span>
+      <span>· Cập nhật: Tháng 6/2025</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: TỔNG QUAN -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Tổng quan nền tảng</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="cards-3">
+      <div class="platform-card shopify">
+        <div class="card-logo shopify">Shopify</div>
+        <div class="card-tagline">Nền tảng SaaS toàn cầu · Ottawa, Canada</div>
+        <div class="stat-row"><span class="stat-label">Thành lập</span><span class="stat-value">2006</span></div>
+        <div class="stat-row"><span class="stat-label">Số cửa hàng</span><span class="stat-value">~2,45 triệu</span></div>
+        <div class="stat-row"><span class="stat-label">GMV 2024</span><span class="stat-value">$292 tỷ</span></div>
+        <div class="stat-row"><span class="stat-label">Doanh thu 2024</span><span class="stat-value">$8,88 tỷ</span></div>
+        <div class="stat-row"><span class="stat-label">Thị phần toàn cầu</span><span class="stat-value">10,32%</span></div>
+        <div class="stat-row"><span class="stat-label">Thị phần Mỹ</span><span class="stat-value">~29–30%</span></div>
+      </div>
+
+      <div class="platform-card woo">
+        <div class="card-logo woo">WooCommerce</div>
+        <div class="card-tagline">Plugin WordPress mã nguồn mở · Automattic</div>
+        <div class="stat-row"><span class="stat-label">Thành lập</span><span class="stat-value">2011</span></div>
+        <div class="stat-row"><span class="stat-label">Số cửa hàng</span><span class="stat-value">~4,53 triệu+</span></div>
+        <div class="stat-row"><span class="stat-label">GMV ước tính</span><span class="stat-value">$30–35 tỷ/năm</span></div>
+        <div class="stat-row"><span class="stat-label">Plugin miễn phí</span><span class="stat-value">Có (Core)</span></div>
+        <div class="stat-row"><span class="stat-label">Thị phần toàn cầu</span><span class="stat-value">33,4% (StoreLeads)</span></div>
+        <div class="stat-row"><span class="stat-label">% WordPress ecom</span><span class="stat-value">93,7%</span></div>
+      </div>
+
+      <div class="platform-card haravan">
+        <div class="card-logo haravan">Haravan</div>
+        <div class="card-tagline">Nền tảng Omnichannel Việt Nam · TP.HCM</div>
+        <div class="stat-row"><span class="stat-label">Thành lập</span><span class="stat-value">2014</span></div>
+        <div class="stat-row"><span class="stat-label">Người dùng VN</span><span class="stat-value">~50.000 SMEs</span></div>
+        <div class="stat-row"><span class="stat-label">Số cửa hàng (Q1/2026)</span><span class="stat-value">~8.860</span></div>
+        <div class="stat-row"><span class="stat-label">Ngành dùng nhiều</span><span class="stat-value">Thời trang, Nhà ở</span></div>
+        <div class="stat-row"><span class="stat-label">Thị trường chính</span><span class="stat-value">Việt Nam</span></div>
+        <div class="stat-row"><span class="stat-label">Partner chứng nhận</span><span class="stat-value">Google, Meta</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: THỊ PHẦN -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Thị phần & Quy mô thị trường</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="cards-2" style="margin-bottom:16px">
+      <div class="chart-box">
+        <div class="chart-title">Thị phần nền tảng eCommerce toàn cầu</div>
+        <div class="chart-source">Nguồn: StoreLeads Aug 2025 · TechnologyChecker.io Feb 2026</div>
+        <div class="chart-wrap">
+          <canvas id="marketShareChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-title">Thị phần trong Top 1 triệu website</div>
+        <div class="chart-source">Nguồn: BuiltWith 2025 · redstagfulfillment.com</div>
+        <div class="chart-wrap">
+          <canvas id="topSitesChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-title">Lịch sử số cửa hàng Haravan tại Việt Nam (theo quý)</div>
+      <div class="chart-source">Nguồn: StoreLeads.app — storeleads.app/reports/haravan/VN</div>
+      <div class="chart-wrap-tall">
+        <canvas id="haravanGrowthChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: CHI PHÍ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Cấu trúc chi phí & Bảng giá</h2>
+      <div class="divider"></div>
+    </div>
+
+    <p class="prose">Mỗi nền tảng có mô hình định giá rất khác nhau — từ SaaS thuê bao cố định (Shopify, Haravan) đến mã nguồn mở với chi phí vận hành linh hoạt (WooCommerce). Bảng dưới tổng hợp chi phí thực tế cho từng quy mô kinh doanh.</p>
+
+    <!-- Shopify Pricing -->
+    <div style="margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span class="tag tag-shopify">Shopify</span>
+        <span style="font-size:13px;color:var(--muted)">Giá niêm yết tháng 6/2025 (USD, thanh toán hàng năm)</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Gói</th>
+              <th>Giá/tháng (năm)</th>
+              <th>Giá/tháng (tháng)</th>
+              <th>Phí giao dịch (Shopify Pay)</th>
+              <th>Đối tượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Starter</strong></td>
+              <td>$5</td>
+              <td>$5</td>
+              <td>5%</td>
+              <td>Bán qua social, không cần website</td>
+            </tr>
+            <tr>
+              <td><strong>Basic</strong></td>
+              <td>$29</td>
+              <td>$39</td>
+              <td>2,9% + $0,30</td>
+              <td>Mới bắt đầu, doanh nghiệp nhỏ</td>
+            </tr>
+            <tr>
+              <td><strong>Grow</strong> (cũ: Shopify)</td>
+              <td>$79</td>
+              <td>$105</td>
+              <td>2,6% + $0,30</td>
+              <td>Doanh nghiệp đang phát triển</td>
+            </tr>
+            <tr>
+              <td><strong>Advanced</strong></td>
+              <td>$299</td>
+              <td>$399</td>
+              <td>2,4% + $0,30</td>
+              <td>Thương hiệu quy mô lớn, xuất khẩu</td>
+            </tr>
+            <tr>
+              <td><strong>Plus</strong></td>
+              <td colspan="2" style="text-align:center">Từ $2.300/tháng</td>
+              <td>0,4% (min $2.300/tháng)</td>
+              <td>Enterprise: Gymshark, Tesla, LVMH…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight shopify" style="margin-top:10px">
+        <strong style="color:var(--shopify)">Lưu ý:</strong> Khi dùng cổng thanh toán bên thứ ba (không dùng Shopify Payments), bị cộng thêm phí 0,5%–2% tùy gói. Chi phí app trung bình $50–$100/tháng. Theme premium $140–$350 một lần.
+      </div>
+    </div>
+
+    <!-- WooCommerce Pricing -->
+    <div style="margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span class="tag tag-woo">WooCommerce</span>
+        <span style="font-size:13px;color:var(--muted)">Chi phí thực tế hàng năm (ước tính, USD)</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Quy mô</th>
+              <th>Plugin cốt lõi</th>
+              <th>Hosting/năm</th>
+              <th>Plugin & Theme</th>
+              <th>Tổng ước tính/năm</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Khởi nghiệp (DIY)</strong></td>
+              <td>Miễn phí</td>
+              <td>$60–$120</td>
+              <td>$0–$100 (free themes)</td>
+              <td style="font-weight:600;color:#4cdb8f">$100–$300</td>
+            </tr>
+            <tr>
+              <td><strong>Chuyên nghiệp (SME)</strong></td>
+              <td>Miễn phí</td>
+              <td>$360–$1.200</td>
+              <td>$300–$600</td>
+              <td style="font-weight:600;color:#f5a623">$800–$2.500</td>
+            </tr>
+            <tr>
+              <td><strong>Tăng trưởng (Mid-market)</strong></td>
+              <td>Miễn phí</td>
+              <td>$1.200–$3.000</td>
+              <td>$1.000–$3.000</td>
+              <td style="font-weight:600;color:#f5a623">$3.000–$15.000</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise (custom)</strong></td>
+              <td>Miễn phí</td>
+              <td>$5.000–$20.000</td>
+              <td>Dev custom</td>
+              <td style="font-weight:600;color:var(--haravan)">$50.000+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight woo" style="margin-top:10px">
+        <strong style="color:#a97de0">Lưu ý:</strong> Phí cổng thanh toán (Stripe ~2,9% + $0,30; PayPal ~3,49%). Domain ~$10–$20/năm; SSL thường miễn phí theo hosting. Chi phí nhân sự/developer không bao gồm trong bảng trên.
+      </div>
+    </div>
+
+    <!-- Haravan Pricing -->
+    <div style="margin-bottom:24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span class="tag tag-haravan">Haravan</span>
+        <span style="font-size:13px;color:var(--muted)">Bảng giá Haravan (đã bao gồm VAT 10%, thanh toán theo năm)</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Gói</th>
+              <th>Giá/tháng (VND)</th>
+              <th>Giá/năm (VND)</th>
+              <th>Kênh bán hàng</th>
+              <th>Đối tượng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Standard</strong></td>
+              <td>~150.000đ</td>
+              <td>~1,8 triệu</td>
+              <td>POS cơ bản</td>
+              <td>Quản lý cửa hàng offline nhỏ</td>
+            </tr>
+            <tr>
+              <td><strong>Omni Pro</strong></td>
+              <td>~600.000đ</td>
+              <td>~7,2 triệu</td>
+              <td>Website + Social + POS</td>
+              <td>SME bán đa kênh</td>
+            </tr>
+            <tr>
+              <td><strong>Growth</strong></td>
+              <td>~1.500.000đ</td>
+              <td>~18 triệu</td>
+              <td>Đầy đủ kênh + CRM</td>
+              <td>Thương hiệu đang mở rộng</td>
+            </tr>
+            <tr>
+              <td><strong>Scale</strong></td>
+              <td>~3.000.000đ</td>
+              <td>~36 triệu</td>
+              <td>Toàn bộ tính năng</td>
+              <td>Chuỗi bán lẻ lớn</td>
+            </tr>
+            <tr>
+              <td><strong>Enterprise</strong></td>
+              <td colspan="2" style="text-align:center">Thương lượng</td>
+              <td>Tùy chỉnh</td>
+              <td>Vinamilk, Juno, The Coffee House…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight haravan" style="margin-top:10px">
+        <strong style="color:#f47289">Lưu ý:</strong> Haravan chỉ cho phép thanh toán theo năm (tối thiểu). Dùng thử miễn phí 14 ngày. Không phí thiết lập. Theme Haravan từ $60–$150 (thấp hơn Shopify). Không tính phí giao dịch theo giao dịch.
+      </div>
+    </div>
+
+    <!-- Cost comparison chart -->
+    <div class="chart-box">
+      <div class="chart-title">So sánh chi phí hàng năm theo quy mô kinh doanh (USD)</div>
+      <div class="chart-source">Nguồn: Shopify.com, swell.is/woocommerce-pricing, meowcart.net/shopify-vs-haravan — Q2 2025</div>
+      <div class="chart-wrap-tall">
+        <canvas id="costCompareChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SO SÁNH TÍNH NĂNG -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>So sánh tính năng</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th style="width:30%">Tiêu chí</th>
+            <th style="color:var(--shopify)">Shopify</th>
+            <th style="color:#a97de0">WooCommerce</th>
+            <th style="color:#f47289">Haravan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hosting đi kèm</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗ Tự lo</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Tên miền tùy chỉnh</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Thanh toán tháng</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗ Theo năm</span></td>
+          </tr>
+          <tr>
+            <td>Bán đa kênh (Social, Sàn TMĐT)</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="partial">Qua plugin</span></td>
+            <td><span class="check">✓ Tối ưu VN</span></td>
+          </tr>
+          <tr>
+            <td>POS (Quản lý cửa hàng offline)</td>
+            <td><span class="check">✓ Shopify POS</span></td>
+            <td><span class="partial">Plugin bên 3</span></td>
+            <td><span class="check">✓ Hararetail</span></td>
+          </tr>
+          <tr>
+            <td>Hỗ trợ tiếng Việt / VND</td>
+            <td><span class="partial">Có, không đầy đủ</span></td>
+            <td><span class="partial">Qua plugin</span></td>
+            <td><span class="check">✓ Bản địa hóa</span></td>
+          </tr>
+          <tr>
+            <td>Tích hợp TMĐT VN (Shopee, Lazada, TikTok Shop)</td>
+            <td><span class="partial">Hạn chế</span></td>
+            <td><span class="partial">Qua plugin</span></td>
+            <td><span class="check">✓ Tích hợp sẵn</span></td>
+          </tr>
+          <tr>
+            <td>SEO tích hợp</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓ Tốt nhất</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>Tùy chỉnh code (open-source)</td>
+            <td><span class="partial">Liquid (hạn chế)</span></td>
+            <td><span class="check">✓ Hoàn toàn</span></td>
+            <td><span class="partial">API/Webhook</span></td>
+          </tr>
+          <tr>
+            <td>App/plugin ecosystem</td>
+            <td><span class="check">✓ 8.000+ apps</span></td>
+            <td><span class="check">✓ 59.000+ plugins</span></td>
+            <td><span class="partial">Hệ sinh thái VN</span></td>
+          </tr>
+          <tr>
+            <td>CRM & Marketing tích hợp</td>
+            <td><span class="partial">Qua app</span></td>
+            <td><span class="partial">Qua plugin</span></td>
+            <td><span class="check">✓ Harasocial, CRM</span></td>
+          </tr>
+          <tr>
+            <td>Hỗ trợ hóa đơn điện tử VN</td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="partial">Plugin bên 3</span></td>
+            <td><span class="check">✓ Tích hợp sẵn</span></td>
+          </tr>
+          <tr>
+            <td>Dùng thử miễn phí</td>
+            <td>3 ngày + $1/tháng đầu</td>
+            <td>Mã nguồn mở, không giới hạn</td>
+            <td>14 ngày</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 5: CHỈ SỐ TÀI CHÍNH -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Hiệu suất tài chính Shopify</h2>
+      <div class="divider"></div>
+    </div>
+
+    <p class="prose">Shopify là nền tảng duy nhất trong 3 cái tên được niêm yết công khai, cung cấp dữ liệu tài chính minh bạch. WooCommerce thuộc Automattic (tư nhân). Haravan là startup tư nhân Việt Nam.</p>
+
+    <div class="highlight-grid" style="margin-bottom:20px">
+      <div class="highlight-item">
+        <div class="hi-num" style="color:var(--shopify)">$8,88 tỷ</div>
+        <div class="hi-label">Doanh thu Shopify 2024<br><span style="color:var(--muted);font-size:11px">Tăng 26% so với năm trước</span></div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-num" style="color:var(--shopify)">$292 tỷ</div>
+        <div class="hi-label">GMV (Tổng giá trị hàng hóa) 2024<br><span style="font-size:11px;color:var(--muted)">Dự kiến vượt $350 tỷ vào 2025</span></div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-num" style="color:var(--shopify)">30%+</div>
+        <div class="hi-label">Tăng trưởng doanh thu<br><span style="font-size:11px;color:var(--muted)">Q2 & Q3/2025 (year-over-year)</span></div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-num" style="color:var(--woo)">$30–35 tỷ</div>
+        <div class="hi-label">GMV ước tính WooCommerce/năm<br><span style="font-size:11px;color:var(--muted)">Trải rộng trên 4,53 triệu cửa hàng</span></div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-num" style="color:var(--shopify)">76.600+</div>
+        <div class="hi-label">Cửa hàng Shopify Plus<br><span style="font-size:11px;color:var(--muted)">Thêm 300+ merchant mới mỗi tuần</span></div>
+      </div>
+      <div class="highlight-item">
+        <div class="hi-num" style="color:var(--haravan)">~8.717</div>
+        <div class="hi-label">Cửa hàng Haravan (Q2/2026)<br><span style="font-size:11px;color:var(--muted)">Giảm 16% YoY — dữ liệu StoreLeads</span></div>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-title">Doanh thu Shopify qua các năm (tỷ USD)</div>
+      <div class="chart-source">Nguồn: Shopify 10-K SEC Filing 2024 · edesk.com/shopify-statistics</div>
+      <div class="chart-wrap">
+        <canvas id="shopifyRevenueChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: PHÂN TÍCH & KHUYẾN NGHỊ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Phân tích & Khuyến nghị</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="verdict-grid">
+      <div class="verdict-card shopify">
+        <div class="verdict-title shopify">✦ Chọn Shopify khi…</div>
+        <ul class="verdict-list">
+          <li>Muốn mở rộng quốc tế, xuất khẩu</li>
+          <li>Cần giải pháp all-in-one, không lo kỹ thuật</li>
+          <li>Doanh thu cao, cần tích hợp logistics toàn cầu</li>
+          <li>Thương hiệu lớn, cần Shopify Plus</li>
+          <li>Thanh toán linh hoạt hàng tháng</li>
+        </ul>
+      </div>
+      <div class="verdict-card woo">
+        <div class="verdict-title woo">✦ Chọn WooCommerce khi…</div>
+        <ul class="verdict-list">
+          <li>Đã có website WordPress, cần thêm ecom</li>
+          <li>Muốn tùy chỉnh không giới hạn</li>
+          <li>Ngân sách khởi đầu hạn hẹp ($100–300/năm)</li>
+          <li>Có đội developer nội bộ</li>
+          <li>Chú trọng SEO và blog content</li>
+        </ul>
+      </div>
+      <div class="verdict-card haravan">
+        <div class="verdict-title haravan">✦ Chọn Haravan khi…</div>
+        <ul class="verdict-list">
+          <li>Kinh doanh tại thị trường Việt Nam</li>
+          <li>Bán đa kênh: Shopee, Lazada, TikTok Shop</li>
+          <li>Cần tích hợp hóa đơn điện tử VN</li>
+          <li>Quản lý chuỗi cửa hàng offline + online</li>
+          <li>Cần hỗ trợ tiếng Việt, thanh toán VND</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Nguồn tham khảo</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="sources-box">
+      <div class="sources-title">Nguồn chính thống được sử dụng trong báo cáo này</div>
+      <ul class="sources-list">
+        <li><strong>Shopify 10-K SEC Filing 2024</strong> — Doanh thu $8,88 tỷ, GMV $292 tỷ · <a href="https://investors.shopify.com" target="_blank">investors.shopify.com</a></li>
+        <li><strong>StoreLeads.app (Aug 2025)</strong> — Số cửa hàng: Shopify 2,44 triệu, WooCommerce 4,53 triệu, Haravan theo quý · <a href="https://storeleads.app/reports/haravan" target="_blank">storeleads.app</a></li>
+        <li><strong>TechnologyChecker.io (Feb 2026)</strong> — Thị phần Shopify 45,99% (ecom-platform), WooCommerce 17,79% · <a href="https://technologychecker.io/blog/shopify-analytics-trends-insights" target="_blank">technologychecker.io</a></li>
+        <li><strong>BuiltWith (2025)</strong> — Thị phần Top 1 triệu website: Shopify 28,8%, WooCommerce 18,2% · <a href="https://builtwith.com" target="_blank">builtwith.com</a></li>
+        <li><strong>Shopify Official Pricing</strong> — Basic $39, Grow $105, Advanced $399/tháng · <a href="https://www.shopify.com/pricing" target="_blank">shopify.com/pricing</a></li>
+        <li><strong>NerdWallet — Shopify Pricing (2025)</strong> — Bảng giá và phí giao dịch · <a href="https://www.nerdwallet.com/business/software/learn/shopify-pricing" target="_blank">nerdwallet.com</a></li>
+        <li><strong>WooCommerce Official Pricing Guide</strong> — Hosting $200–$20.000/năm; TCO $1.821–$67.791+ · <a href="https://woocommerce.com/pricing" target="_blank">woocommerce.com</a></li>
+        <li><strong>Elementor — WooCommerce Cost Guide (2026)</strong> — TCO phân tích chi tiết · <a href="https://elementor.com/blog/how-much-does-a-woocommerce-store-cost/" target="_blank">elementor.com</a></li>
+        <li><strong>Haravan Official Pricing Page</strong> — Bảng giá VAT 10%, thanh toán theo năm · <a href="https://www.haravan.com/pages/pricing" target="_blank">haravan.com/pages/pricing</a></li>
+        <li><strong>Meowcart.net — Shopify vs Haravan (2024)</strong> — So sánh chi phí thực tế VN · <a href="https://www.meowcart.net/en/blogs/ecommerce/shopify-vs-haravan" target="_blank">meowcart.net</a></li>
+        <li><strong>eDesk — Shopify Statistics 2025</strong> — Thị phần theo quốc gia, Shopify Plus · <a href="https://www.edesk.com/blog/shopify-statistics-marketshare-revenue-ecommerce/" target="_blank">edesk.com</a></li>
+        <li><strong>Red Stag Fulfillment — WooCommerce Market Share 2025</strong> · <a href="https://redstagfulfillment.com/what-is-woocommerces-market-share/" target="_blank">redstagfulfillment.com</a></li>
+        <li><strong>Haravan Blog</strong> — "Haravan enables multi-channel e-commerce world for Vietnam SMEs" · <a href="https://www.haravan.com/blogs/bao-chi" target="_blank">haravan.com/blogs</a></li>
+      </ul>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px">* Tỷ giá quy đổi tham khảo: 1 USD ≈ 25.500 VND (Q2 2025). Dữ liệu Haravan dựa trên StoreLeads và thông tin công bố của công ty; Haravan là doanh nghiệp tư nhân, không công bố báo cáo tài chính.</p>
+  </div>
+
+</div>
+
+<script>
+const SHOPIFY = 'rgba(150,191,72,1)';
+const SHOPIFY_A = 'rgba(150,191,72,0.15)';
+const WOO = 'rgba(169,125,224,1)';
+const WOO_A = 'rgba(169,125,224,0.15)';
+const HARAVAN = 'rgba(233,69,96,1)';
+const HARAVAN_A = 'rgba(233,69,96,0.15)';
+
+const gridColor = 'rgba(255,255,255,0.06)';
+const tickColor = '#8890ab';
+const font = "'Inter', sans-serif";
+
+Chart.defaults.color = tickColor;
+Chart.defaults.font.family = font;
+Chart.defaults.font.size = 12;
+
+// ── 1. Market Share Pie ──
+new Chart(document.getElementById('marketShareChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Shopify (46%)', 'WooCommerce (18%)', 'BigCommerce', 'Squarespace', 'Khác'],
+    datasets: [{
+      data: [46, 18, 6, 5, 25],
+      backgroundColor: [SHOPIFY, WOO, 'rgba(70,130,230,0.8)', 'rgba(255,180,50,0.7)', 'rgba(100,110,140,0.4)'],
+      borderColor: '#151824',
+      borderWidth: 3,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 16, boxWidth: 12, color: tickColor } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}%` } }
+    },
+    cutout: '62%',
+  }
+});
+
+// ── 2. Top Sites Bar ──
+new Chart(document.getElementById('topSitesChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Shopify', 'WooCommerce', 'Wix', 'Squarespace', 'BigCommerce'],
+    datasets: [{
+      label: 'Thị phần trong Top 1M website (%)',
+      data: [28.8, 18.2, 8.5, 6.2, 3.1],
+      backgroundColor: [SHOPIFY, WOO, 'rgba(70,130,230,0.7)', 'rgba(255,180,50,0.6)', 'rgba(100,200,180,0.6)'],
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { callback: v => v + '%', color: tickColor }, border: { color: 'transparent' } },
+      y: { grid: { display: false }, ticks: { color: tickColor }, border: { color: 'transparent' } }
+    }
+  }
+});
+
+// ── 3. Haravan Growth ──
+new Chart(document.getElementById('haravanGrowthChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q4/21','Q1/22','Q2/22','Q3/22','Q4/22','Q1/23','Q2/23','Q3/23','Q4/23','Q1/24','Q2/24','Q3/24','Q4/24','Q1/25','Q2/25','Q3/25','Q4/25','Q1/26','Q2/26'],
+    datasets: [{
+      label: 'Số cửa hàng Haravan (VN)',
+      data: [8552,8793,8942,9449,9964,10132,10913,11342,11179,11239,11171,10930,10579,10543,10622,9306,9112,8860,8717],
+      borderColor: HARAVAN,
+      backgroundColor: HARAVAN_A,
+      borderWidth: 2.5,
+      pointRadius: 3,
+      pointBackgroundColor: HARAVAN,
+      fill: true,
+      tension: 0.35,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toLocaleString()} cửa hàng` } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { color: tickColor, maxRotation: 45 }, border: { color: 'transparent' } },
+      y: { grid: { color: gridColor }, ticks: { color: tickColor, callback: v => v.toLocaleString() }, border: { color: 'transparent' }, min: 7000 }
+    }
+  }
+});
+
+// ── 4. Cost Comparison ──
+new Chart(document.getElementById('costCompareChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Khởi nghiệp\n(Starter)', 'SME\n(Chuyên nghiệp)', 'Mid-market\n(Tăng trưởng)', 'Enterprise'],
+    datasets: [
+      { label: 'Shopify (USD/năm)', data: [348, 948, 3588, 27600], backgroundColor: SHOPIFY, borderRadius: 5, borderSkipped: false },
+      { label: 'WooCommerce (USD/năm)', data: [200, 1650, 9000, 50000], backgroundColor: WOO, borderRadius: 5, borderSkipped: false },
+      { label: 'Haravan (USD tương đương/năm)', data: [70, 280, 705, 1412], backgroundColor: HARAVAN, borderRadius: 5, borderSkipped: false },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { padding: 16, boxWidth: 12, color: tickColor } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.raw.toLocaleString()}` } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: tickColor }, border: { color: 'transparent' } },
+      y: { grid: { color: gridColor }, ticks: { color: tickColor, callback: v => '$' + (v>=1000?v/1000+'k':v) }, border: { color: 'transparent' }, type: 'logarithmic' }
+    }
+  }
+});
+
+// ── 5. Shopify Revenue ──
+new Chart(document.getElementById('shopifyRevenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025 (dự kiến)'],
+    datasets: [{
+      label: 'Doanh thu (tỷ USD)',
+      data: [1.58, 2.93, 4.61, 5.60, 7.06, 8.88, 12],
+      backgroundColor: (ctx) => {
+        const idx = ctx.dataIndex;
+        return idx === 6 ? SHOPIFY_A.replace('0.15','0.4') : SHOPIFY;
+      },
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.raw} tỷ` } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: tickColor }, border: { color: 'transparent' } },
+      y: { grid: { color: gridColor }, ticks: { color: tickColor, callback: v => '$' + v + 'B' }, border: { color: 'transparent' } }
+    }
+  }
+});
+</script>
+</body>
+</html>

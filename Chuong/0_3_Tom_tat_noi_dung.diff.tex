@@ -1,0 +1,61 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmpio2ncuo2.tex   Mon Jun 15 17:22:25 2026
+%DIF ADD /tmp/tmp1a2f53ho.tex   Mon Jun 15 17:22:25 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+\begin{center}
+    \Large{\textbf{TÓM TẮT NỘI DUNG ĐỒ ÁN}}\\
+\end{center}
+\vspace{1cm}
+Trong bối cảnh thương mại điện tử tại Việt Nam đang phát triển mạnh mẽ, các doanh nghiệp vừa và nhỏ thường xuyên đối mặt với rào cản lớn về mặt chi phí cũng như rào cản kỹ thuật khi muốn xây dựng và vận hành một cửa hàng trực tuyến độc lập. Các nền tảng thương mại điện tử hiện có trên thị trường như Shopify, WooCommerce hay Haravan vẫn tồn tại nhiều hạn chế đáng kể, đặc biệt là trong việc không thể đáp ứng đồng thời cả ba tiêu chí: chi phí khởi tạo và duy trì thấp, khả năng tùy biến giao diện linh hoạt mà không yêu cầu kiến thức lập trình, và khả năng \DIFdelbegin \DIFdel{mở rộng hệ thống để phục vụ hàng chục ngàn }\DIFdelend \DIFaddbegin \DIFadd{vận hành nhiều }\DIFaddend cửa hàng \DIFdelbegin \DIFdel{mà không làm gia tăng tuyến tính chi phí }\DIFdelend \DIFaddbegin \DIFadd{trên cùng một }\DIFaddend hạ tầng \DIFaddbegin \DIFadd{dùng chung với chi phí biên thấp cho mỗi cửa hàng tăng thêm}\DIFaddend . Xuất phát từ thực tiễn đó, đồ án này tập trung vào việc nghiên cứu và phát triển nền tảng thương mại điện tử đa thuê bao mang tên ShopVolo v2 nhằm giải quyết triệt để bài toán tối ưu hóa nguồn lực. Hướng tiếp cận chủ đạo của nghiên cứu là áp dụng kiến trúc phần mềm Multi-tenant SaaS kết hợp với nguyên lý thiết kế "Zero-file", trong đó toàn bộ giao diện của các cửa hàng được biểu diễn dưới dạng dữ liệu cấu hình thay vì mã nguồn vật lý riêng biệt.
+
+Hệ thống được phát triển dựa trên mô hình Monorepo với công cụ Turborepo, tích hợp các nền tảng công nghệ hiện đại bao gồm Next.js cho giao diện trang quản trị và kết xuất mặt tiền cửa hàng động, NestJS cho hệ thống API lõi, cùng hệ thống cơ sở dữ liệu kép kết hợp giữa PostgreSQL và MongoDB để xử lý hiệu quả cả thông tin có cấu trúc lẫn tài liệu cấu hình linh hoạt. Đồ án mang lại ba đóng góp kỹ thuật chính: (i) cơ chế cô lập dữ liệu đa thuê bao tự động dựa trên AsyncLocalStorage, bảo đảm mọi truy vấn gắn đúng phạm vi cửa hàng mà không cần truyền tham số qua các tầng xử lý; (ii) động cơ kết xuất giao diện động theo kiến trúc Zero-file, cho phép thêm cửa hàng mới mà không phát sinh tệp mã nguồn hay lần biên dịch nào; và (iii) mô hình Master Template theo ngành hàng kết hợp quy trình chỉnh sửa hai pha nháp--xuất bản, giúp người không biết lập trình tùy biến giao diện một cách an toàn. Kết quả của đồ án là một hệ thống hoàn chỉnh gồm bốn ứng dụng và năm gói thư viện dùng chung, hiện thực hóa đầy đủ mười nhóm chức năng đã đề ra và được kiểm chứng bằng bộ kiểm thử tự động phủ các nghiệp vụ cốt lõi.
+\begin{flushright}
+Sinh viên thực hiện\\
+\begin{tabular}{@{}c@{}}
+\textit{(Ký và ghi rõ họ tên)}
+\end{tabular}
+\end{flushright}
+
+\end{document}

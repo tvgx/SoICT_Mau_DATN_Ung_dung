@@ -23,7 +23,7 @@ Bên trong \texttt{api-core}, mã nguồn được tổ chức thành 20 mô-đu
 
 Hình \ref{fig:PackageDiagram} thể hiện biểu đồ gói của toàn hệ thống theo ba tầng. Nguyên tắc thiết kế xuyên suốt là phụ thuộc một chiều: tầng ứng dụng phụ thuộc vào tầng gói dùng chung, tầng gói dùng chung phụ thuộc vào tầng hạ tầng, và không tồn tại phụ thuộc ngược.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{Hinhve/Chuong4/package_diagram.png}
     \caption{Biểu đồ gói thể hiện kiến trúc phân tầng và quan hệ phụ thuộc của hệ thống}
@@ -37,9 +37,9 @@ Trong hình \ref{fig:PackageDiagram}, hai ứng dụng \texttt{admin} và \textt
 
 Bên trong \texttt{api-core}, mỗi request đi qua chuỗi xử lý phân tầng \textit{Middleware} $\to$ \textit{Guard} $\to$ \textit{Controller} $\to$ \textit{Service} $\to$ \textit{tầng truy cập dữ liệu}, như thể hiện trong hình \ref{fig:PackageDetail}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{Hinhve/Chuong4/apicore_detail.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/apicore_detail.png}
     \caption{Thiết kế chi tiết bên trong gói api-core và luồng xử lý đa thuê bao}
     \label{fig:PackageDetail}
 \end{figure}
@@ -62,9 +62,9 @@ Trình thiết kế kéo thả trong ứng dụng Admin là màn hình phức t�
 
 Hình \ref{fig:ClassDiagram} trình bày thiết kế chi tiết các lớp giữ vai trò xương sống của \texttt{api-core}: \texttt{TenantService} và \texttt{TenantMiddleware} (cô lập đa thuê bao), \texttt{BetterAuthGuard} và \texttt{AuthService} (xác thực), \texttt{OrderService} (nghiệp vụ đặt hàng), \texttt{LayoutService} (quản lý bố cục giao diện) và \texttt{PrismaService} (truy cập dữ liệu).
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{Hinhve/Chuong4/class_diagram.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/class_diagram.png}
     \caption{Biểu đồ lớp các thành phần cốt lõi của api-core}
     \label{fig:ClassDiagram}
 \end{figure}
@@ -73,16 +73,16 @@ Trong hình \ref{fig:ClassDiagram}, các quan hệ phụ thuộc đều hướng
 
 Để làm rõ sự phối hợp giữa các lớp, hai luồng nghiệp vụ quan trọng nhất được mô tả bằng biểu đồ trình tự. Hình \ref{fig:SeqCheckout} thể hiện luồng đặt hàng: sau khi nạp giá các biến thể sản phẩm và kiểm tra mã khuyến mãi, toàn bộ thao tác ghi (trừ tồn kho, tạo đơn, tạo bản ghi thanh toán, xóa giỏ hàng, tạo vận đơn) được gói trong một giao dịch nguyên tử duy nhất; nếu thiếu tồn kho hoặc số dư ví không đủ, mọi thay đổi được hoàn tác toàn bộ.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{Hinhve/Chuong4/seq_checkout.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/seq_checkout.png}
     \caption{Biểu đồ trình tự luồng đặt hàng (checkout)}
     \label{fig:SeqCheckout}
 \end{figure}
 
 Hình \ref{fig:SeqAuth} mô tả luồng xác thực tại \texttt{BetterAuthGuard}: các endpoint gắn \texttt{@Public()} được cho qua ngay; với endpoint cần bảo vệ, Guard xác minh phiên đăng nhập qua thư viện Better Auth theo đúng loại người dùng (chủ cửa hàng hoặc khách mua hàng, phân biệt bằng header \texttt{x-auth-type}), sau đó nạp danh sách cửa hàng thuộc sở hữu từ bộ nhớ đệm để phục vụ kiểm tra phân quyền ở các bước sau \cite{betterauth_docs}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\linewidth]{Hinhve/Chuong4/seq_auth.png}
     \caption{Biểu đồ trình tự luồng xác thực qua BetterAuthGuard}
@@ -92,11 +92,11 @@ Hình \ref{fig:SeqAuth} mô tả luồng xác thực tại \texttt{BetterAuthGua
 \subsection{Thiết kế cơ sở dữ liệu}
 \label{subsection:4.2.3}
 
-Hệ thống sử dụng đồng thời hai loại cơ sở dữ liệu theo đặc tính dữ liệu. PostgreSQL quản lý qua Prisma ORM lưu các thực thể có cấu trúc chặt và yêu cầu giao dịch (cửa hàng, sản phẩm, đơn hàng, thanh toán); lược đồ đầy đủ gồm 46 mô hình, trong đó hình \ref{fig:ERDiagram} thể hiện các thực thể cốt lõi cùng quan hệ giữa chúng.
+Hệ thống sử dụng đồng thời hai loại cơ sở dữ liệu theo đặc tính dữ liệu. PostgreSQL quản lý qua Prisma ORM lưu các thực thể có cấu trúc chặt và yêu cầu giao dịch (cửa hàng, sản phẩm, đơn hàng, thanh toán); lược đồ đầy đủ gồm 49 mô hình, trong đó hình \ref{fig:ERDiagram} thể hiện các thực thể cốt lõi cùng quan hệ giữa chúng.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{Hinhve/Chuong4/er_diagram.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/er_diagram.png}
     \caption{Sơ đồ thực thể liên kết các thực thể cốt lõi trên PostgreSQL}
     \label{fig:ERDiagram}
 \end{figure}
@@ -105,6 +105,15 @@ Hình \ref{fig:ERDiagram} cho thấy đặc trưng đa thuê bao của lược �
 
 Bên cạnh PostgreSQL, hệ thống sử dụng ba kho dữ liệu chuyên biệt. MongoDB (qua Mongoose) lưu các tài liệu giao diện có cấu trúc linh hoạt: \texttt{GlobalLayout} và \texttt{PageLayout} chứa hai phiên bản nháp và xuất bản của bố cục, \texttt{UIComponentCatalog} lưu lược đồ thuộc tính các thành phần giao diện, và \texttt{MasterTemplateCatalog} lưu danh mục giao diện mẫu theo ngành hàng. Redis lưu các kết quả định danh có tần suất truy cập cao: ánh xạ tên miền sang cửa hàng, trạng thái cửa hàng và danh sách cửa hàng thuộc sở hữu của người dùng, tất cả với thời gian sống 300 giây. MinIO lưu trữ tệp ảnh gốc theo giao thức S3, còn imgproxy biến đổi ảnh theo kích thước yêu cầu tại thời điểm phân phối.
 
+Hình \ref{fig:MongoDesign} mô tả cấu trúc các bộ sưu tập trên MongoDB. Khác với lược đồ quan hệ chuẩn hóa của PostgreSQL, các tài liệu giao diện được thiết kế lồng nhau (nested document) để khớp với cách dữ liệu được đọc và kết xuất. Điểm cốt lõi là hai trường \texttt{draftData} và \texttt{publishedData} trong \texttt{GlobalLayout} và \texttt{PageLayout}: cả hai cùng tham chiếu đệ quy tới cấu trúc \texttt{UIComponentRef} -- một cây thành phần giao diện trong đó mỗi nút chứa \texttt{componentId}, tập thuộc tính \texttt{props} và danh sách khối con \texttt{blocks}. Chính cấu trúc cây đệ quy này là dữ liệu đầu vào cho động cơ kết xuất Zero-file được phân tích tại mục \ref{section:5.2}, còn cặp \texttt{draftData}/\texttt{publishedData} là nền tảng cho quy trình nháp--xuất bản hai pha tại mục \ref{section:5.3}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Hinhve/Chuong4/mongo_design.png}
+    \caption{Thiết kế tài liệu các bộ sưu tập giao diện trên MongoDB}
+    \label{fig:MongoDesign}
+\end{figure}
+
 % ===========================================================
 \section{Xây dựng ứng dụng}
 \label{section:4.3}
@@ -112,7 +121,7 @@ Bên cạnh PostgreSQL, hệ thống sử dụng ba kho dữ liệu chuyên bi�
 \subsection{Thư viện và công cụ sử dụng}
 \label{subsection:4.3.1}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering{}
     \begin{tabulary}{\textwidth}{LLL}
         \hline
@@ -145,7 +154,7 @@ Bảng \ref{table:tools} liệt kê các thư viện và công cụ chính cùng
 
 Hệ thống đã hoàn thành việc xây dựng nền tảng thương mại điện tử đa thuê bao với đầy đủ các mô-đun cốt lõi. Bảng \ref{table:codestats} thống kê các thông số kỹ thuật của mã nguồn (không tính mã kiểm thử, mã sinh tự động và thư viện bên thứ ba).
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering{}
     \begin{tabulary}{\textwidth}{LL}
         \hline
@@ -155,7 +164,7 @@ Hệ thống đã hoàn thành việc xây dựng nền tảng thương mại đ
         Số mô-đun nghiệp vụ trong api-core & 20 mô-đun \\ \hline
         Số lớp Controller / Service & 24 / 27 \\ \hline
         Số gói thư viện nội bộ dùng chung & 5 gói \\ \hline
-        Số mô hình dữ liệu PostgreSQL (Prisma) & 46 mô hình \\ \hline
+        Số mô hình dữ liệu PostgreSQL (Prisma) & 49 mô hình \\ \hline
         Số bộ sưu tập MongoDB chính & 4 bộ sưu tập \\ \hline
         Số thành phần giao diện trong ui-registry & hơn 40 thành phần \\ \hline
         Số tệp kiểm thử tự động (Jest) & 32 tệp \\ \hline
@@ -169,7 +178,15 @@ Bảng \ref{table:codestats} cho thấy quy mô mã nguồn ở mức một hệ
 \subsection{Minh họa các chức năng chính}
 \label{subsection:4.3.3}
 
-Phần này minh họa năm nhóm chức năng chính của hệ thống bằng ảnh chụp màn hình thực tế, bao gồm: (i) luồng đăng ký và khởi tạo cửa hàng mới với bước chọn giao diện mẫu theo ngành hàng, (ii) quản lý sản phẩm và tồn kho trên bảng điều khiển Admin, (iii) trình thiết kế kéo thả tùy biến bố cục trang Storefront, (iv) luồng mua hàng và thanh toán của khách, và (v) theo dõi, cập nhật trạng thái đơn hàng.
+Phần này minh họa năm nhóm chức năng chính của hệ thống bằng ảnh chụp màn hình thực tế, bao gồm:
+
+\begin{itemize}
+    \item Luồng đăng ký và khởi tạo cửa hàng mới với bước chọn giao diện mẫu theo ngành hàng.
+    \item Quản lý sản phẩm và tồn kho trên bảng điều khiển Admin.
+    \item Trình thiết kế kéo thả tùy biến bố cục trang Storefront.
+    \item Luồng mua hàng và thanh toán của khách.
+    \item Theo dõi, cập nhật trạng thái đơn hàng.
+\end{itemize}
 
 % (Ảnh chụp màn hình thực tế sẽ do sinh viên bổ sung tại đây,
 %  mỗi ảnh kèm caption + \label + câu giải thích tham chiếu.)
@@ -178,11 +195,11 @@ Phần này minh họa năm nhóm chức năng chính của hệ thống bằng 
 \section{Kiểm thử}
 \label{section:4.4}
 
-Hệ thống sử dụng Jest kết hợp \texttt{@nestjs/testing} để kiểm thử đơn vị và kiểm thử tích hợp cho tầng backend, với tổng cộng 32 tệp kiểm thử phủ các mô-đun nghiệp vụ chính (Order, Auth, Layout, Shop, Payment, Inventory, Promotions, Shipping, Wallet, Media, Analytics). Kỹ thuật trọng tâm là giả lập qua tiêm phụ thuộc (dependency injection mocking): \texttt{PrismaService}, \texttt{TenantService}, các mô hình Mongoose và bộ nhớ đệm đều được thay bằng đối tượng giả, nhờ đó các bài kiểm thử chạy độc lập hoàn toàn với hạ tầng.
+Hệ thống sử dụng Jest kết hợp \texttt{@nestjs/testing} để kiểm thử đơn vị và kiểm thử tích hợp cho tầng backend, với tổng cộng 32 tệp kiểm thử phủ các mô-đun nghiệp vụ chính (Order, Auth, Layout, Shop, Payment, Inventory, Promotions, Shipping, Wallet, Media, Analytics). Kỹ thuật trọng tâm là giả lập (mock) các phụ thuộc thông qua cơ chế dependency injection của NestJS: \texttt{PrismaService}, \texttt{TenantService}, các mô hình Mongoose và bộ nhớ đệm đều được inject bằng đối tượng giả, nhờ đó các bài kiểm thử chạy độc lập hoàn toàn với hạ tầng.
 
 Chức năng được kiểm thử kỹ nhất là luồng đặt hàng \texttt{OrderService.createOrder} -- nghiệp vụ phức tạp nhất hệ thống. Bảng \ref{table:testcases} liệt kê các trường hợp kiểm thử tiêu biểu được trích từ bộ kiểm thử thực tế của mô-đun này.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering{}
     \begin{tabulary}{\textwidth}{lLL}
         \hline
@@ -209,10 +226,39 @@ Bảng \ref{table:testcases} cho thấy bộ kiểm thử phủ cả luồng ch�
 
 Hệ thống được thiết kế hướng cloud-native với hai cấu hình triển khai tương ứng hai giai đoạn. Trong giai đoạn phát triển, toàn bộ hạ tầng chạy bằng Docker Compose gồm các dịch vụ: hai thực thể PostgreSQL (chuẩn bị sẵn cho hướng phân mảnh dữ liệu về sau), MongoDB, MinIO kèm tác vụ khởi tạo bucket, và imgproxy; các ứng dụng Node.js chạy trực tiếp qua Turborepo để tận dụng khả năng nạp lại nhanh khi sửa mã.
 
-Đối với môi trường vận hành, đồ án đã xây dựng đầy đủ bộ manifest Kubernetes gồm: (i) các Deployment riêng cho ba ứng dụng \texttt{admin}, \texttt{api-core}, \texttt{storefront} với giới hạn tài nguyên tường minh cho từng container (ví dụ \texttt{api-core} giới hạn 350MB bộ nhớ, Redis giới hạn 512MB) nhằm phục vụ mục tiêu vận hành trên hạ tầng khiêm tốn đã nêu tại mục \ref{section:2.4}; (ii) tầng định tuyến gồm NGINX Ingress ánh xạ các tên miền dịch vụ và Cloudflare Tunnel cho phép công bố hệ thống ra Internet mà không cần địa chỉ IP công khai; (iii) hạ tầng giám sát Grafana; và (iv) một CronJob sao lưu PostgreSQL tự động chạy lúc 3 giờ sáng hằng ngày, đáp ứng yêu cầu độ tin cậy tại mục \ref{section:2.4}.
+Đối với môi trường vận hành, đồ án đã xây dựng đầy đủ bộ manifest Kubernetes gồm:
+
+\begin{itemize}
+    \item Các Deployment riêng cho ba ứng dụng \texttt{admin}, \texttt{api-core}, \texttt{storefront} với giới hạn tài nguyên tường minh cho từng container (ví dụ \texttt{api-core} giới hạn 350MB bộ nhớ, Redis giới hạn 512MB) nhằm giữ chi phí tài nguyên cho mỗi cửa hàng ở mức thấp như đã nêu tại mục \ref{section:2.4}.
+    \item Tầng định tuyến gồm NGINX Ingress ánh xạ các tên miền dịch vụ và Cloudflare Tunnel cho phép công bố hệ thống ra Internet mà không cần địa chỉ IP công khai.
+    \item Hạ tầng giám sát Grafana.
+    \item Một CronJob sao lưu PostgreSQL tự động chạy lúc 3 giờ sáng hằng ngày, đáp ứng yêu cầu độ tin cậy tại mục \ref{section:2.4}.
+\end{itemize}
 
 Tại thời điểm viết báo cáo, hệ thống đã vận hành ổn định trên môi trường phát triển; việc triển khai bộ manifest nói trên lên máy chủ thực tế và đo lường các chỉ tiêu hiệu năng là bước kế tiếp, như đã trình bày trong các mục kết quả của Chương 5 và định hướng tại mục \ref{section:6.2}.
 
-Chương này đã trình bày trọn vẹn quá trình thiết kế và xây dựng hệ thống: từ kiến trúc phân tầng Monorepo, thiết kế lớp và cơ sở dữ liệu, tới kết quả mã nguồn, kiểm thử tự động và mô hình triển khai. Một số quyết định thiết kế mang tính đóng góp nổi bật mới chỉ được tóm lược ở đây; chương tiếp theo sẽ phân tích chuyên sâu ba giải pháp kỹ thuật quan trọng nhất của đồ án.
+\subsection{Đánh giá hiệu năng (benchmark)}
+\label{subsection:4.5.1}
+
+Để kiểm chứng mục tiêu chi phí biên thấp đã đặt ra tại mục \ref{section:2.4}, đồ án thiết kế một quy trình đo hiệu năng (benchmark) chạy trên chính mã nguồn của hệ thống. Quy trình gồm các bước:
+
+\begin{itemize}
+    \item \textbf{Chuẩn bị dữ liệu:} dùng \texttt{cli-tool} sinh số lượng cửa hàng tăng dần (ví dụ 100, 1.000, 5.000 cửa hàng), mỗi cửa hàng kèm bố cục mặc định và một tập sản phẩm mẫu, để quan sát mức tiêu thụ tài nguyên thay đổi theo số cửa hàng.
+    \item \textbf{Tạo tải:} dùng công cụ kiểm thử tải (\texttt{k6} hoặc \texttt{autocannon}) bắn đồng thời vào các tên miền cửa hàng khác nhau, đo độ trễ ở phân vị p50/p95 cho hai trường hợp trúng cache và trượt cache.
+    \item \textbf{Thu thập chỉ số:} ghi lại mức sử dụng RAM và CPU của \texttt{api-core}, Redis và Storefront qua hạ tầng giám sát Grafana, từ đó tính lượng bộ nhớ tăng thêm trung bình cho mỗi cửa hàng.
+    \item \textbf{Chỉ số xây dựng:} đo thời gian build với và không có bộ nhớ đệm của Turborepo, cùng kích thước gói JavaScript của một trang Storefront để đánh giá hiệu quả của cơ chế nạp thành phần theo nhu cầu.
+\end{itemize}
+
+Hình \ref{fig:benchmark} là vị trí dành cho biểu đồ kết quả benchmark; số liệu sẽ được bổ sung sau khi hệ thống được triển khai và đo đạc trên máy chủ thực tế theo quy trình nêu trên.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\begin{minipage}[c][6cm][c]{0.8\linewidth}
+        \centering
+        \textit{(Biểu đồ kết quả benchmark sẽ được bổ sung sau khi đo đạc\\trên môi trường triển khai thực tế.)}
+    \end{minipage}}
+    \caption{Biểu đồ kết quả đo hiệu năng theo số lượng cửa hàng}
+    \label{fig:benchmark}
+\end{figure}
 
 \end{document}

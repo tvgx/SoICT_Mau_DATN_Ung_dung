@@ -1,0 +1,275 @@
+========================================================
+NGUỒN THAM KHẢO — MARKET REPORT ECOMMERCE PLATFORM
+Shopify · WooCommerce · Haravan | Q2 2025
+========================================================
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A. SHOPIFY — DỮ LIỆU TÀI CHÍNH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[1] Shopify Annual Report / SEC 10-K Filing 2024
+    Dữ liệu: Doanh thu $8,88 tỷ (tăng 26% YoY), GMV $292 tỷ,
+             Shopify Plus 76.600 cửa hàng, 300+ merchant mới/tuần
+    Truy cập qua: https://investors.shopify.com
+    Trích dẫn gián tiếp qua: mobiloud.com & technologychecker.io
+
+[2] MobiLoud — "WooCommerce vs Shopify: Market Share Insights for 2026"
+    Dữ liệu: GMV, doanh thu, tăng trưởng Q2–Q3/2025, dự báo 2026
+    URL: https://www.mobiloud.com/blog/woocommerce-vs-shopify-market-share-statistics
+
+[3] eDesk — "Shopify Statistics 2025: Market Share, Revenue, Users, and Global Trends"
+    Dữ liệu: Thị phần Mỹ 30%, thị phần toàn cầu, Shopify Plus stats
+    URL: https://www.edesk.com/blog/shopify-statistics-marketshare-revenue-ecommerce/
+    Ngày xuất bản: January 8, 2026
+
+[4] TechnologyChecker.io — "Trends, Insights and Shopify Market Share 2026"
+    Dữ liệu: Shopify 45,99% ecom-platform market share (crawl Feb 2026),
+             2,446,083 live stores, WooCommerce 17,79%
+    URL: https://technologychecker.io/blog/shopify-analytics-trends-insights
+    Ngày xuất bản: January 8, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+B. SHOPIFY — THỊ PHẦN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[5] Red Stag Fulfillment — "Shopify Market Share Stats 2026 - Global & Regional Data"
+    Dữ liệu: Thị phần toàn cầu 10,32%; Top 1M sites: Shopify 28,8% vs WooCommerce 18,2%
+             Nguồn gốc: BuiltWith 2025, Yaguara Shopify Market Share Report
+    URL: https://redstagfulfillment.com/shopify-market-share/
+    Ngày xuất bản: June 15, 2025
+
+[6] BuiltWith (dữ liệu gốc)
+    Dữ liệu: Phân bổ thị phần trong Top 10K / 100K / 1M websites
+    URL: https://builtwith.com/ecommerce (truy cập qua [5])
+
+[7] ColorWhistle — "WooCommerce VS Shopify Statistics Compared for 2026"
+    Dữ liệu: Shopify 17,50% thị phần ecom-platform category, 633,655 khách hàng
+    URL: https://colorwhistle.com/woocommerce-vs-shopify-statistics/
+    Ngày xuất bản: February 18, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+C. SHOPIFY — GIÁ & PHÍ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[8] Shopify Official Pricing Page
+    Dữ liệu: Giá gốc các gói Basic, Grow, Advanced, Plus, Starter
+    URL: https://www.shopify.com/pricing
+
+[9] NerdWallet — "Shopify Pricing & Plans 2025"
+    Dữ liệu: Starter $5, Retail $89, Basic $39, phí giao dịch chi tiết
+    URL: https://www.nerdwallet.com/business/software/learn/shopify-pricing
+
+[10] 2HatsLogic — "Shopify Pricing in 2025: How Much Does It Really Cost?"
+     Dữ liệu: Basic $39/$29, Grow $105/$79, Advanced $399/$299 (tháng/năm),
+              giảm 25% thanh toán năm, app trung bình $50–100/tháng, theme $140–350
+     URL: https://www.2hatslogic.com/blog/shopify-pricing/
+     Ngày xuất bản: May 29, 2025
+
+[11] The Fold Tech — "Shopify Pricing Plans 2025: $29 or $39?"
+     Dữ liệu: So sánh chi tiết monthly vs annual billing
+     URL: https://thefoldtech.com/blogs/news/shopify-pricing-plans-review
+     Ngày xuất bản: March 13, 2026
+
+[12] Expert Market — "Shopify Pricing: Breakdown of Fees & Hidden Costs"
+     Dữ liệu: Advanced plan $299/năm, $399/tháng; đổi tên gói "Grow" tháng 4/2025
+     URL: https://www.expertmarket.com/website-builders/shopify-pricing
+     Ngày xuất bản: October 22, 2025
+
+[13] Latori GmbH — "Shopify Prices 2025"
+     Dữ liệu: Giá theo thị trường EU (EUR); Plus từ $2.300/tháng hoặc 0,4% net sales
+     URL: https://www.latori.com/en/blogpost/shopify-prices
+
+[14] Shero Commerce — "Shopify Pricing (2026): Plans, Fees & Real Costs"
+     Dữ liệu: Tổng hợp giá gói và chi phí ẩn
+     URL: https://sherocommerce.com/blogs/insights/shopify-pricing
+     Ngày xuất bản: June 14, 2026 (cách đây ~15 giờ tính từ ngày report)
+
+[15] GemPages — "A Full Guide To Shopify Plan Pricing By Country (2026)"
+     Dữ liệu: Giá theo từng thị trường quốc gia, free trial 3 ngày + $1/tháng đầu
+     URL: https://gempages.net/blogs/shopify/shopify-plan-pricing-by-country
+     Ngày xuất bản: March 24, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+D. WOOCOMMERCE — THỊ PHẦN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[16] Red Stag Fulfillment — "What is WooCommerce's market share in 2025?"
+     Dữ liệu: 33,4% thị phần tổng (StoreLeads Aug 2025), 4,53 triệu cửa hàng,
+              dự báo duy trì 30–35% đến 2027
+     Nguồn gốc trong bài: StoreLeads Aug 2025, MageComp Dec 2024, BuiltWith
+     URL: https://redstagfulfillment.com/what-is-woocommerces-market-share/
+     Ngày xuất bản: June 15, 2025
+
+[17] StoreLeads — Platform Reports (August 2025)
+     Dữ liệu: 4,53 triệu active WooCommerce stores, 13,585,586 stores tracked toàn bộ
+     URL: https://storeleads.app (truy cập qua [16])
+
+[18] Uptek — "WooCommerce vs Shopify: Key Statistics (Updated 2026)"
+     Dữ liệu: WooCommerce 38,76% ecom-platform share (MageComp),
+              93,7% WordPress ecom sites, 6 triệu stores
+     URL: https://uptek.com/shopify-statistics/vs-woocommerce/
+     Ngày xuất bản: March 4, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+E. WOOCOMMERCE — CHI PHÍ & TCO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[19] WooCommerce Official Pricing Guide
+     Dữ liệu: Hosting $200–$20.000/năm; TCO mẫu $1.821–$67.791+
+     URL: https://woocommerce.com/pricing (truy cập qua [20])
+
+[20] Swell.is — "WooCommerce Pricing in 2026: Full Cost Breakdown ($0 to $50K+)"
+     Dữ liệu: TCO $480–$560/năm (hobby) đến $15.000+/năm (mid-market),
+              enterprise $50.000+ năm đầu; trích dẫn WooCommerce official guide
+     URL: https://www.swell.is/content/woocommerce-pricing
+     Ngày xuất bản: April 4, 2026
+
+[21] Elementor — "How Much Does a WooCommerce Store Cost?"
+     Dữ liệu: Năm đầu ~$800, năm tiếp theo $600–700; DIY từ $120/năm;
+              custom agency build từ $8.000+
+     URL: https://elementor.com/blog/how-much-does-a-woocommerce-store-cost/
+     Ngày xuất bản: February 10, 2026
+
+[22] CMSMinds — "WooCommerce Pricing Guide 2025: Estimate Your Store Costs"
+     Dữ liệu: Starter: tổng $100–300/năm đầu; managed hosting $30–100/tháng
+     URL: https://cmsminds.com/blog/woocommerce-pricing/
+     Ngày xuất bản: February 5, 2026
+
+[23] Zigpoll — "How to Calculate the Total Cost of Ownership for WooCommerce"
+     Dữ liệu: SSL $10–50/năm; Domain $10–20/năm; Backup/Security $5–20/tháng
+              Công thức TCO = Hosting + Plugin + Payment Fees + Maintenance + Ops
+     URL: https://www.zigpoll.com/content/how-can-i-calculate-the-total-cost-of-ownership-for-running-a-woocommerce-store
+
+[24] WizCommerce — "WooCommerce Pricing 2026: Hosting, Plugins & Real Costs"
+     Dữ liệu: Hosting $10–250/tháng; chi phí ẩn khi scale (renewal tăng, CDN, dev)
+     URL: https://wizcommerce.com/blog/woocommerce-pricing/
+     Ngày xuất bản: ~1 tháng trước (May 2026)
+
+[25] Outfy — "How Much Does a WooCommerce Store Cost? (2026)"
+     Dữ liệu: $100–$10.000+/năm tùy nhu cầu
+     URL: https://www.outfy.com/blog/woocommerce-pricing/
+     Ngày xuất bản: April 22, 2026
+
+[26] SupportHost — "WooCommerce Pricing 2026: A Detailed Cost Breakdown"
+     Dữ liệu: Mức tối thiểu $7/tháng (hosting + domain); phân tích hosting options
+     URL: https://supporthost.com/woocommerce-pricing/
+     Ngày xuất bản: February 18, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+F. HARAVAN — SỐ LIỆU & LỊCH SỬ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[27] StoreLeads — "The State of Haravan in 2026"
+     Dữ liệu: Toàn bộ bảng số cửa hàng theo quý Q4/2021 → Q2/2026,
+              Haravan giảm 16% YoY trong Q1/2026
+     URL: https://storeleads.app/reports/haravan
+     Ngày cập nhật: May 15, 2026
+
+[28] StoreLeads — "Haravan Stores in Vietnam"
+     Dữ liệu: Giảm 15% YoY tại VN trong Q3/2025;
+              12,3% cửa hàng bán Apparel; 10,5% bán Home & Garden
+     URL: https://storeleads.app/reports/haravan/VN/top-stores
+     Ngày cập nhật: March 27, 2026
+
+[29] AfterShip — "Top 100 Haravan Stores in Vietnam 2025"
+     Dữ liệu: Phân bổ ngành: WooCommerce (29), Sapo (17), Haravan (9) trong mảng
+              Construction & Maintenance
+     URL: https://www.aftership.com/store-list/top-100-vn-haravan-construction-maintenance-stores
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+G. HARAVAN — THÔNG TIN CÔNG TY & SẢN PHẨM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[30] Haravan Official — "Haravan enables multi-channel e-commerce world for Vietnam SMEs"
+     Dữ liệu: 50.000 doanh nghiệp đăng ký, Google for Retail & Meta Business Partner,
+              kế hoạch mở rộng Đông Nam Á (Thái Lan, Philippines),
+              Haravan Finance với Techcombank & K-Bank
+     URL: https://www.haravan.com/blogs/bao-chi/haravan-enables-multi-channel-e-commerce-world-for-vietnam-smes
+     Ngày: March 27, 2024
+
+[31] Haravan Official — Trang chủ
+     Dữ liệu: 400+ giao diện; tích hợp Google Analytics, TikTok Pixel, Meta Pixel, CAPI;
+              quản lý không giới hạn cửa hàng; hỗ trợ lô - hạn sử dụng
+     URL: https://www.haravan.com/
+
+[32] Haravan Enterprise Page
+     Dữ liệu: Giải pháp B2B, quản lý đại lý, bảng giá theo cấp
+     URL: https://www.haravan.com/pages/enterprise
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+H. HARAVAN — GIÁ & PHÍ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[33] Haravan Official Pricing Page
+     Dữ liệu: Thanh toán theo năm bắt buộc; dùng thử 14 ngày miễn phí;
+              không phí thiết lập; giá đã bao gồm VAT; hotline 1900.636.099
+     URL: https://www.haravan.com/pages/pricing
+
+[34] Haravan Help Center — "Bảng giá các gói dịch vụ tại Haravan đã bao gồm thuế hay chưa?"
+     Dữ liệu: Xác nhận giá niêm yết đã bao gồm thuế 10%
+     URL: https://help.haravan.com/docs/faqs/service-plans/bang-gia-cac-goi-dich-vu-tai-haravan-da-bao-gom-thue-hay-chua/
+     URL (support): https://support.haravan.com/support/solutions/articles/42000033091
+
+[35] Haravan Support — "Gói dịch vụ FAQ"
+     Dữ liệu: Không mất dữ liệu dùng thử khi nâng cấp; có thể đăng ký nhiều năm;
+              phí chênh lệch khi nâng gói
+     URL: https://support.haravan.com/support/solutions/folders/42000098292
+     Ngày cập nhật: May 27, 2025
+
+[36] Meowcart.net — "Shopify vs Haravan: Đâu là nền tảng phù hợp cho bạn 2025?"
+     Dữ liệu: Omni Pro ~600.000đ/tháng; Growth 18 triệu/năm; Scale 36 triệu/năm;
+              50.000 người dùng VN (công bố Haravan); theme $60–150;
+              chỉ thanh toán theo năm
+     URL: https://www.meowcart.net/en/blogs/ecommerce/shopify-vs-haravan
+     Ngày cập nhật: April 24, 2024
+
+[37] Hocvien Haravan — "Chi phí thiết kế website là bao nhiêu? Báo giá chi tiết 2025"
+     Dữ liệu: 3 giải pháp thiết kế: Tiêu chuẩn, Tiết kiệm, Tăng trưởng;
+              60.000+ người kinh doanh; khách Enterprise: Vinamilk, Juno,
+              The Coffee House, Thiên Long
+     URL: https://hocvien.haravan.com/blogs/ban-hang-website/bao-gia-thiet-ke-website
+
+[38] Boxme Asia — "Sapo and Haravan – the battle of two leading Vietnam e-commerce websites"
+     Dữ liệu: Haravan Advanced Website 500.000 VND/tháng; 6.000.000 VND/năm;
+              giới hạn 10 user; chi phí đa kênh 899.000đ/tháng
+     URL: https://boxme.asia/sapo-haravan-battle-e-commerce-development-websites/
+
+[39] OneAds — "Haravan, Sapo, Shopify: Nền Tảng Nào Cho Doanh Nghiệp Online?"
+     Dữ liệu: Quy đổi giá Haravan sang VND, so sánh 3 nền tảng VN
+     URL: https://oneads.vn/blogs/haravan/haravan-sapo-shopify
+     Ngày xuất bản: February 16, 2025
+
+[40] GHN — "Phần mềm quản lý bán hàng Haravan: Lợi ích và hướng dẫn sử dụng"
+     Dữ liệu: Mô tả tính năng quản lý đơn hàng, tồn kho, marketing tích hợp
+     URL: https://ghn.vn/blogs/tip-ban-hang/phan-mem-quan-ly-ban-hang-haravan
+     Ngày cập nhật: March 27, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GHI CHÚ PHƯƠNG PHÁP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* Dữ liệu thị phần có thể chênh lệch đáng kể tuỳ theo phương pháp đo
+  (BuiltWith crawl kỹ thuật, StoreLeads theo DNS/WHOIS, W3Techs theo mẫu ngẫu nhiên).
+  Report này ghi rõ nguồn gốc từng con số.
+
+* Haravan là doanh nghiệp tư nhân, không công bố báo cáo tài chính.
+  Số liệu dựa trên StoreLeads (tracking độc lập) và thông tin Haravan tự công bố.
+
+* Tỷ giá quy đổi tham khảo: 1 USD ≈ 25.500 VND (Q2 2025).
+
+* Dữ liệu Shopify tài chính lấy từ SEC 10-K Filing — nguồn pháp lý bắt buộc công bố,
+  độ tin cậy cao nhất trong 3 nền tảng.
+
+========================================================
+Tổng cộng: 40 nguồn từ 25+ domain khác nhau
+Ngày tổng hợp: Tháng 6/2025
+========================================================

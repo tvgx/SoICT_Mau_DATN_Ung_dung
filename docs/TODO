@@ -1,0 +1,31 @@
+về report:
+- KHÔNG NHẤT THIẾT PHẢI TUÂN THEO CHÍNH XÁC TEMPLATE CÓ SẴN CỦA BÁO CÁO, QUAN TRỌNG LÀ TRUYỀN TẢI ĐƯỢC ĐÚNG VÀ ĐỦ NỘI DUNG CỦA ĐATN
+- mỗi ảnh, biểu đồ, nội dung được đưa từ ngoài nội dung đatn vào đều phải có cite và có related works
+- thêm logo, làm sao cho chỉ cần đọc là hiểu được đồ án của mình đã được làm ntn
+- bổ sung ảnh HUST trên trang bìa (log.png)
+- xóa hết những phần trống giữa báo cáo. yêu cầu không 
+- nên tránh dùng những từ quá "fancy","có cảm xúc" trong phần báo cáo. cần giữ báo cáo ở mức độ trung tính nhất có thể
+- những từ như "bất lực", hạn chế đưa vào.
+- không nhất thiết phải giữ nguyên template laTex
+- cần nêu rõ những gì đang muốn biểu đạt theo 1 hướng dễ hiểu nhất.
+- bổ sung thiết kế trên mongodb atlas và hiển thị ra
+- ảnh xuất ra cần được lưu dưới dạng ảnh vector để đẹp hơn khi đưa vào báo cáo
+- luôn nhớ trích dẫn những nội dung tham khảo được đưa vào
+- vẽ lại ảnh để to hơn và rõ hơn. hạn chế vẽ theo chiều ngang mà tập trung vẽ theo hình vuông hoặc chữ nhật đứng
+- bổ sung thống kê theo dạng market research
+- thêm time measure mang tính định lượng tiết kiệm ntn: bảng/ biểu đồ cột/... hoặc lời kèm con số cụ thể
+- estimate tiền cần duy trì cho 1 shop/tháng
+- hỗ trợ thanh toán nội địa hóa
+- bổ sung evidence cho từng claim của mình
+- highlight đóng góp chính 
+- bỏ tóm tắt chương hoặc đưa lên đầu
+- 2.1 thiếu market research, lỗi hình 2.5
+- thiếu benchmark cho dự án: cụ thể 1 shop vận hành tốn bao nhiêu tài nguyên, bao nhiêu tiền,...
+- chỉnh hình vẽ và kích thước chữ: chữ trong ảnh =< chữ trong đoạn văn
+- biểu đồ quy trình nên xoay ngang -> chữ to và dễ nhìn hơn
+- viết lại để làm bật lên đóng góp của bản thân mình 1 cách dễ hiểu
+- review kĩ nội dung được sync ra: văn phong, lời dẫn
+- TẠO 1 MẠCH TRUYỆN THỐNG NHẤT CHO TOÀN REPORT. Nêu rõ vấn đề, từ vấn đề đó dẫn đến sự ra đời của giải pháp (đatn của tôi), trong đồ án đó có những gì, sử dụng cũng như áp dụng những gì, tư duy như thế nào và những cái đó giải quyết được vấn đề như thế nào (giải pháp và đóng góp), hướng đi này có pros và cons gì (kết luận và hướng phát triển).
+- lượng hóa được số lượng khách, tần xuất thay đổi của shop
+- khi liệt kê thì luôn xuống dòng, gạch đầu dòng trước mỗi ý.
+- thiếu flow liên quan đến cách thức tạo 1 shop: input của người dùng là gì? cơ chế xử lý ở hạ tầng -> output mong muốn. có cách nào để đánh giá output đó có hợp lý hay ko?

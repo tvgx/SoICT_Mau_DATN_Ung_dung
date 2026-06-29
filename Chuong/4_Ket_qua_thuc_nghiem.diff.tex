@@ -1,0 +1,343 @@
+\documentclass[../main.tex]{subfiles}
+%DIF LATEXDIFF DIFFERENCE FILE
+%DIF DEL /tmp/tmpp5dnmj5s.tex   Mon Jun 15 17:22:27 2026
+%DIF ADD /tmp/tmpzp80v0f4.tex   Mon Jun 15 17:22:27 2026
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}} %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+\providecommand{\DIFmodbegin}{} %DIF PREAMBLE
+\providecommand{\DIFmodend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF COLORLISTINGS PREAMBLE %DIF PREAMBLE
+\RequirePackage{listings} %DIF PREAMBLE
+\RequirePackage{color} %DIF PREAMBLE
+\lstdefinelanguage{DIFcode}{ %DIF PREAMBLE
+%DIF DIFCODE_UNDERLINE %DIF PREAMBLE
+  moredelim=[il][\color{red}\sout]{\%DIF\ <\ }, %DIF PREAMBLE
+  moredelim=[il][\color{blue}\uwave]{\%DIF\ >\ } %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstdefinestyle{DIFverbatimstyle}{ %DIF PREAMBLE
+	language=DIFcode, %DIF PREAMBLE
+	basicstyle=\ttfamily, %DIF PREAMBLE
+	columns=fullflexible, %DIF PREAMBLE
+	keepspaces=true %DIF PREAMBLE
+} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim}[1][]{\lstset{style=DIFverbatimstyle}}{} %DIF PREAMBLE
+\lstnewenvironment{DIFverbatim*}[1][]{\lstset{style=DIFverbatimstyle,showspaces=true}}{} %DIF PREAMBLE
+\lstset{extendedchars=\true,inputencoding=utf8}
+
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\begin{document}
+
+Trên cơ sở các yêu cầu đã phân tích ở Chương 2 và các công nghệ đã lựa chọn ở Chương 3, chương này trình bày quá trình hiện thực hóa hệ thống ShopVolo v2. Mục \ref{section:4.1} mô tả thiết kế kiến trúc từ mức tổng quan tới mức chi tiết gói. Mục \ref{section:4.2} đi sâu vào thiết kế giao diện, thiết kế lớp và thiết kế cơ sở dữ liệu. Mục \ref{section:4.3} tổng hợp kết quả xây dựng ứng dụng, mục \ref{section:4.4} trình bày quy trình kiểm thử, và mục \ref{section:4.5} mô tả mô hình triển khai hệ thống.
+
+% ===========================================================
+\section{Thiết kế kiến trúc}
+\label{section:4.1}
+
+\subsection{Lựa chọn kiến trúc phần mềm}
+\label{subsection:4.1.1}
+
+Hệ thống được tổ chức theo kiến trúc \textbf{Monorepo} quản lý bằng Turborepo, kết hợp tư tưởng \textbf{Modular Monolith} cho tầng backend. Kiến trúc Monorepo cho phép quản lý tập trung toàn bộ mã nguồn frontend, backend và các gói dùng chung trong một kho lưu trữ duy nhất, nhờ đó kiểu dữ liệu được chia sẻ xuyên suốt giữa các ứng dụng và quy trình xây dựng được tối ưu bằng bộ nhớ đệm tăng dần \cite{turborepo_docs}.
+
+Hệ thống gồm ba nhóm thành phần chính. Nhóm thứ nhất là các ứng dụng: hai ứng dụng Next.js độc lập gồm \texttt{storefront} (mặt tiền cửa hàng phục vụ khách mua sắm) và \texttt{admin} (bảng điều khiển dành cho chủ cửa hàng), ứng dụng backend \texttt{api-core} viết bằng NestJS, và công cụ dòng lệnh \texttt{cli-tool} phục vụ vận hành. Nhóm thứ hai là năm gói thư viện nội bộ dùng chung: \texttt{database} (Prisma ORM và các mô hình Mongoose), \texttt{schema} (kiểu dữ liệu và xác thực Zod), \texttt{master-templates} (các bộ khung giao diện mẫu), \texttt{ui-registry} (thư viện thành phần giao diện kiêm trình thiết kế kéo thả), và \texttt{i18n} (đa ngôn ngữ). Nhóm thứ ba là tầng hạ tầng gồm PostgreSQL, MongoDB, Redis, MinIO và imgproxy.
+
+Bên trong \texttt{api-core}, mã nguồn được tổ chức thành 20 mô-đun nghiệp vụ (Auth, Shop, Order, Catalog, Layout, Inventory, Payment, Media, Promotions, Shipping, Wallet, Analytics, v.v.) theo đúng mô hình mô-đun của NestJS, tạo ranh giới rõ ràng giữa các miền nghiệp vụ và giữ khả năng tách thành các dịch vụ độc lập về sau.
+
+Đối với bài toán đa thuê bao, hệ thống áp dụng chiến lược \textit{Shared Database, Row-Level Isolation}: mọi thực thể nghiệp vụ đều mang khóa ngoại \texttt{shopId}, và việc phân lập logic được thực thi tự động thông qua \texttt{AsyncLocalStorage} ở tầng backend, bảo đảm mọi truy vấn đều gắn đúng ngữ cảnh cửa hàng mà không cần truyền tham số qua từng lớp. Chi tiết về cơ chế này được trình bày tại mục \ref{section:5.1}.
+
+\subsection{Thiết kế tổng quan}
+\label{subsection:4.1.2}
+
+Hình \ref{fig:PackageDiagram} thể hiện biểu đồ gói của toàn hệ thống theo ba tầng. Nguyên tắc thiết kế xuyên suốt là phụ thuộc một chiều: tầng ứng dụng phụ thuộc vào tầng gói dùng chung, tầng gói dùng chung phụ thuộc vào tầng hạ tầng, và không tồn tại phụ thuộc ngược.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \includegraphics[width=\linewidth]{Hinhve/Chuong4/package_diagram.png}
+    \caption{Biểu đồ gói thể hiện kiến trúc phân tầng và quan hệ phụ thuộc của hệ thống}
+    \label{fig:PackageDiagram}
+\end{figure}
+
+Trong hình \ref{fig:PackageDiagram}, hai ứng dụng \texttt{admin} và \texttt{storefront} cùng sử dụng \texttt{ui-registry} và \texttt{i18n}, đồng thời giao tiếp với \texttt{api-core} qua REST API; riêng \texttt{storefront} còn nhập kiểu dữ liệu từ \texttt{schema} và phân phối ảnh qua imgproxy. Gói \texttt{ui-registry} phụ thuộc \texttt{schema} để dùng chung định nghĩa \texttt{UIComponentRef}. Ứng dụng \texttt{api-core} truy cập PostgreSQL qua gói \texttt{database} (Prisma), truy cập MongoDB qua Mongoose, dùng Redis làm bộ nhớ đệm và MinIO làm kho lưu trữ đối tượng theo giao thức S3. Công cụ \texttt{cli-tool} thao tác với hệ thống qua REST API và sử dụng gói \texttt{master-templates} cho tác vụ đồng bộ giao diện mẫu.
+
+\subsection{Thiết kế chi tiết gói api-core}
+\label{subsection:4.1.3}
+
+Bên trong \texttt{api-core}, mỗi request đi qua chuỗi xử lý phân tầng \textit{Middleware} $\to$ \textit{Guard} $\to$ \textit{Controller} $\to$ \textit{Service} $\to$ \textit{tầng truy cập dữ liệu}, như thể hiện trong hình \ref{fig:PackageDetail}.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=\linewidth]{Hinhve/Chuong4/apicore_detail.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/apicore_detail.png}
+    \DIFaddendFL \caption{Thiết kế chi tiết bên trong gói api-core và luồng xử lý đa thuê bao}
+    \label{fig:PackageDetail}
+\end{figure}
+
+Theo hình \ref{fig:PackageDetail}, \texttt{TenantMiddleware} được đăng ký toàn cục và áp dụng cho mọi route: nó định danh cửa hàng từ header \texttt{x-shop-id} hoặc tên miền con, tra cứu Redis trước khi truy vấn PostgreSQL, rồi gọi \texttt{TenantService.run()} để lưu ngữ cảnh vào \texttt{AsyncLocalStorage}. \texttt{BetterAuthGuard} bảo vệ các endpoint cần xác thực và nạp danh sách cửa hàng thuộc sở hữu của người dùng vào request. Các Controller chỉ làm nhiệm vụ tiếp nhận và xác thực dữ liệu vào, toàn bộ logic nghiệp vụ nằm ở tầng Service; các Service đọc định danh cửa hàng qua \texttt{TenantService.getTenantId()} rồi thao tác dữ liệu qua \texttt{PrismaService} (dữ liệu quan hệ) hoặc các mô hình Mongoose (tài liệu bố cục giao diện).
+
+% ===========================================================
+\section{Thiết kế chi tiết}
+\label{section:4.2}
+
+\subsection{Thiết kế giao diện}
+\label{subsection:4.2.1}
+
+Giao diện hệ thống được xây dựng theo hướng thành phần (component-based) với TailwindCSS phiên bản 4, trong đó toàn bộ thành phần tái sử dụng tập trung tại gói \texttt{ui-registry}. Ba quy chuẩn thiết kế được áp dụng thống nhất. Thứ nhất, về tính đáp ứng, giao diện hỗ trợ ba ngưỡng hiển thị: di động (dưới 768px), máy tính bảng (768--1024px) và máy tính để bàn (trên 1024px). Thứ hai, về giao diện động, trang Storefront không có bố cục cố định mà được kết xuất từ tài liệu JSON do \texttt{api-core} trả về, cho phép chủ cửa hàng tùy biến trang web bằng thao tác kéo thả; chi tiết cơ chế này được trình bày tại mục \ref{section:5.2}. Thứ ba, về phản hồi người dùng, mọi hành động đều có trạng thái đang tải và thông báo thành công hoặc lỗi rõ ràng; ảnh sản phẩm hiển thị trước bằng ảnh mờ BlurHash trong lúc chờ tải ảnh thật, giúp bố cục không bị xô lệch.
+
+Trình thiết kế kéo thả trong ứng dụng Admin là màn hình phức tạp nhất của hệ thống, gồm ba vùng: khung xem trước ở giữa (chuyển đổi được giữa chế độ máy tính và di động), bảng danh sách thành phần bên trái và bảng thuộc tính bên phải được sinh tự động từ lược đồ của từng thành phần. Hình ảnh chụp thực tế các màn hình sẽ được bổ sung tại mục \ref{subsection:4.3.3}.
+
+\subsection{Thiết kế lớp}
+\label{subsection:4.2.2}
+
+Hình \ref{fig:ClassDiagram} trình bày thiết kế chi tiết các lớp giữ vai trò xương sống của \texttt{api-core}: \texttt{TenantService} và \texttt{TenantMiddleware} (cô lập đa thuê bao), \texttt{BetterAuthGuard} và \texttt{AuthService} (xác thực), \texttt{OrderService} (nghiệp vụ đặt hàng), \texttt{LayoutService} (quản lý bố cục giao diện) và \texttt{PrismaService} (truy cập dữ liệu).
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=\linewidth]{Hinhve/Chuong4/class_diagram.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/class_diagram.png}
+    \DIFaddendFL \caption{Biểu đồ lớp các thành phần cốt lõi của api-core}
+    \label{fig:ClassDiagram}
+\end{figure}
+
+Trong hình \ref{fig:ClassDiagram}, các quan hệ phụ thuộc đều hướng về hai lớp nền tảng: \texttt{TenantService} cung cấp ngữ cảnh cửa hàng cho mọi Service nghiệp vụ, còn \texttt{PrismaService} là điểm truy cập duy nhất tới PostgreSQL với khả năng thực thi giao dịch nguyên tử qua \texttt{\$transaction}. \texttt{OrderService} tập trung nhiều phụ thuộc nhất vì nghiệp vụ đặt hàng phải phối hợp tồn kho, ví điện tử, thông báo và email.
+
+Để làm rõ sự phối hợp giữa các lớp, hai luồng nghiệp vụ quan trọng nhất được mô tả bằng biểu đồ trình tự. Hình \ref{fig:SeqCheckout} thể hiện luồng đặt hàng: sau khi nạp giá các biến thể sản phẩm và kiểm tra mã khuyến mãi, toàn bộ thao tác ghi (trừ tồn kho, tạo đơn, tạo bản ghi thanh toán, xóa giỏ hàng, tạo vận đơn) được gói trong một giao dịch nguyên tử duy nhất; nếu thiếu tồn kho hoặc số dư ví không đủ, mọi thay đổi được hoàn tác toàn bộ.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=\linewidth]{Hinhve/Chuong4/seq_checkout.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/seq_checkout.png}
+    \DIFaddendFL \caption{Biểu đồ trình tự luồng đặt hàng (checkout)}
+    \label{fig:SeqCheckout}
+\end{figure}
+
+Hình \ref{fig:SeqAuth} mô tả luồng xác thực tại \texttt{BetterAuthGuard}: các endpoint gắn \texttt{@Public()} được cho qua ngay; với endpoint cần bảo vệ, Guard xác minh phiên đăng nhập qua thư viện Better Auth theo đúng loại người dùng (chủ cửa hàng hoặc khách mua hàng, phân biệt bằng header \texttt{x-auth-type}), sau đó nạp danh sách cửa hàng thuộc sở hữu từ bộ nhớ đệm để phục vụ kiểm tra phân quyền ở các bước sau \cite{betterauth_docs}.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \includegraphics[width=0.95\linewidth]{Hinhve/Chuong4/seq_auth.png}
+    \caption{Biểu đồ trình tự luồng xác thực qua BetterAuthGuard}
+    \label{fig:SeqAuth}
+\end{figure}
+
+\subsection{Thiết kế cơ sở dữ liệu}
+\label{subsection:4.2.3}
+
+Hệ thống sử dụng đồng thời hai loại cơ sở dữ liệu theo đặc tính dữ liệu. PostgreSQL quản lý qua Prisma ORM lưu các thực thể có cấu trúc chặt và yêu cầu giao dịch (cửa hàng, sản phẩm, đơn hàng, thanh toán); lược đồ đầy đủ gồm \DIFdelbegin \DIFdel{46 }\DIFdelend \DIFaddbegin \DIFadd{49 }\DIFaddend mô hình, trong đó hình \ref{fig:ERDiagram} thể hiện các thực thể cốt lõi cùng quan hệ giữa chúng.
+
+\DIFdelbegin %DIFDELCMD < \begin{figure}[H]
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htbp]
+    \DIFaddendFL \centering
+    \DIFdelbeginFL %DIFDELCMD < \includegraphics[width=0.85\linewidth]{Hinhve/Chuong4/er_diagram.png}
+%DIFDELCMD <     %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong4/er_diagram.png}
+    \DIFaddendFL \caption{Sơ đồ thực thể liên kết các thực thể cốt lõi trên PostgreSQL}
+    \label{fig:ERDiagram}
+\end{figure}
+
+Hình \ref{fig:ERDiagram} cho thấy đặc trưng đa thuê bao của lược đồ: hầu hết các thực thể đều mang khóa ngoại \texttt{shopId} trỏ về \texttt{Shop}, và các ràng buộc duy nhất đều được đặt trong phạm vi cửa hàng (ví dụ \texttt{Variant} duy nhất theo cặp \texttt{(shopId, sku)}, \texttt{Cart} duy nhất theo cặp \texttt{(shopId, customerId)}). Nhờ vậy hai cửa hàng khác nhau có thể dùng trùng mã SKU mà không xung đột.
+
+Bên cạnh PostgreSQL, hệ thống sử dụng ba kho dữ liệu chuyên biệt. MongoDB (qua Mongoose) lưu các tài liệu giao diện có cấu trúc linh hoạt: \texttt{GlobalLayout} và \texttt{PageLayout} chứa hai phiên bản nháp và xuất bản của bố cục, \texttt{UIComponentCatalog} lưu lược đồ thuộc tính các thành phần giao diện, và \texttt{MasterTemplateCatalog} lưu danh mục giao diện mẫu theo ngành hàng. Redis lưu các kết quả định danh có tần suất truy cập cao: ánh xạ tên miền sang cửa hàng, trạng thái cửa hàng và danh sách cửa hàng thuộc sở hữu của người dùng, tất cả với thời gian sống 300 giây. MinIO lưu trữ tệp ảnh gốc theo giao thức S3, còn imgproxy biến đổi ảnh theo kích thước yêu cầu tại thời điểm phân phối.
+
+\DIFaddbegin \DIFadd{Hình \ref{fig:MongoDesign} mô tả cấu trúc các bộ sưu tập trên MongoDB. Khác với lược đồ quan hệ chuẩn hóa của PostgreSQL, các tài liệu giao diện được thiết kế lồng nhau (nested document) để khớp với cách dữ liệu được đọc và kết xuất. Điểm cốt lõi là hai trường }\texttt{\DIFadd{draftData}} \DIFadd{và }\texttt{\DIFadd{publishedData}} \DIFadd{trong }\texttt{\DIFadd{GlobalLayout}} \DIFadd{và }\texttt{\DIFadd{PageLayout}}\DIFadd{: cả hai cùng tham chiếu đệ quy tới cấu trúc }\texttt{\DIFadd{UIComponentRef}} \DIFadd{-- một cây thành phần giao diện trong đó mỗi nút chứa }\texttt{\DIFadd{componentId}}\DIFadd{, tập thuộc tính }\texttt{\DIFadd{props}} \DIFadd{và danh sách khối con }\texttt{\DIFadd{blocks}}\DIFadd{. Chính cấu trúc cây đệ quy này là dữ liệu đầu vào cho động cơ kết xuất Zero-file được phân tích tại mục \ref{section:5.2}, còn cặp }\texttt{\DIFadd{draftData}}\DIFadd{/}\texttt{\DIFadd{publishedData}} \DIFadd{là nền tảng cho quy trình nháp--xuất bản hai pha tại mục \ref{section:5.3}.
+}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Hinhve/Chuong4/mongo_design.png}
+    \caption{\DIFaddFL{Thiết kế tài liệu các bộ sưu tập giao diện trên MongoDB}}
+    \label{fig:MongoDesign}
+\end{figure}
+
+\DIFaddend % ===========================================================
+\section{Xây dựng ứng dụng}
+\label{section:4.3}
+
+\subsection{Thư viện và công cụ sử dụng}
+\label{subsection:4.3.1}
+
+\DIFdelbegin %DIFDELCMD < \begin{table}[H]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{table}[htbp]
+\DIFaddendFL \centering{}
+    \begin{tabulary}{\textwidth}{LLL}
+        \hline
+        \textbf{Mục đích} & \textbf{Công cụ / Thư viện} & \textbf{Phiên bản} \\ \hline
+        Ngôn ngữ lập trình & TypeScript & 5.7 \\ \hline
+        Frontend framework & Next.js (App Router) & 16.2 \\ \hline
+        Thư viện giao diện & React & 19.2 \\ \hline
+        CSS framework & TailwindCSS & 4.x \\ \hline
+        Backend framework & NestJS & 11.0 \\ \hline
+        ORM quan hệ & Prisma & 5.22 \\ \hline
+        Cơ sở dữ liệu quan hệ & PostgreSQL & 15 \\ \hline
+        Cơ sở dữ liệu tài liệu & MongoDB / Mongoose & 6 / 8.2 \\ \hline
+        Xác thực & Better Auth & 1.6 \\ \hline
+        Bộ nhớ đệm & Redis / ioredis & 7 / 5.11 \\ \hline
+        Hàng đợi tác vụ & Bull & 4.16 \\ \hline
+        Lưu trữ đối tượng & MinIO (AWS SDK v3) & --- \\ \hline
+        Xử lý ảnh phân phối & imgproxy & --- \\ \hline
+        Kiểm tra dữ liệu & Zod & 3.24 \\ \hline
+        Quản lý monorepo & Turborepo & 2.9 \\ \hline
+        Kiểm thử & Jest + @nestjs/testing & --- \\ \hline
+    \end{tabulary}
+    \caption{Danh sách thư viện và công cụ sử dụng trong dự án}
+    \label{table:tools}
+\end{table}
+
+Bảng \ref{table:tools} liệt kê các thư viện và công cụ chính cùng phiên bản thực tế được khai báo trong tệp cấu hình của dự án.
+
+\subsection{Kết quả đạt được}
+\label{subsection:4.3.2}
+
+Hệ thống đã hoàn thành việc xây dựng nền tảng thương mại điện tử đa thuê bao với đầy đủ các mô-đun cốt lõi. Bảng \ref{table:codestats} thống kê các thông số kỹ thuật của mã nguồn (không tính mã kiểm thử, mã sinh tự động và thư viện bên thứ ba).
+
+\DIFdelbegin %DIFDELCMD < \begin{table}[H]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{table}[htbp]
+\DIFaddendFL \centering{}
+    \begin{tabulary}{\textwidth}{LL}
+        \hline
+        \textbf{Thông số} & \textbf{Giá trị} \\ \hline
+        Tổng số tệp mã nguồn TypeScript/TSX & 391 tệp \\ \hline
+        Tổng số dòng mã nghiệp vụ & 36.826 dòng \\ \hline
+        Số mô-đun nghiệp vụ trong api-core & 20 mô-đun \\ \hline
+        Số lớp Controller / Service & 24 / 27 \\ \hline
+        Số gói thư viện nội bộ dùng chung & 5 gói \\ \hline
+        Số mô hình dữ liệu PostgreSQL (Prisma) & \DIFdelbeginFL \DIFdelFL{46 }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{49 }\DIFaddendFL mô hình \\ \hline
+        Số bộ sưu tập MongoDB chính & 4 bộ sưu tập \\ \hline
+        Số thành phần giao diện trong ui-registry & hơn 40 thành phần \\ \hline
+        Số tệp kiểm thử tự động (Jest) & 32 tệp \\ \hline
+    \end{tabulary}
+    \caption{Thống kê thông số kỹ thuật của dự án}
+    \label{table:codestats}
+\end{table}
+
+Bảng \ref{table:codestats} cho thấy quy mô mã nguồn ở mức một hệ thống hoàn chỉnh nhiều phân hệ, trong đó tỷ lệ đáng kể nằm ở thư viện thành phần giao diện và các mô-đun nghiệp vụ backend.
+
+\subsection{Minh họa các chức năng chính}
+\label{subsection:4.3.3}
+
+Phần này minh họa năm nhóm chức năng chính của hệ thống bằng ảnh chụp màn hình thực tế, bao gồm:
+\DIFdelbegin \DIFdel{(i) luồng }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Luồng }\DIFaddend đăng ký và khởi tạo cửa hàng mới với bước chọn giao diện mẫu theo ngành hàng\DIFdelbegin \DIFdel{, (ii) quản }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Quản }\DIFaddend lý sản phẩm và tồn kho trên bảng điều khiển Admin\DIFdelbegin \DIFdel{, (iii) trình }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Trình }\DIFaddend thiết kế kéo thả tùy biến bố cục trang Storefront\DIFdelbegin \DIFdel{, (iv) luồng }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Luồng }\DIFaddend mua hàng và thanh toán của khách\DIFdelbegin \DIFdel{, và (v) theo }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Theo }\DIFaddend dõi, cập nhật trạng thái đơn hàng.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+% (Ảnh chụp màn hình thực tế sẽ do sinh viên bổ sung tại đây,
+%  mỗi ảnh kèm caption + \label + câu giải thích tham chiếu.)
+
+% ===========================================================
+\section{Kiểm thử}
+\label{section:4.4}
+
+Hệ thống sử dụng Jest kết hợp \texttt{@nestjs/testing} để kiểm thử đơn vị và kiểm thử tích hợp cho tầng backend, với tổng cộng 32 tệp kiểm thử phủ các mô-đun nghiệp vụ chính (Order, Auth, Layout, Shop, Payment, Inventory, Promotions, Shipping, Wallet, Media, Analytics). Kỹ thuật trọng tâm là giả lập \DIFdelbegin \DIFdel{qua tiêm }\DIFdelend \DIFaddbegin \DIFadd{(mock) các }\DIFaddend phụ thuộc \DIFdelbegin \DIFdel{(dependency injection mocking)}\DIFdelend \DIFaddbegin \DIFadd{thông qua cơ chế dependency injection của NestJS}\DIFaddend : \texttt{PrismaService}, \texttt{TenantService}, các mô hình Mongoose và bộ nhớ đệm đều được \DIFdelbegin \DIFdel{thay }\DIFdelend \DIFaddbegin \DIFadd{inject }\DIFaddend bằng đối tượng giả, nhờ đó các bài kiểm thử chạy độc lập hoàn toàn với hạ tầng.
+
+Chức năng được kiểm thử kỹ nhất là luồng đặt hàng \texttt{OrderService.createOrder} -- nghiệp vụ phức tạp nhất hệ thống. Bảng \ref{table:testcases} liệt kê các trường hợp kiểm thử tiêu biểu được trích từ bộ kiểm thử thực tế của mô-đun này.
+
+\DIFdelbegin %DIFDELCMD < \begin{table}[H]
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{table}[htbp]
+\DIFaddendFL \centering{}
+    \begin{tabulary}{\textwidth}{lLL}
+        \hline
+        \textbf{TC} & \textbf{Kịch bản} & \textbf{Kết quả mong đợi} \\ \hline
+        1 & Gọi nghiệp vụ khi thiếu ngữ cảnh tenant & Ném \texttt{BadRequestException} ``Shop context is missing'' \\ \hline
+        2 & Checkout không kèm lineItems và giỏ hàng trống & Từ chối với lỗi 400 \\ \hline
+        3 & Checkout không kèm lineItems, giỏ hàng có hàng & Lấy giỏ phía máy chủ, đặt hàng và xóa giỏ trong cùng giao dịch \\ \hline
+        4 & Variant không thuộc cửa hàng hiện tại & Từ chối với lỗi 400 \\ \hline
+        5 & Đặt hàng chuyển khoản ngân hàng & Tạo đơn trạng thái chờ kèm mã QR xác nhận \\ \hline
+        6 & Thanh toán bằng ví đủ số dư & Đơn chuyển \texttt{confirmed/paid}, ví bị trừ đúng số tiền \\ \hline
+        7 & Mã khuyến mãi phần trăm hợp lệ & Giảm đúng tỷ lệ, tăng bộ đếm lượt dùng \\ \hline
+        8 & Mã khuyến mãi hết hạn hoặc vượt giới hạn lượt dùng & Từ chối với lỗi 400 \\ \hline
+        9 & Phương thức vận chuyển hợp lệ / không hợp lệ & Cộng đúng phí vận chuyển / từ chối với lỗi 400 \\ \hline
+    \end{tabulary}
+    \caption{Các trường hợp kiểm thử tiêu biểu cho luồng đặt hàng}
+    \label{table:testcases}
+\end{table}
+
+Bảng \ref{table:testcases} cho thấy bộ kiểm thử phủ cả luồng chính lẫn các luồng phát sinh của nghiệp vụ đặt hàng đã đặc tả tại mục \ref{subsection:2.3.5}. Ngoài ra, bộ kiểm thử của \texttt{AuthService} xác minh hành vi phiên đăng nhập (trả về phiên hợp lệ, trả về \texttt{null} khi phiên lỗi, đổi tên người dùng với các ràng buộc trùng tên), và bộ kiểm thử của \texttt{LayoutService} xác minh chu trình nháp--xuất bản (tự khởi tạo bố cục rỗng, ghi đè bản nháp, từ chối xuất bản khi chưa có nháp, sao chép nháp sang bản xuất bản). Toàn bộ các bài kiểm thử đều đạt khi chạy bằng lệnh \texttt{npm run test} thông qua Turborepo.
+
+% ===========================================================
+\section{Triển khai}
+\label{section:4.5}
+
+Hệ thống được thiết kế hướng cloud-native với hai cấu hình triển khai tương ứng hai giai đoạn. Trong giai đoạn phát triển, toàn bộ hạ tầng chạy bằng Docker Compose gồm các dịch vụ: hai thực thể PostgreSQL (chuẩn bị sẵn cho hướng phân mảnh dữ liệu về sau), MongoDB, MinIO kèm tác vụ khởi tạo bucket, và imgproxy; các ứng dụng Node.js chạy trực tiếp qua Turborepo để tận dụng khả năng nạp lại nhanh khi sửa mã.
+
+Đối với môi trường vận hành, đồ án đã xây dựng đầy đủ bộ manifest Kubernetes gồm:
+\DIFdelbegin \DIFdel{(i) các }\DIFdelend \DIFaddbegin 
+
+\begin{itemize}
+    \item \DIFadd{Các }\DIFaddend Deployment riêng cho ba ứng dụng \texttt{admin}, \texttt{api-core}, \texttt{storefront} với giới hạn tài nguyên tường minh cho từng container (ví dụ \texttt{api-core} giới hạn 350MB bộ nhớ, Redis giới hạn 512MB) nhằm \DIFdelbegin \DIFdel{phục vụ mục tiêu vận hành trên hạ tầng khiêm tốn }\DIFdelend \DIFaddbegin \DIFadd{giữ chi phí tài nguyên cho mỗi cửa hàng ở mức thấp như }\DIFaddend đã nêu tại mục \ref{section:2.4}\DIFdelbegin \DIFdel{; (ii) tầng }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Tầng }\DIFaddend định tuyến gồm NGINX Ingress ánh xạ các tên miền dịch vụ và Cloudflare Tunnel cho phép công bố hệ thống ra Internet mà không cần địa chỉ IP công khai\DIFdelbegin \DIFdel{; (iii) hạ }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Hạ }\DIFaddend tầng giám sát Grafana\DIFdelbegin \DIFdel{; và (iv) một }\DIFdelend \DIFaddbegin \DIFadd{.
+    }\item \DIFadd{Một }\DIFaddend CronJob sao lưu PostgreSQL tự động chạy lúc 3 giờ sáng hằng ngày, đáp ứng yêu cầu độ tin cậy tại mục \ref{section:2.4}.
+\DIFaddbegin \end{itemize}
+\DIFaddend 
+
+Tại thời điểm viết báo cáo, hệ thống đã vận hành ổn định trên môi trường phát triển; việc triển khai bộ manifest nói trên lên máy chủ thực tế và đo lường các chỉ tiêu hiệu năng là bước kế tiếp, như đã trình bày trong các mục kết quả của Chương 5 và định hướng tại mục \ref{section:6.2}.
+
+\DIFdelbegin \DIFdel{Chương này }\DIFdelend \DIFaddbegin \subsection{\DIFadd{Đánh giá hiệu năng (benchmark)}}
+\label{subsection:4.5.1}
+
+\DIFadd{Để kiểm chứng mục tiêu chi phí biên thấp }\DIFaddend đã \DIFdelbegin \DIFdel{trình bày trọn vẹn quá trình }\DIFdelend \DIFaddbegin \DIFadd{đặt ra tại mục \ref{section:2.4}, đồ án }\DIFaddend thiết kế \DIFdelbegin \DIFdel{và xây dựng }\DIFdelend \DIFaddbegin \DIFadd{một quy trình đo hiệu năng (benchmark) chạy trên chính mã nguồn của }\DIFaddend hệ thống\DIFdelbegin \DIFdel{: từ kiến trúc }\DIFdelend \DIFaddbegin \DIFadd{. Quy trình gồm các bước:
+}
+
+\begin{itemize}
+    \item \textbf{\DIFadd{Chuẩn bị dữ liệu:}} \DIFadd{dùng }\texttt{\DIFadd{cli-tool}} \DIFadd{sinh số lượng cửa hàng tăng dần (ví dụ 100, 1.000, 5.000 cửa hàng), mỗi cửa hàng kèm bố cục mặc định và một tập sản phẩm mẫu, để quan sát mức tiêu thụ tài nguyên thay đổi theo số cửa hàng.
+    }\item \textbf{\DIFadd{Tạo tải:}} \DIFadd{dùng công cụ kiểm thử tải (}\texttt{\DIFadd{k6}} \DIFadd{hoặc }\texttt{\DIFadd{autocannon}}\DIFadd{) bắn đồng thời vào các tên miền cửa hàng khác nhau, đo độ trễ ở }\DIFaddend phân \DIFaddbegin \DIFadd{vị p50/p95 cho hai trường hợp trúng cache và trượt cache.
+    }\item \textbf{\DIFadd{Thu thập chỉ số:}} \DIFadd{ghi lại mức sử dụng RAM và CPU của }\texttt{\DIFadd{api-core}}\DIFadd{, Redis và Storefront qua hạ }\DIFaddend tầng \DIFdelbegin \DIFdel{Monorepo, thiết kế lớp }\DIFdelend \DIFaddbegin \DIFadd{giám sát Grafana, từ đó tính lượng bộ nhớ tăng thêm trung bình cho mỗi cửa hàng.
+    }\item \textbf{\DIFadd{Chỉ số xây dựng:}} \DIFadd{đo thời gian build với }\DIFaddend và \DIFaddbegin \DIFadd{không có bộ nhớ đệm của Turborepo, cùng kích thước gói JavaScript của một trang Storefront để đánh giá hiệu quả của }\DIFaddend cơ \DIFdelbegin \DIFdel{sở dữ liệu, tới }\DIFdelend \DIFaddbegin \DIFadd{chế nạp thành phần theo nhu cầu.
+}\end{itemize}
+
+\DIFadd{Hình \ref{fig:benchmark} là vị trí dành cho biểu đồ }\DIFaddend kết quả \DIFdelbegin \DIFdel{mã nguồn, kiểm thử tự động và mô hình triển khai.
+    Một }\DIFdelend \DIFaddbegin \DIFadd{benchmark; }\DIFaddend số \DIFdelbegin \DIFdel{quyết định thiết kế mang tính đóng góp nổi bật mới chỉ được tóm lược ở đây; chương tiếp theo }\DIFdelend \DIFaddbegin \DIFadd{liệu }\DIFaddend sẽ \DIFdelbegin \DIFdel{phân tích chuyên sâu ba giải pháp kỹ thuật quan trọng nhất của đồ án.
+}\DIFdelend \DIFaddbegin \DIFadd{được bổ sung sau khi hệ thống được triển khai và đo đạc trên máy chủ thực tế theo quy trình nêu trên.
+}
+
+\begin{figure}[H]
+    \centering
+    \DIFaddFL{\fbox{\begin{minipage}[c][6cm][c]{0.8\linewidth}
+        \centering
+        \textit{(Biểu đồ kết quả benchmark sẽ được bổ sung sau khi đo đạc\\trên môi trường triển khai thực tế.)}
+    \end{minipage}}
+    }\caption{\DIFaddFL{Biểu đồ kết quả đo hiệu năng theo số lượng cửa hàng}}
+    \label{fig:benchmark}
+\end{figure}
+\DIFaddend 
+
+\end{document}

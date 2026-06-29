@@ -6,29 +6,56 @@ Chương 1 đã xác định bài toán về rào cản chi phí và kỹ thuậ
 \section{Khảo sát hiện trạng}
 \label{section:2.1}
 
-Đối tượng người dùng của ShopVolo v2 là các doanh nghiệp vừa và nhỏ tại Việt Nam có nhu cầu mở rộng kênh bán hàng trực tuyến. Theo báo cáo về thương mại điện tử Việt Nam \cite{vecom2024}, chi phí xây dựng và duy trì website là một trong những rào cản lớn nhất đối với nhóm doanh nghiệp này. Người dùng cần một nền tảng dễ sử dụng, không yêu cầu kiến thức lập trình, có chi phí duy trì thấp nhưng vẫn cung cấp được giao diện chuyên nghiệp. Từ khảo sát đó, hệ thống xác định hai nhóm người dùng chính: (i) chủ cửa hàng (Tenant Owner) là người kinh doanh trực tiếp thiết lập và quản lý cửa hàng của mình, và (ii) khách hàng (End Customer) là người truy cập trang cửa hàng để xem và mua sản phẩm.
+Đối tượng người dùng của ShopVolo v2 là các doanh nghiệp vừa và nhỏ tại Việt Nam có nhu cầu mở rộng kênh bán hàng trực tuyến. Theo báo cáo về thương mại điện tử Việt Nam \cite{vecom2024}, chi phí xây dựng và duy trì website là một trong những rào cản lớn nhất đối với nhóm doanh nghiệp này. Người dùng cần một nền tảng dễ sử dụng, không yêu cầu kiến thức lập trình, có chi phí duy trì thấp nhưng vẫn cung cấp được giao diện chuyên nghiệp. Từ khảo sát đó, hệ thống xác định ba tác nhân:
+
+\begin{itemize}
+    \item \textbf{Quản trị nền tảng (Platform Admin):} người vận hành hệ thống, quản lý master template (bộ giao diện mặc định) dùng chung cho toàn bộ cửa hàng.
+    \item \textbf{Chủ cửa hàng (Tenant Owner):} người kinh doanh trực tiếp thiết lập và quản lý cửa hàng của mình.
+    \item \textbf{Khách hàng (End Customer):} người truy cập trang cửa hàng để xem và mua sản phẩm.
+\end{itemize}
+
+Trong đó, chủ cửa hàng và khách hàng là hai nhóm người dùng trọng tâm mà đề tài hướng tới.
 
 Xét các hệ thống mà nhóm người dùng này đang sử dụng, phổ biến nhất là hai hình thức: tự dựng website bằng WordPress kết hợp WooCommerce, hoặc bán hàng hoàn toàn trên mạng xã hội như Facebook và Zalo. Cả hai hình thức đều bộc lộ hạn chế rõ rệt: không có hệ thống quản lý đơn hàng và tồn kho tập trung, trải nghiệm giao diện không nhất quán giữa các thiết bị, và khó mở rộng khi số lượng sản phẩm cũng như lượng truy cập tăng lên.
 
-Xét các ứng dụng tương tự trên thị trường, Shopify là nền tảng SaaS hàng đầu với giao diện chuyên nghiệp, nhưng chi phí duy trì hằng tháng cao và khả năng tùy biến sâu bị giới hạn trong khuôn khổ các theme dựng sẵn \cite{shopify_docs}. WooCommerce mã nguồn mở cho tự do tùy biến tối đa, nhưng buộc người dùng tự thuê máy chủ, tự cấu hình bảo mật và cập nhật thường xuyên, đòi hỏi nguồn lực kỹ thuật đáng kể \cite{woocommerce}. Ở thị trường trong nước, Haravan tích hợp tốt các dịch vụ vận chuyển và thanh toán nội địa, song công cụ tùy biến giao diện còn hạn chế đối với người không biết lập trình \cite{haravan_platform}. Với phân khúc doanh nghiệp lớn, Adobe Commerce (Magento) rất mạnh nhưng phức tạp và tốn kém để triển khai lẫn duy trì \cite{magento_docs}.
+Xét các ứng dụng tương tự trên thị trường:
 
-\begin{table}[H]
+\begin{itemize}
+    \item \textbf{Shopify} là nền tảng SaaS hàng đầu với giao diện chuyên nghiệp, nhưng chi phí duy trì hằng tháng cao và khả năng tùy biến sâu bị giới hạn trong khuôn khổ các theme dựng sẵn \cite{shopify_docs}.
+    \item \textbf{WooCommerce} mã nguồn mở cho tự do tùy biến tối đa, nhưng buộc người dùng tự thuê máy chủ, tự cấu hình bảo mật và cập nhật thường xuyên, đòi hỏi nguồn lực kỹ thuật đáng kể \cite{woocommerce}.
+    \item \textbf{Haravan} tích hợp tốt các dịch vụ vận chuyển và thanh toán nội địa, song công cụ tùy biến giao diện còn hạn chế đối với người không biết lập trình \cite{haravan_platform}.
+\end{itemize}
+
+\begin{table}[htbp]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|L|L|L|}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash}p{2.6cm}|Y|Y|Y|Y|}
   \hline
-  \textbf{Tiêu chí so sánh} & \textbf{Shopify} & \textbf{WooCommerce} & \textbf{Haravan} & \textbf{ShopVolo v2 (đề xuất)} \\ \hline
+  \textbf{Tiêu chí so sánh} & \textbf{Shopify} & \textbf{Woo\-Commerce} & \textbf{Haravan} & \textbf{ShopVolo v2 (đề xuất)} \\ \hline
   Mô hình triển khai & SaaS & Tự vận hành & SaaS & SaaS \\ \hline
-  Chi phí hàng tháng & \$29--\$299 & Miễn phí (tự thuê hosting) & 200 nghìn--3 triệu VND & Tối ưu nhờ dùng chung hạ tầng \\ \hline
+  Chi phí hàng tháng & Từ 39 USD & Miễn phí phần lõi, tự thuê hosting & 300 nghìn -- 1,5 triệu đồng & Chia sẻ chung hạ tầng \\ \hline
   Tùy biến giao diện & Theme dựng sẵn & Cần lập trình viên & Hạn chế & Kéo thả từng khối, không cần lập trình \\ \hline
-  Đa thuê bao thực sự & Có & Không & Không & Có (AsyncLocalStorage) \\ \hline
-  Thanh toán phù hợp Việt Nam & Hạn chế & Qua plugin & Có & Có (COD, chuyển khoản QR, ví) \\ \hline
-  Vận hành nhiều cửa hàng trên hạ tầng nhỏ & Không áp dụng & Không & Không áp dụng & Mục tiêu thiết kế \\ \hline
-\end{tabulary}
+  Đa thuê bao thực sự & Có & Không & Không & Có (Async\-LocalStorage) \\ \hline
+  Thanh toán nội địa Việt Nam & Hạn chế & Qua plugin & Có & Có (COD, chuyển khoản QR, ví) \\ \hline
+  Chi phí biên cho mỗi cửa hàng & Không áp dụng & Cao (mỗi cửa hàng một hạ tầng) & Không áp dụng & Thấp (vài tài liệu JSON) \\ \hline
+\end{tabularx}
 \caption{So sánh chi tiết các nền tảng thương mại điện tử}
 \label{table:so_sanh_chi_tiet}
 \end{table}
 
-Bảng \ref{table:so_sanh_chi_tiet} cho thấy khoảng trống của thị trường: chưa nền tảng nào cân bằng được đồng thời chi phí, khả năng vận hành nhiều cửa hàng trên hạ tầng giới hạn và công cụ tùy biến giao diện dành cho người không chuyên. Từ đó, đề tài xác định 10 chức năng cốt lõi cần xây dựng: (i) khởi tạo cửa hàng, (ii) quản lý chương trình khuyến mãi, (iii) tùy biến giao diện và thương hiệu, (iv) quản lý sản phẩm, (v) thiết lập menu điều hướng, (vi) tạo trang nội dung động, (vii) duyệt sản phẩm trên trang cửa hàng, (viii) quản lý giỏ hàng, (ix) thanh toán và xử lý đơn hàng, và (x) ánh xạ tên miền tùy chỉnh.
+Bảng \ref{table:so_sanh_chi_tiet} cho thấy khoảng trống của thị trường: chưa nền tảng nào cân bằng được đồng thời chi phí biên thấp cho mỗi cửa hàng và công cụ tùy biến giao diện dành cho người không chuyên. Từ đó, đề tài xác định 10 chức năng cốt lõi cần xây dựng:
+
+\begin{enumerate}[leftmargin=*]
+    \item Khởi tạo cửa hàng.
+    \item Tùy biến giao diện và thương hiệu.
+    \item Quản lý sản phẩm.
+    \item Tạo trang nội dung động.
+    \item Duyệt sản phẩm trên trang cửa hàng.
+    \item Quản lý giỏ hàng.
+    \item Thanh toán và xử lý đơn hàng.
+\end{enumerate}
 
 \section{Tổng quan chức năng}
 \label{section:2.2}
@@ -40,19 +67,19 @@ Phần này mô tả cấu trúc chức năng của hệ thống thông qua bi�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{Hinhve/Chuong2/usecase_tong_quat.png}
+    \includegraphics[width=0.62\linewidth]{Hinhve/Chuong2/usecase_tong_quat.png}
     \caption{Biểu đồ use case tổng quát hệ thống ShopVolo v2}
     \label{fig:usecase_tong_quat}
 \end{figure}
 
-Hình \ref{fig:usecase_tong_quat} thể hiện toàn cảnh tương tác giữa hai tác nhân và hệ thống. Tác nhân chủ cửa hàng thực hiện nhóm chức năng quản trị: khởi tạo cửa hàng, quản lý sản phẩm và khuyến mãi, tùy biến giao diện, thiết lập điều hướng và tên miền; tác nhân này cũng tham gia ca sử dụng thanh toán và xử lý đơn hàng ở vai trò xử lý các đơn phát sinh. Tác nhân khách hàng tương tác với mặt tiền cửa hàng: duyệt sản phẩm, quản lý giỏ hàng và thực hiện thanh toán.
+Hình \ref{fig:usecase_tong_quat} thể hiện toàn cảnh tương tác giữa ba tác nhân và hệ thống. Tác nhân quản trị nền tảng phụ trách quản lý master template --- bộ giao diện mặc định mà mọi cửa hàng kế thừa. Tác nhân chủ cửa hàng thực hiện nhóm chức năng quản trị cửa hàng: khởi tạo cửa hàng, quản lý sản phẩm, tùy biến giao diện và thương hiệu, thiết lập menu điều hướng, tạo trang nội dung động và ánh xạ tên miền; tác nhân này cũng tham gia ca sử dụng thanh toán và xử lý đơn hàng ở vai trò xử lý các đơn phát sinh. Tác nhân khách hàng tương tác với mặt tiền cửa hàng: duyệt sản phẩm, quản lý giỏ hàng và thực hiện thanh toán.
 
 \subsection{Biểu đồ use case phân rã --- Quản lý cửa hàng}
 \label{subsection:2.2.2}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{Hinhve/Chuong2/usecase_quan_ly_shop.png}
+    \includegraphics[width=0.78\linewidth]{Hinhve/Chuong2/usecase_quan_ly_shop.png}
     \caption{Biểu đồ use case phân rã nhóm Quản lý cửa hàng}
     \label{fig:usecase_quan_ly_shop}
 \end{figure}
@@ -64,7 +91,7 @@ Hình \ref{fig:usecase_quan_ly_shop} phân rã nhóm chức năng thiết lập 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{Hinhve/Chuong2/usecase_san_pham_don_hang.png}
+    \includegraphics[width=0.82\linewidth]{Hinhve/Chuong2/usecase_san_pham_don_hang.png}
     \caption{Biểu đồ use case phân rã nhóm Sản phẩm và Đơn hàng}
     \label{fig:usecase_san_pham_don_hang}
 \end{figure}
@@ -76,7 +103,7 @@ Hình \ref{fig:usecase_san_pham_don_hang} mô tả các chức năng nghiệp v�
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\linewidth]{Hinhve/Chuong2/usecase_khach_hang.png}
+    \includegraphics[width=0.72\linewidth]{Hinhve/Chuong2/usecase_khach_hang.png}
     \caption{Biểu đồ use case phân rã nhóm Trải nghiệm khách hàng}
     \label{fig:usecase_khach_hang}
 \end{figure}
@@ -86,9 +113,9 @@ Hình \ref{fig:usecase_khach_hang} mô tả trải nghiệm phía người mua. 
 \subsection{Quy trình nghiệp vụ --- Khởi tạo cửa hàng và kết xuất giao diện}
 \label{subsection:2.2.5}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{Hinhve/Chuong2/activity_onboarding.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong2/activity_onboarding.png}
     \caption{Biểu đồ hoạt động quy trình khởi tạo cửa hàng và kết xuất giao diện động}
     \label{fig:activity_onboarding}
 \end{figure}
@@ -105,7 +132,7 @@ Trong 10 chức năng đã xác định ở mục \ref{section:2.1}, phần này
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabulary}{\textwidth}{|p{3cm}|L|}
   \hline
   \textbf{Tên use case} & Khởi tạo cửa hàng \\ \hline
   \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
@@ -136,7 +163,7 @@ Bảng \ref{table:uc01} mô tả luồng khởi tạo: điểm đáng chú ý l�
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabulary}{\textwidth}{|p{3cm}|L|}
   \hline
   \textbf{Tên use case} & Tùy biến giao diện và thương hiệu \\ \hline
   \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
@@ -165,7 +192,7 @@ Bảng \ref{table:uc03} thể hiện quy trình chỉnh sửa hai pha: mọi tha
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabulary}{\textwidth}{|p{3cm}|L|}
   \hline
   \textbf{Tên use case} & Quản lý sản phẩm \\ \hline
   \textbf{Tác nhân} & Chủ cửa hàng \\ \hline
@@ -187,9 +214,9 @@ Bảng \ref{table:uc03} thể hiện quy trình chỉnh sửa hai pha: mọi tha
 \label{table:uc04}
 \end{table}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\linewidth]{Hinhve/Chuong2/activity_upload_product.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong2/activity_upload_product.png}
     \caption{Biểu đồ hoạt động luồng tải lên và xử lý ảnh sản phẩm}
     \label{fig:activity_upload_product}
 \end{figure}
@@ -201,7 +228,7 @@ Bảng \ref{table:uc04} và hình \ref{fig:activity_upload_product} mô tả quy
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabulary}{\textwidth}{|p{3cm}|L|}
   \hline
   \textbf{Tên use case} & Duyệt sản phẩm trên trang cửa hàng \\ \hline
   \textbf{Tác nhân} & Khách hàng \\ \hline
@@ -231,7 +258,7 @@ Bảng \ref{table:uc07} mô tả luồng đọc quan trọng nhất của hệ t
 
 \begin{table}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|}
+\begin{tabulary}{\textwidth}{|p{3cm}|L|}
   \hline
   \textbf{Tên use case} & Thanh toán và đặt đơn hàng \\ \hline
   \textbf{Tác nhân} & Khách hàng \\ \hline
@@ -256,9 +283,9 @@ Bảng \ref{table:uc07} mô tả luồng đọc quan trọng nhất của hệ t
 \label{table:uc09}
 \end{table}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.62\linewidth]{Hinhve/Chuong2/activity_checkout.png}
+    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{Hinhve/Chuong2/activity_checkout.png}
     \caption{Biểu đồ hoạt động quy trình thanh toán và đặt đơn hàng}
     \label{fig:activity_checkout}
 \end{figure}
@@ -268,16 +295,14 @@ Bảng \ref{table:uc09} và hình \ref{fig:activity_checkout} cho thấy tính n
 \section{Yêu cầu phi chức năng}
 \label{section:2.4}
 
-Về hiệu năng, mục tiêu thiết kế của hệ thống là phục vụ đồng thời 20.000 cửa hàng trên một máy chủ 16GB RAM, với thời gian phản hồi dưới 500ms cho yêu cầu chưa có trong bộ nhớ đệm và dưới 10ms cho dữ liệu đã được đệm. Để hướng tới mục tiêu này, mọi thành phần đều phải khai báo giới hạn tài nguyên tường minh khi triển khai (ví dụ dịch vụ API giới hạn 350MB và Redis giới hạn 512MB bộ nhớ trong cấu hình Kubernetes), đồng thời các truy vấn có tần suất cao phải đi qua bộ nhớ đệm: định danh cửa hàng được đệm trên Redis với thời gian sống 300 giây, còn bố cục giao diện và dữ liệu sản phẩm được đệm ở tầng kết xuất với chu kỳ làm mới lần lượt 60 và 30 giây.
+Về hiệu năng, mục tiêu thiết kế của hệ thống là giữ chi phí tài nguyên tăng thêm cho mỗi cửa hàng (chi phí biên) ở mức thấp, để nhiều cửa hàng có thể cùng chạy trên một hạ tầng dùng chung mà vẫn duy trì trải nghiệm phản hồi nhanh. Do toàn bộ cửa hàng chia sẻ một ứng dụng duy nhất thay vì mỗi cửa hàng một tiến trình riêng, bộ nhớ tiêu tốn không tăng tuyến tính theo số cửa hàng. Về độ trễ, các yêu cầu đã có dữ liệu trong bộ nhớ đệm được phục vụ gần như tức thời do đọc trực tiếp từ RAM, còn các yêu cầu chưa được đệm chỉ phụ thuộc vào một vài truy vấn cơ sở dữ liệu. Để đạt được điều này, mọi thành phần đều khai báo giới hạn tài nguyên tường minh khi triển khai (ví dụ dịch vụ API giới hạn 350MB và Redis giới hạn 512MB bộ nhớ trong cấu hình Kubernetes), đồng thời các truy vấn có tần suất cao đều đi qua bộ nhớ đệm: định danh cửa hàng được đệm trên Redis với thời gian sống 300 giây, còn bố cục giao diện và dữ liệu sản phẩm được đệm ở tầng kết xuất với chu kỳ làm mới lần lượt 60 và 30 giây.
 
-Về độ tin cậy, hệ thống đặt mục tiêu duy trì thời gian hoạt động từ 99,5\% trở lên. Cơ sở dữ liệu phải được sao lưu tự động hằng ngày (hiện thực bằng CronJob chạy lúc 3 giờ sáng). Mọi lỗi phát sinh từ tầng dữ liệu phải được chuyển thành ngoại lệ có kiểm soát của NestJS, tuyệt đối không để lộ chi tiết truy vết nội bộ trong phản hồi trả về máy khách. Lỗi kết xuất của một thành phần giao diện không được làm sập toàn trang.
+Về độ tin cậy, hệ thống đặt mục tiêu duy trì thời gian hoạt động từ 99,5\% trở lên. Cơ sở dữ liệu phải được sao lưu tự động hằng ngày (hiện thực bằng CronJob chạy lúc 2 giờ sáng). Mọi lỗi phát sinh từ tầng dữ liệu phải được chuyển thành ngoại lệ có kiểm soát của NestJS, tuyệt đối không để lộ chi tiết truy vết nội bộ trong phản hồi trả về máy khách. Lỗi kết xuất của một thành phần giao diện không được làm sập toàn trang.
 
 Về tính dễ sử dụng, toàn bộ bảng điều khiển Admin phải dùng được bởi người không có kiến thức kỹ thuật: các thao tác trọng yếu như tải ảnh sản phẩm hay đổi màu thương hiệu phải hoàn thành trong tối đa 3 phút, và cửa hàng mới khởi tạo phải có giao diện hoạt động được ngay thay vì trang trắng. Giao diện phải đáp ứng trên cả thiết bị di động, máy tính bảng và máy tính để bàn.
 
 Về bảo mật, hệ thống xác thực bằng phiên đăng nhập do thư viện Better Auth quản lý, tách biệt hoàn toàn phiên của chủ cửa hàng và phiên của khách mua hàng. Yêu cầu cốt lõi của môi trường đa thuê bao là cô lập dữ liệu tuyệt đối: chủ cửa hàng này không thể truy cập dữ liệu của cửa hàng khác trên cùng hạ tầng. Các khóa bí mật chỉ được nạp qua biến môi trường và không xuất hiện trong mã nguồn; toàn bộ kết nối ra Internet phải được mã hóa TLS.
 
 Về yêu cầu kỹ thuật, hệ thống chạy trên Node.js phiên bản 22 trở lên; phía máy khách hỗ trợ các trình duyệt Chrome và Firefox từ phiên bản 100, Safari từ phiên bản 15. Tầng dữ liệu sử dụng PostgreSQL 15 với Prisma ORM và MongoDB 6 với Mongoose. Môi trường phát triển vận hành bằng Docker Compose, môi trường sản xuất hướng tới Kubernetes; toàn bộ mã nguồn được quản lý theo mô hình Monorepo bằng Turborepo để tối ưu thời gian xây dựng.
-
-Chương này đã khảo sát hiện trạng từ ba nguồn, xác định 10 nhóm chức năng cốt lõi, đặc tả chi tiết năm trường hợp sử dụng trung tâm và đưa ra các yêu cầu phi chức năng của hệ thống. Chương tiếp theo trình bày các công nghệ được lựa chọn để hiện thực hóa các yêu cầu này.
 
 \end{document}

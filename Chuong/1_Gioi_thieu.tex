@@ -8,49 +8,127 @@ Chương này giới thiệu tổng quan về bối cảnh và mục tiêu của
 
 Thương mại điện tử tại Việt Nam đang trải qua giai đoạn tăng trưởng mạnh mẽ trong những năm gần đây \cite{vecom}. Sự chuyển dịch thói quen mua sắm của người tiêu dùng sang các nền tảng trực tuyến đã thúc đẩy các hộ kinh doanh và doanh nghiệp vừa và nhỏ liên tục tìm kiếm cơ hội mở rộng kênh bán hàng. Nhu cầu sở hữu một cửa hàng trực tuyến riêng biệt, chuyên nghiệp để xây dựng thương hiệu đang ngày càng trở nên cấp thiết.
 
-Tuy nhiên, để xây dựng và vận hành một cửa hàng trực tuyến độc lập, các doanh nghiệp vừa và nhỏ phải đối mặt với nhiều rào cản lớn. Chi phí ban đầu cho việc thiết kế và phát triển website thường dao động từ mười đến năm mươi triệu đồng. Bên cạnh đó, việc duy trì một đội ngũ kỹ thuật để quản lý máy chủ, bảo mật và cập nhật tính năng liên tục là một gánh nặng tài chính không nhỏ. Hơn nữa, thời gian triển khai từ khi lên ý tưởng đến khi ra mắt thường kéo dài từ một đến ba tháng, làm chậm khả năng phản ứng với thị trường.
+Tuy nhiên, để sở hữu một cửa hàng trực tuyến độc lập, các doanh nghiệp vừa và nhỏ hiện đứng trước hai lựa chọn, mỗi lựa chọn đều kèm theo rào cản riêng:
 
-Các nền tảng phần mềm dưới dạng dịch vụ hiện có trên thị trường vẫn tồn tại nhiều hạn chế đáng kể. Các nền tảng quốc tế thường có chi phí duy trì hàng tháng cao, không tối ưu cho các phương thức thanh toán địa phương và giới hạn khả năng can thiệp sâu. Các giải pháp tự triển khai lại đòi hỏi người sử dụng phải có kiến thức kỹ thuật chuyên sâu để tự thiết lập hạ tầng và bảo mật. Trong khi đó, các nền tảng trong nước tuy dễ tiếp cận nhưng lại thiếu đi khả năng cho phép người dùng tự do tùy biến giao diện một cách sâu rộng mà không cần viết mã. Hiện tại, chưa có giải pháp nào đáp ứng đồng thời cả ba tiêu chí: chi phí thấp, khả năng tùy biến cao, và khả năng vận hành hàng chục ngàn cửa hàng mà không làm tăng tuyến tính chi phí hạ tầng.
+\begin{itemize}
+    \item \textbf{Thuê bao một nền tảng dịch vụ (SaaS):} chi phí định kỳ dao động từ khoảng 300.000 đồng đến hơn 1.500.000 đồng mỗi tháng với nền tảng nội địa Haravan \cite{haravan_pricing2026}, hoặc từ 39 USD mỗi tháng trở lên với nền tảng quốc tế Shopify \cite{shopify_docs, shero_pricing2026}, chưa tính chi phí mua giao diện và tiện ích mở rộng.
+    \item \textbf{Tự triển khai một giải pháp mã nguồn mở} như WooCommerce: phần lõi miễn phí nhưng doanh nghiệp phải tự thuê máy chủ (khoảng 10--100 USD mỗi tháng) và tự chịu trách nhiệm về bảo mật, sao lưu và cập nhật; chi phí xây dựng một cửa hàng tùy biến qua đơn vị phát triển có thể vượt 8.000 USD \cite{swell_woo2026}.
+\end{itemize}
+
+Cả hai lựa chọn đều đặt ra gánh nặng về chi phí hoặc về năng lực kỹ thuật, đồng thời thời gian thiết lập một cửa hàng hoàn chỉnh cũng đáng kể, làm chậm khả năng phản ứng với thị trường.
+
+Các nền tảng phần mềm dưới dạng dịch vụ hiện có trên thị trường vẫn tồn tại nhiều hạn chế đáng kể. Các nền tảng quốc tế thường có chi phí duy trì hàng tháng cao, không tối ưu cho các phương thức thanh toán địa phương và giới hạn khả năng can thiệp sâu. Các giải pháp tự triển khai lại đòi hỏi người sử dụng phải có kiến thức kỹ thuật chuyên sâu để tự thiết lập hạ tầng và bảo mật. Trong khi đó, các nền tảng trong nước tuy dễ tiếp cận nhưng lại thiếu đi khả năng cho phép người dùng tự do tùy biến giao diện một cách sâu rộng mà không cần viết mã. Hiện tại, chưa có giải pháp nào đáp ứng đồng thời cả ba tiêu chí: chi phí thấp, khả năng tùy biến cao, và khả năng vận hành nhiều cửa hàng trên cùng một hạ tầng dùng chung với chi phí biên thấp cho mỗi cửa hàng tăng thêm.
 
 Một nền tảng phần mềm mở, cho phép các doanh nghiệp vừa và nhỏ tại Việt Nam khởi động cửa hàng trực tuyến chỉ trong vài phút mà không cần kỹ năng lập trình sẽ là một bước tiến quan trọng. Giải pháp này không chỉ giúp tiết kiệm chi phí và thời gian triển khai, mà còn cung cấp một giao diện chuyên nghiệp, góp phần đẩy nhanh quá trình số hóa thương mại.
 
 \section{Mục tiêu và phạm vi đề tài}
 \label{section:1.2}
 
-Trên thị trường hiện nay, có nhiều nền tảng cung cấp giải pháp xây dựng cửa hàng trực tuyến với các đặc điểm khác nhau. Shopify là một trong những nền tảng cung cấp phần mềm dưới dạng dịch vụ hàng đầu, cung cấp giao diện đẹp mắt nhưng có chi phí duy trì khá cao từ \$29 đến \$299 mỗi tháng \cite{shopify_docs}. Hơn nữa, nền tảng này cũng giới hạn khả năng tùy biến sâu vào mã nguồn giao diện, và chưa thực sự phù hợp với các doanh nghiệp nhỏ tại Việt Nam về mặt chi phí và hỗ trợ thanh toán nội địa.
+Trên thị trường hiện nay, có nhiều nền tảng cung cấp giải pháp xây dựng cửa hàng trực tuyến với các đặc điểm khác nhau:
 
-WooCommerce là một thành phần mở rộng mã nguồn mở dành cho hệ thống quản trị nội dung WordPress, cho phép tạo cửa hàng trực tuyến hoàn toàn miễn phí \cite{woocommerce}. Mặc dù mang lại khả năng tùy biến sâu, giải pháp này lại yêu cầu người sử dụng phải tự thuê máy chủ lưu trữ, tự cấu hình bảo mật và thường xuyên thực hiện các bản cập nhật. Việc này đòi hỏi trình độ kỹ thuật cao và tiêu tốn nhiều thời gian vận hành hệ thống.
+\begin{itemize}
+    \item \textbf{Shopify} là nền tảng SaaS dẫn đầu thị trường, chiếm khoảng 28,8\% thị phần trong nhóm một triệu website thương mại điện tử lớn nhất thế giới \cite{builtwith2026, redstag_shopify2026}. Nền tảng cung cấp giao diện đẹp và hạ tầng ổn định, nhưng chi phí thuê bao cao (gói Basic 39 USD, Advanced 399 USD mỗi tháng) \cite{shopify_docs, shero_pricing2026}, giới hạn khả năng tùy biến sâu vào mã nguồn giao diện và chưa tối ưu cho thanh toán nội địa Việt Nam.
+    \item \textbf{WooCommerce} là thành phần mã nguồn mở chạy trên WordPress, chiếm khoảng 18,2\% nhóm một triệu website lớn nhất với hơn 4,5 triệu cửa hàng đang hoạt động \cite{mobiloud2026, storeleads_woo2025}. Phần lõi miễn phí và tùy biến sâu, nhưng người dùng phải tự thuê máy chủ, tự cấu hình bảo mật và cập nhật --- đòi hỏi trình độ kỹ thuật cao.
+    \item \textbf{Haravan} là nền tảng phổ biến tại Việt Nam với hơn 50.000 doanh nghiệp đăng ký, thân thiện và tích hợp tốt vận chuyển, thanh toán nội địa \cite{haravan_platform, haravan_pricing2026}. Tuy nhiên nền tảng vẫn hạn chế khả năng tùy biến giao diện nếu người dùng không biết lập trình và chưa được xây dựng trên kiến trúc đa thuê bao tối ưu cho cá nhân hóa giao diện động.
+\end{itemize}
 
-Tại Việt Nam, Haravan là một nền tảng phổ biến, thân thiện với người dùng trong nước và tích hợp tốt các dịch vụ vận chuyển, thanh toán nội địa \cite{haravan_platform}. Tuy nhiên, giải pháp này vẫn có những hạn chế nhất định trong việc tùy biến giao diện nếu người dùng không biết lập trình, đồng thời hệ thống chưa được xây dựng dựa trên kiến trúc đa thuê bao thực sự tối ưu cho việc cá nhân hóa giao diện động. Đối với các doanh nghiệp lớn, Magento là một lựa chọn mạnh mẽ, nhưng đi kèm với sự phức tạp và chi phí triển khai cực kỳ đắt đỏ \cite{magento_docs}.
+Hình \ref{fig:market_share} so sánh thị phần của ba nền tảng tiêu biểu trong nhóm một triệu website thương mại điện tử lớn nhất, cho thấy thị trường bị chi phối bởi các nền tảng quốc tế, trong khi nền tảng nội địa còn chiếm tỷ trọng rất nhỏ ở phạm vi toàn cầu.
 
-\begin{table}[H]
+\begin{figure}[H]
 \centering
-\begin{tabulary}{\textwidth}{|L|L|L|L|L|}
-  \hline
-  \textbf{Tiêu chí} & \textbf{Shopify} & \textbf{WooCommerce} & \textbf{Haravan} & \textbf{ShopVolo v2} \\ \hline
-  Chi phí thấp      & $\times$ & $\checkmark$ & Trung bình & $\checkmark$ \\ \hline
-  Không cần lập trình    & $\checkmark$ & $\times$ & $\checkmark$     & $\checkmark$ \\ \hline
-  Tùy biến giao diện sâu & Hạn chế & $\checkmark$ (cần dev) & $\times$ & $\checkmark$ \\ \hline
-  Multi-tenant thực sự & $\checkmark$ & $\times$ & $\times$ & $\checkmark$ \\ \hline
-  Phù hợp SME Việt Nam & $\times$ & Khó & $\checkmark$ & $\checkmark$ \\ \hline
-  Vận hành 20k+ shop / hạ tầng nhỏ & N/A & $\times$ & N/A & $\checkmark$ \\ \hline
-\end{tabulary}
-\caption{So sánh các nền tảng thương mại điện tử}
-\label{table:so_sanh_nen_tang}
-\end{table}
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    width=0.85\textwidth,
+    height=6.0cm,
+    bar width=26pt,
+    ymin=0, ymax=33,
+    ylabel={Thị phần (\%)},
+    symbolic x coords={Shopify, WooCommerce, Haravan},
+    xtick=data,
+    nodes near coords,
+    nodes near coords style={font=\small},
+    enlarge x limits=0.3,
+    ymajorgrids=true,
+    grid style=dashed,
+    tick label style={font=\small},
+    label style={font=\small},
+]
+\addplot[fill=blue!55] coordinates {
+    (Shopify,28.8) (WooCommerce,18.2) (Haravan,0.6)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Thị phần các nền tảng trong nhóm một triệu website thương mại điện tử lớn nhất (đơn vị: \%, số liệu năm 2025--2026) \cite{builtwith2026, redstag_shopify2026, mobiloud2026}}
+\label{fig:market_share}
+\end{figure}
 
-Bảng \ref{table:so_sanh_nen_tang} tổng hợp sự khác biệt giữa các nền tảng thương mại điện tử hiện nay. Có thể thấy, các nền tảng hiện có chưa giải quyết được đồng thời ba vấn đề cốt lõi: (i) chi phí triển khai và duy trì thấp, (ii) khả năng tùy biến giao diện sâu rộng mà không cần lập trình, và (iii) khả năng vận hành một số lượng lớn cửa hàng trên một hạ tầng phần cứng tối ưu.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    width=0.92\textwidth,
+    height=6.2cm,
+    bar width=18pt,
+    ymin=0, ymax=30,
+    ylabel={Doanh thu (tỷ USD)},
+    xlabel={Năm},
+    symbolic x coords={2020,2021,2022,2023,2024},
+    xtick=data,
+    nodes near coords,
+    nodes near coords style={font=\small},
+    enlarge x limits=0.15,
+    ymajorgrids=true,
+    grid style=dashed,
+    tick label style={font=\small},
+    label style={font=\small},
+]
+\addplot[fill=blue!55] coordinates {
+    (2020,11.8) (2021,13.7) (2022,16.4) (2023,20.5) (2024,25.0)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Doanh thu thương mại điện tử bán lẻ B2C của Việt Nam giai đoạn 2020--2024 (đơn vị: tỷ USD) \cite{idea_whitebook, vecom2025}}
+\label{fig:tmdt_growth}
+\end{figure}
 
-Đề tài hướng đến xây dựng nền tảng ShopVolo v2 nhằm giải quyết các bài toán trên với các chức năng chính bao gồm: (i) khởi tạo cửa hàng trực tuyến trong vài phút thông qua các bước hướng dẫn tự động, (ii) cung cấp công cụ tùy biến giao diện trực quan không cần lập trình, (iii) quản lý vòng đời sản phẩm và trạng thái đơn hàng đầy đủ, (iv) xử lý thanh toán trực tuyến qua các cổng thanh toán hoặc nhận hàng trả tiền, và (v) hỗ trợ ánh xạ tên miền tùy chỉnh riêng biệt cho từng cửa hàng.
+Hình \ref{fig:tmdt_growth} cho thấy doanh thu thương mại điện tử bán lẻ B2C của Việt Nam tăng từ 11,8 tỷ USD năm 2020 lên khoảng 25 tỷ USD năm 2024, tương ứng tốc độ tăng trưởng kép hằng năm khoảng 20\% \cite{idea_whitebook, vecom2025}. Đà tăng trưởng liên tục này, cùng với việc số lượng doanh nghiệp tham gia bán hàng trực tuyến ngày càng lớn, cho thấy nhu cầu sở hữu cửa hàng trực tuyến riêng là rất cao và còn nhiều dư địa. Tuy nhiên, như đã phân tích ở trên, các nền tảng hiện có chưa giải quyết được đồng thời ba vấn đề cốt lõi:
+
+\begin{itemize}
+    \item Chi phí triển khai và duy trì thấp.
+    \item Khả năng tùy biến giao diện sâu rộng mà không cần lập trình.
+    \item Chi phí biên thấp khi phục vụ thêm cửa hàng trên cùng một hạ tầng dùng chung.
+\end{itemize}
+
+Bảng so sánh chi tiết các nền tảng theo từng tiêu chí được trình bày ở mục \ref{section:2.1} (Bảng \ref{table:so_sanh_chi_tiet}).
+
+Đề tài hướng đến xây dựng nền tảng ShopVolo v2 nhằm giải quyết các bài toán trên với các chức năng chính bao gồm:
+
+\begin{itemize}
+    \item Khởi tạo cửa hàng trực tuyến trong vài phút thông qua các bước hướng dẫn tự động.
+    \item Cung cấp công cụ tùy biến giao diện trực quan không cần lập trình.
+    \item Quản lý vòng đời sản phẩm và trạng thái đơn hàng đầy đủ.
+    \item Xử lý thanh toán trực tuyến qua các cổng thanh toán nội địa (VNPAY, MoMo) hoặc hình thức nhận hàng trả tiền (COD).
+    \item Hỗ trợ ánh xạ tên miền tùy chỉnh riêng biệt cho từng cửa hàng.
+\end{itemize}
 
 \section{Định hướng giải pháp}
 \label{section:1.3}
 
-Để giải quyết bài toán vận hành số lượng lớn cửa hàng với chi phí hạ tầng tối ưu, đề tài lựa chọn kiến trúc phần mềm Multi-tenant SaaS kết hợp với nguyên lý thiết kế "Zero-file". Đây là phương pháp quản lý giao diện trong đó toàn bộ cấu trúc trang của các cửa hàng được biểu diễn hoàn toàn dưới dạng tệp dữ liệu cấu hình JSON thay vì các tệp mã nguồn riêng lẻ. Cách tiếp cận này cho phép một mã nguồn duy nhất có thể phục vụ hàng ngàn cửa hàng khác nhau mà không cần thực hiện quá trình triển khai lại từng ứng dụng riêng biệt.
+Để hạ chi phí biên khi phục vụ thêm cửa hàng trên một hạ tầng dùng chung, đề tài lựa chọn kiến trúc phần mềm Multi-tenant SaaS kết hợp với nguyên lý thiết kế "Zero-file". Đây là phương pháp quản lý giao diện trong đó toàn bộ cấu trúc trang của các cửa hàng được biểu diễn hoàn toàn dưới dạng tệp dữ liệu cấu hình JSON thay vì các tệp mã nguồn riêng lẻ. Cách tiếp cận này cho phép một mã nguồn duy nhất có thể phục vụ nhiều cửa hàng khác nhau mà không cần thực hiện quá trình triển khai lại từng ứng dụng riêng biệt.
 
 Hệ thống ShopVolo v2 được xây dựng dưới dạng Monorepo sử dụng Turborepo, bao gồm bốn ứng dụng chính. Ứng dụng Admin Dashboard phát triển bằng Next.js 16 cho phép người bán quản lý cửa hàng toàn diện. Ứng dụng API Core viết bằng NestJS 11 cung cấp các giao diện lập trình ứng dụng REST API có khả năng cô lập dữ liệu tự động qua AsyncLocalStorage. Ứng dụng Storefront cũng dùng Next.js 16 để kết xuất giao diện động từ cấu hình, cùng với một công cụ dòng lệnh hỗ trợ vận hành hệ thống hàng loạt. Cơ sở dữ liệu PostgreSQL được dùng cho các dữ liệu có cấu trúc chặt chẽ như đơn hàng, trong khi MongoDB lưu trữ các dữ liệu có tính chất linh hoạt như cấu hình giao diện.
 
-Đóng góp của đề tài tập trung ở ba giải pháp kỹ thuật. Thứ nhất là cơ chế cô lập dữ liệu đa thuê bao tự động bằng AsyncLocalStorage, giúp mọi truy vấn gắn đúng phạm vi cửa hàng mà không cần truyền tham số qua các tầng xử lý. Thứ hai là kiến trúc giao diện ``Zero-file'' với động cơ kết xuất động, cho phép thêm cửa hàng mới mà không sinh thêm tệp mã nguồn hay lần biên dịch nào. Thứ ba là mô hình Master Template kết hợp quy trình nháp--xuất bản hai pha, giúp chủ cửa hàng có ngay giao diện hoàn chỉnh theo ngành hàng rồi tùy biến an toàn; hệ thống chỉ lưu cấu hình thay đổi của từng cửa hàng và dùng bộ nhớ đệm phân tầng (Redis cho định danh cửa hàng, Next.js Data Cache cho bố cục) để đạt hiệu năng cao. Mục tiêu thiết kế của hệ thống là phục vụ đồng thời 20.000 cửa hàng trên một máy chủ 16GB RAM với thời gian phản hồi dưới 500ms đối với dữ liệu mới và dưới 10ms đối với dữ liệu đã có trong bộ nhớ đệm. Chi tiết về các giải pháp kỹ thuật này sẽ được trình bày cụ thể trong Chương 5.
+Đóng góp của đề tài tập trung ở ba giải pháp kỹ thuật:
+
+\begin{itemize}
+    \item \textbf{Cô lập dữ liệu đa thuê bao tự động bằng AsyncLocalStorage:} mọi truy vấn được gắn đúng phạm vi cửa hàng mà không cần truyền tham số qua các tầng xử lý, đưa trách nhiệm cô lập dữ liệu về một điểm duy nhất thay vì phụ thuộc kỷ luật của người lập trình.
+    \item \textbf{Kiến trúc giao diện ``Zero-file'' với động cơ kết xuất động:} cho phép thêm cửa hàng mới mà không sinh thêm tệp mã nguồn hay lần biên dịch nào; chi phí biên của mỗi cửa hàng chỉ còn là vài tài liệu cấu hình JSON.
+    \item \textbf{Mô hình Master Template kết hợp quy trình nháp--xuất bản hai pha:} chủ cửa hàng có ngay giao diện hoàn chỉnh theo ngành hàng rồi tùy biến an toàn; hệ thống chỉ lưu cấu hình thay đổi của từng cửa hàng và dùng bộ nhớ đệm phân tầng (Redis cho định danh cửa hàng, Next.js Data Cache cho bố cục) để đạt hiệu năng cao.
+\end{itemize}
+
+Ba giải pháp trên cùng hướng tới một mục tiêu: hạ chi phí biên của mỗi cửa hàng xuống mức tối thiểu để có thể phục vụ nhiều cửa hàng trên một hạ tầng dùng chung mà vẫn giữ được trải nghiệm dịch vụ tốt. Chi tiết về cách hiện thực hóa và phân tích từng giải pháp kỹ thuật được trình bày cụ thể trong Chương 5.
 
 \section{Bố cục đồ án}
 \label{section:1.4}
@@ -66,5 +144,3 @@ Chương 4 trình bày thiết kế kiến trúc tổng quan theo mô hình phâ
 Chương 5 phân tích chuyên sâu ba đóng góp kỹ thuật nổi bật của đề tài, bao gồm cơ chế cô lập dữ liệu đa thuê bao bằng AsyncLocalStorage, kiến trúc giao diện ``Zero-file'' với động cơ kết xuất thành phần động, và mô hình Master Template với quy trình cá nhân hóa giao diện hai pha nháp--xuất bản.
 
 Chương 6 tổng kết các kết quả đã đạt được trong quá trình nghiên cứu và phát triển, so sánh sản phẩm hoàn thiện với các nền tảng tương tự trên thị trường, đánh giá một cách khách quan những điểm chưa hoàn thiện và đề xuất các hướng phát triển tiếp theo.
-
-Chương này đã làm rõ bài toán thực tiễn về sự thiếu hụt một nền tảng phù hợp cho các doanh nghiệp vừa và nhỏ, đồng thời phân tích những điểm còn hạn chế của các hệ thống thương mại điện tử hiện tại. Dựa trên cơ sở đó, đề tài đề xuất việc phát triển hệ thống ShopVolo v2 ứng dụng kiến trúc đa thuê bao và nguyên lý giao diện "Zero-file" để tối ưu hóa quá trình vận hành và tùy biến. Chương tiếp theo sẽ trình bày chi tiết kết quả khảo sát hiện trạng và phân tích yêu cầu của hệ thống.
